@@ -42,16 +42,9 @@ const ExplorePage = () => {
           href: "/books/newreleases",
           icon: <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>,
         },
-        {
-          name: t("explorepage.explore_library.genres") || "Genres",
-          href: "/category",
-          icon: <span className="text-purple-400 text-sm">🏷️</span>,
-        },
-        {
-          name: t("explorepage.explore_library.collections") || "Collections",
-          href: "/collections",
-          icon: <span className="text-indigo-400 text-sm">📚</span>,
-        },
+      
+
+
       ],
       gradient: "from-sky-50 to-blue-50",
       darkGradient: "from-sky-900/30 to-blue-900/30",
@@ -83,6 +76,25 @@ const ExplorePage = () => {
       gradient: "from-rose-50 to-orange-50",
       darkGradient: "from-rose-900/30 to-orange-900/30",
     },
+     {
+  title: t("explorepage.search") || "Search",
+  subtitle: t("explorepage.search_subtitle") || "Find stories, tags, and categories",
+  icon: <span className="text-rose-500">🔍</span>, // Changed from 📰 to magnifying glass
+  links: [
+    {
+      name: t("explorepage.explore_library.genres") || "Genres",
+      href: "/category",
+      icon: <span className="text-purple-400 text-sm">🏷️</span>,
+    },
+    {
+      name: t("explorepage.explore_.tags.search") || "Tags Search",
+      href: "/tag",
+      icon: <span className="text-indigo-400 text-sm">📚</span>,
+    },
+  ],
+  gradient: "from-rose-50 to-orange-50",
+  darkGradient: "from-rose-900/30 to-orange-900/30",
+},
     {
       title: t("explorepage.help_support.title") || "Help & Support",
       subtitle: t("explorepage.help_support.subtitle") || "Get assistance",
@@ -132,6 +144,9 @@ const ExplorePage = () => {
       gradient: "from-amber-50 to-orange-50",
       darkGradient: "from-amber-900/30 to-orange-900/30",
     },
+
+
+  
   ];
 
   // Helper function for gradients

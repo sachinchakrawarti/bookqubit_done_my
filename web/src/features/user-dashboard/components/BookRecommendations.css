@@ -1,17 +1,126 @@
 .book-recommendations {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
 }
 
-.book-recommendations h3 {
-  margin-top: 0;
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.book-item {
+.dark .recommendations-header {
+  border-bottom-color: #374151;
+}
+
+.recommendations-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.view-all {
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: #0284c7;
+  transition: color 0.2s;
+}
+
+.view-all:hover {
+  color: #0f766e;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recommendation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  background: #f3f4f6;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.recommendation-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dark .recommendation-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.book-info p {
+  font-size: 0.85rem;
+  margin: 0 0 6px 0;
+}
+
+.book-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.book-rating .stars {
+  font-size: 0.85rem;
+}
+
+.book-rating span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.recommendation-reason {
+  font-size: 0.75rem;
+  display: block;
+}
+
+.add-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.add-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .book-recommendations {
+    padding: 16px;
+  }
+  
+  .recommendation-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .add-btn {
+    width: 100%;
+  }
 }
