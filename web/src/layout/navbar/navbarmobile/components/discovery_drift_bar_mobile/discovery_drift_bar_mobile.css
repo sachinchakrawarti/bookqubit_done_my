@@ -1,0 +1,329 @@
+/* DiscoveryDriftBarMobile.css - Full Width Beautiful Design */
+
+.discovery-drift-bar-mobile {
+  width: 100% !important;
+  max-width: 100% !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient border */
+.discovery-drift-bar-mobile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.discovery-drift-bar-mobile:hover::before {
+  left: 100%;
+}
+
+.discovery-drift-container-mobile {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.discovery-drift-tab-mobile {
+  cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  letter-spacing: 0.3px;
+  font-family: inherit;
+  white-space: nowrap;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ripple effect for active tabs */
+.ripple-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out;
+  pointer-events: none;
+}
+
+.discovery-drift-tab-mobile.active .ripple-effect {
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+}
+
+/* Active indicator - elegant line */
+.active-indicator-mobile {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  border-radius: 3px;
+  animation: slideInMobile 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideInMobile {
+  0% {
+    width: 0;
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0);
+  }
+  50% {
+    width: 60px;
+    opacity: 0.8;
+  }
+  100% {
+    width: 40px;
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+/* Icon animations */
+.discovery-drift-tab-mobile .tab-icon-mobile {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
+.discovery-drift-tab-mobile:hover .tab-icon-mobile {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.discovery-drift-tab-mobile.active:hover .tab-icon-mobile {
+  transform: scale(1.05) rotate(0deg);
+}
+
+/* Touch feedback */
+.discovery-drift-tab-mobile:active {
+  transform: scale(0.97) !important;
+  transition: transform 0.1s ease !important;
+}
+
+/* Hover effects for devices that support hover */
+@media (hover: hover) {
+  .discovery-drift-tab-mobile {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .discovery-drift-tab-mobile:not(.active):hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+/* Theme-specific styles */
+[data-theme="forest"] .active-indicator-mobile {
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+}
+
+[data-theme="neon"] .active-indicator-mobile,
+[data-theme="cyberpunk"] .active-indicator-mobile {
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .active-indicator-mobile,
+[data-theme="midnight"] .active-indicator-mobile {
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+}
+
+/* Forest theme specific */
+[data-theme="forest"] .discovery-drift-tab-mobile.active {
+  background: linear-gradient(135deg, #059669, #10b981) !important;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+[data-theme="forest"] .discovery-drift-tab-mobile:not(.active) {
+  background: rgba(5, 150, 105, 0.1);
+}
+
+[data-theme="forest"] .discovery-drift-tab-mobile:not(.active):hover {
+  background: linear-gradient(135deg, #047857, #059669) !important;
+  color: white !important;
+}
+
+/* Neon theme specific */
+[data-theme="neon"] .discovery-drift-tab-mobile.active,
+[data-theme="cyberpunk"] .discovery-drift-tab-mobile.active {
+  background: linear-gradient(135deg, #00ffff, #00bfff) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+  animation: neonPulse 2s infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.7), 0 0 50px rgba(0, 255, 255, 0.5);
+  }
+}
+
+[data-theme="neon"] .discovery-drift-tab-mobile:not(.active),
+[data-theme="cyberpunk"] .discovery-drift-tab-mobile:not(.active) {
+  background: rgba(0, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+/* RTL Support */
+[dir="rtl"] .discovery-drift-container-mobile {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .active-indicator-mobile {
+  left: auto;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .discovery-drift-container-mobile {
+    gap: 8px;
+  }
+  
+  .discovery-drift-tab-mobile {
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    max-width: 150px !important;
+  }
+  
+  .discovery-drift-tab-mobile .tab-icon-mobile {
+    font-size: 18px !important;
+  }
+  
+  .active-indicator-mobile {
+    width: 32px !important;
+    height: 2.5px !important;
+  }
+  
+  @keyframes slideInMobile {
+    0% { width: 0; opacity: 0; }
+    50% { width: 48px; opacity: 0.8; }
+    100% { width: 32px; opacity: 1; }
+  }
+}
+
+@media (max-width: 380px) {
+  .discovery-drift-container-mobile {
+    gap: 6px;
+  }
+  
+  .discovery-drift-tab-mobile {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    max-width: 130px !important;
+    gap: 6px !important;
+  }
+  
+  .discovery-drift-tab-mobile .tab-icon-mobile {
+    font-size: 16px !important;
+  }
+  
+  .active-indicator-mobile {
+    width: 28px !important;
+    height: 2px !important;
+  }
+  
+  @keyframes slideInMobile {
+    0% { width: 0; opacity: 0; }
+    50% { width: 42px; opacity: 0.8; }
+    100% { width: 28px; opacity: 1; }
+  }
+}
+
+/* Landscape mode */
+@media (max-width: 768px) and (orientation: landscape) {
+  .discovery-drift-bar-mobile {
+    padding: 4px 16px !important;
+  }
+  
+  .discovery-drift-tab-mobile {
+    padding: 6px 16px !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .discovery-drift-tab-mobile,
+  .discovery-drift-tab-mobile .tab-icon-mobile,
+  .active-indicator-mobile,
+  .ripple-effect,
+  .discovery-drift-bar-mobile::before {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .discovery-drift-tab-mobile:active {
+    transform: scale(0.99) !important;
+  }
+}
+
+/* Glass morphism enhancement */
+@supports (backdrop-filter: blur(20px)) {
+  .discovery-drift-bar-mobile {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+/* Performance optimization */
+.discovery-drift-tab-mobile {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent text selection */
+.discovery-drift-tab-mobile {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Focus states for accessibility */
+.discovery-drift-tab-mobile:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 40px;
+}
+
+/* Scroll reveal animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.discovery-drift-bar-mobile {
+  animation: fadeInUp 0.4s ease-out;
+}

@@ -118,3 +118,137 @@
   /* Additional dark mode specific styles if needed */
   backdrop-filter: blur(10px);
 }
+
+
+/* Add to existing Navbar_Mobile.css */
+
+/* ==========================================================================
+   Navbar Wrapper - For sticky double row behavior
+   ========================================================================== */
+.navbar-mobile-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* First Row - Main Navigation */
+.navbar-mobile {
+  position: relative;
+  top: 0;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.navbar-mobile.navbar-scrolled {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Second Row Container */
+.navbar-second-row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.navbar-second-row.second-row-scrolled {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-second-row-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Make sure the discovery drift bar fits properly */
+.navbar-second-row .discovery-drift-bar-mobile {
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Adjust spacing for different screen sizes */
+@media (max-width: 480px) {
+  .navbar-second-row {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar-second-row {
+    padding: 4px 6px;
+  }
+}
+
+/* Hide second row on scroll for more content space (optional) */
+@media (max-width: 480px) {
+  .navbar-mobile-wrapper.scroll-hide-second-row .navbar-second-row {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* Second row entrance animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.navbar-second-row {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Ensure proper stacking context */
+.navbar-mobile {
+  z-index: 51;
+}
+
+.navbar-second-row {
+  z-index: 50;
+}
+
+/* Dark mode specific adjustments for second row */
+[data-theme="dark"] .navbar-second-row,
+[data-theme="midnight"] .navbar-second-row,
+[data-theme="cyberpunk"] .navbar-second-row {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Forest theme specific adjustments */
+[data-theme="forest"] .navbar-second-row {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(16, 185, 129, 0.02));
+}
+
+/* RTL support for second row */
+[dir="rtl"] .navbar-second-row-container {
+  direction: rtl;
+}
+
+/* Performance optimization */
+.navbar-second-row {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
