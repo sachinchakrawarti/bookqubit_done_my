@@ -203,7 +203,7 @@ const Slider_Auth_Mobile = ({
         <div className="mobile-auth-buttons">
           {/* Profile Button */}
           <button
-            onClick={() => handleNavigation("/auth/profile")}
+            onClick={() => handleNavigation("/profile")}
             className="mobile-auth-btn profile-btn"
             style={{
               backgroundColor: `var(--sidebar-btn-secondary-bg, ${isDarkMode ? 'rgba(255,255,255,0.1)' : '#f3f4f6'})`,
@@ -225,7 +225,7 @@ const Slider_Auth_Mobile = ({
 
           {/* Dashboard Button */}
           <button
-            onClick={() => handleNavigation("/auth/userdashboard")}
+            onClick={() => handleNavigation("/user-dashboard")}
             className="mobile-auth-btn dashboard-btn"
             style={{
               background: `var(--sidebar-btn-primary-bg, linear-gradient(135deg, #667eea 0%, #764ba2 100%))`,
@@ -244,9 +244,9 @@ const Slider_Auth_Mobile = ({
             <span className="nav-text">Dashboard</span>
           </button>
 
-          {/* Bookworm Ranking Button */}
+          {/* Bookworm Leaderboard Button */}
           <button
-            onClick={() => handleNavigation("/auth/bookwormranking")}
+            onClick={() => handleNavigation("/bookworm-leaderboard")}
             className="mobile-auth-btn ranking-btn"
             style={{
               backgroundColor: `var(--sidebar-btn-secondary-bg, ${isDarkMode ? 'rgba(255,255,255,0.1)' : '#f3f4f6'})`,
@@ -263,7 +263,7 @@ const Slider_Auth_Mobile = ({
             }}
           >
             <FaBookReader className="nav-icon" />
-            <span className="nav-text">Bookworm Ranking</span>
+            <span className="nav-text">Bookworm Leaderboard</span>
             {userStats.ranking > 0 && (
               <span
                 className="ranking-badge"

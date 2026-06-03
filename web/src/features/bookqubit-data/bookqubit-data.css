@@ -1,0 +1,195 @@
+/* BookQubit Data Analytics Styles */
+.bookqubit-data {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Loading State */
+.bookqubit-data-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Header */
+.data-header {
+  background-size: cover;
+  background-position: center;
+}
+
+/* Stats Cards */
+.stat-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Trending Cards */
+.trending-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.trending-card:hover {
+  transform: translateY(-2px);
+}
+
+.rank-section {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+/* Rating Cards */
+.rating-card {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.rating-badge {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+/* Read Cards */
+.read-card {
+  transition: transform 0.2s;
+}
+
+.read-card:hover {
+  transform: translateX(4px);
+}
+
+/* Filters */
+.filters-section {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.filter-group select,
+.filter-group input {
+  min-width: 140px;
+  transition: all 0.2s;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Export Button */
+.export-btn {
+  transition: all 0.2s;
+}
+
+.export-btn:hover {
+  transform: scale(1.02);
+}
+
+/* Chart Placeholder */
+.chart-placeholder {
+  min-height: 250px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filters-left {
+    flex-direction: column;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+  }
+  
+  .stats-overview .grid {
+    gap: 12px;
+  }
+  
+  .trending-card .flex {
+    flex-direction: column;
+  }
+  
+  .rank-section {
+    flex-direction: row;
+    padding: 12px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  .stat-card:hover,
+  .trending-card:hover,
+  .rating-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card,
+.trending-card,
+.rating-card,
+.read-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Custom Scrollbar */
+.bookqubit-data::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bookqubit-data::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.bookqubit-data::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.bookqubit-data::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
