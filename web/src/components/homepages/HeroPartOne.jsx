@@ -33,22 +33,22 @@ const HeroPartOne = () => {
     {
       name: t("hero.hero_part_one.category.science") || "Science",
       icon: <FaSearch className="text-lg" />,
-      path: "/category/science",
+      path: "/tag/Science",
     },
     {
       name: t("hero.hero_part_one.category.history") || "History",
       icon: <FaBookOpen className="text-lg" />,
-      path: "/category/history",
+      path: "/tag/History",
     },
     {
       name: t("hero.hero_part_one.category.finance") || "Finance",
       icon: <FaChartLine className="text-lg" />,
-      path: "/category/finance",
+      path: "/tag/Finance",
     },
     {
       name: t("hero.hero_part_one.category.fiction") || "Fiction",
       icon: <FaLightbulb className="text-lg" />,
-      path: "/category/fiction",
+      path: "/tag/Fiction",
     },
   ];
 
@@ -170,7 +170,7 @@ const HeroPartOne = () => {
           {/* Explore Books Button */}
           <motion.div variants={item} className="mb-12">
             <Link
-              href="/bookslist"
+              href="/books"
               className={`inline-block ${theme.buttonColors?.primaryButton?.background || 'bg-gradient-to-r from-sky-600 to-sky-500'} ${theme.buttonColors?.primaryButton?.hoverBackground || 'hover:from-sky-700 hover:to-sky-600'} ${theme.buttonColors?.primaryButton?.textColor || 'text-white'} font-semibold px-8 py-3 rounded-lg ${theme.border?.button || ''} ${theme.shadow?.button || 'shadow-md'} transition-all duration-300 transform hover:scale-105`}
             >
               {t("hero.hero_part_one.explore_books") || "Explore Books"}

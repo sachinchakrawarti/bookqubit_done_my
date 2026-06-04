@@ -12,3 +12,46 @@
     background: #15202b;
   }
 }
+
+/* Drift Desktop Layout */
+.drift-desktop-layout {
+  min-height: 100vh;
+  background: var(--layout-bg, #f9fafb);
+}
+
+.layout-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 72px;
+  min-height: 100vh;
+}
+
+/* Theme Backgrounds */
+.drift-desktop-layout.light {
+  --layout-bg: #f9fafb;
+}
+
+.drift-desktop-layout.dark {
+  --layout-bg: #0f0f1a;
+}
+
+.drift-desktop-layout.midnight {
+  --layout-bg: #0a0f1a;
+}
+
+.drift-desktop-layout.cyberpunk {
+  --layout-bg: #05010a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout-container {
+    padding-top: 0;
+  }
+}
+
+/* Smooth Transitions */
+.layout-container > * {
+  transition: all 0.3s ease;
+}
