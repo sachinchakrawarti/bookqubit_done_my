@@ -12,7 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Silder_Mobile from "./components/silder_mobile/silder_mobile";
 import Control_Mobile_Slider from "./components/control_mobile/Control_Mobile_Slider";
 import SearchBar_Mobile from "@/components/searchbar/searchbar_mobile/searchbar_mobile";
-import DarkMode_Mobile from "./components/darkmode_mobile/darkmode_mobile";
+
 import DiscoveryDriftBarMobile from "./components/discovery_drift_bar_mobile/discovery_drift_bar_mobile"; // Import the second row component
 
 import "./Navbar_Mobile.css";
@@ -163,7 +163,7 @@ const Navbar_Mobile = () => {
         {/* Right Section - Action Buttons */}
         <div className="navbar-mobile-right flex items-center gap-1.5 flex-shrink-0">
           <SearchBar_Mobile />
-          <DarkMode_Mobile />
+  
           <Control_Mobile_Slider />
 
           {/* Notification Icon */}

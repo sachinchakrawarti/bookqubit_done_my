@@ -16,17 +16,30 @@ import AiTools from "@/components/homepages/AiTools";
 import TrendDashboardSlider from "@/components/homepages/trend_dashboard_slider";
 import TagsHome from "@/components/homepages/TagsHome";
 import HeroSectionSlider_mobile from "@/components/homepages/mobile_homepages/HeroSectionSlider_mobile";
+import BookQubit_Mobile from "@/components/homepages/mobile_homepages/BookQubit_Mobile";
 
 export default function HomepagesPage() {
   return (
     <main>
-      {/* <DiscoveryPlatform /> */}
-      {/* <HeroSectionSlider_mobile /> */}
-      <HeroSectionSlider />
-      <TrendDashboardSlider />
-      {/* <TagsHome /> */}
+      {/* Mobile Only - Hidden on PC */}
+      <div className="block md:hidden">
+        <HeroSectionSlider_mobile />
+        <BookQubit_Mobile />
+      </div>
 
+      {/* PC Only - Hidden on Mobile */}
+      <div className="hidden md:block">
+        <HeroSectionSlider />
+      </div>
+
+      {/* Visible on Both Mobile and PC */}
+      <TrendDashboardSlider />
+
+      {/* Hidden Components (Commented) */}
+      {/* <TagsHome /> */}
       {/* <ThirdPartyAD /> */}
+      
+      {/* Visible on Both */}
       <HeroPartOne />
       <QuickActions />
       <ExploreBooks />
@@ -35,6 +48,8 @@ export default function HomepagesPage() {
       <ExploreAuthor />
       <ExplorePublications />
       <ExploreComics />
+      
+      {/* Hidden Components (Commented) */}
       {/* <LaunchYourBook />
       <AiTools /> */}
     </main>
