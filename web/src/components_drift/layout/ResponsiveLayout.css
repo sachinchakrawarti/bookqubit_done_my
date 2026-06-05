@@ -1,0 +1,168 @@
+/* ============================================
+   RESPONSIVE LAYOUT - MULTI-THEME SUPPORT
+   ============================================ */
+
+.responsive-layout {
+  position: relative;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+/* ===== LOADING STATE ===== */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Light Theme Loading */
+.responsive-layout.light .loading-spinner {
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+}
+
+/* Dark Theme Loading */
+.responsive-layout.dark .loading-spinner {
+  border: 3px solid #2d3748;
+  border-top-color: #3b82f6;
+}
+
+/* Midnight Theme Loading */
+.responsive-layout.midnight .loading-spinner {
+  border: 3px solid #1a2542;
+  border-top-color: #6366f1;
+}
+
+/* Cyberpunk Theme Loading */
+.responsive-layout.cyberpunk .loading-spinner {
+  border: 3px solid #ff00ff;
+  border-top-color: #00ffff;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== CYBERPUNK GRID OVERLAY ===== */
+.cyberpunk-grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 255, 0.03) 0px,
+      rgba(0, 255, 255, 0.03) 2px,
+      transparent 2px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 0, 255, 0.03) 0px,
+      rgba(255, 0, 255, 0.03) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+}
+
+/* ===== MIDNIGHT STARS EFFECT ===== */
+.midnight-stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 80px 120px, #ddd, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 150px 200px, #eee, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 250px 300px, #fff, rgba(0,0,0,0));
+  background-repeat: no-repeat;
+  background-size: 200px 200px, 300px 300px, 400px 400px, 500px 500px, 600px 600px;
+  opacity: 0.3;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ===== THEME VARIABLES ===== */
+.responsive-layout {
+  --transition-speed: 0.3s;
+}
+
+/* Apply theme backgrounds */
+.responsive-layout.light {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.responsive-layout.dark {
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+}
+
+.responsive-layout.midnight {
+  background: linear-gradient(135deg, #0a0f1a 0%, #0f192d 100%);
+}
+
+.responsive-layout.cyberpunk {
+  background: linear-gradient(135deg, #0a0514 0%, #1a0a2e 100%);
+}
+
+/* ===== TRANSITIONS ===== */
+.responsive-layout * {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* ===== RESPONSIVE UTILITIES ===== */
+@media (max-width: 768px) {
+  .responsive-layout {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 769px) {
+  .responsive-layout {
+    font-size: 16px;
+  }
+}
+
+/* ===== SMOOTH SCROLLING ===== */
+.responsive-layout {
+  scroll-behavior: smooth;
+}
+
+/* ===== SELECTION COLOR ===== */
+.responsive-layout ::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: inherit;
+}
+
+.responsive-layout.cyberpunk ::selection {
+  background: rgba(0, 255, 255, 0.3);
+  color: #ff00ff;
+}

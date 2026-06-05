@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
@@ -20,36 +20,42 @@ import {
   FaSun,
   FaBars,
   FaTimes,
+  FaPalette,
 } from "react-icons/fa";
 import { useTheme } from "@/themes/useTheme";
 import { useFont } from "@/contexts/FontContext";
 
-export default function Navbar({ onMenuClick, isMobileMenuOpen }) {
+export default function Navbar({ onMenuClick, onRightSidebarToggle, isMobileMenuOpen }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { theme, themeName, setTheme } = useTheme();
+  const { themeName, setTheme } = useTheme();
   const { currentFont } = useFont();
   const [searchQuery, setSearchQuery] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(3);
-  const [unreadMessages, setUnreadMessages] = useState(2);
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const notificationRef = useRef(null);
+  const userMenuRef = useRef(null);
+  const themeMenuRef = useRef(null);
 
   const isDarkMode = themeName === "dark" || themeName === "midnight" || themeName === "cyberpunk";
 
-  const navLinks = [
-    { href: "/drift", label: "Home", icon: <FaHome /> },
-    { href: "/drift/explore", label: "Explore", icon: <FaCompass /> },
-    { href: "/drift/books", label: "Books", icon: <FaBook /> },
-    { href: "/drift/community", label: "Community", icon: <FaUsers /> },
-  ];
-
-  const notifications = [
-    { id: 1, type: "like", user: "Priya Sharma", message: "liked your post", time: "5 min ago", read: false, avatar: null },
-    { id: 2, type: "comment", user: "Amit Kumar", message: "commented on your story", time: "1 hour ago", read: false, avatar: null },
-    { id: 3, type: "follow", user: "Neha Gupta", message: "started following you", time: "3 hours ago", read: false, avatar: null },
-    { id: 4, type: "mention", user: "Drift Comics", message: "mentioned you in a post", time: "Yesterday", read: true, avatar: null },
-  ];
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target)) {
+        setShowThemeMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -60,20 +66,30 @@ export default function Navbar({ onMenuClick, isMobileMenuOpen }) {
   };
 
   const handleLogout = () => {
-    // Handle logout logic
     router.push("/");
   };
 
-  const toggleTheme = () => {
-    const themes = ["light", "dark", "midnight", "cyberpunk"];
-    const currentIndex = themes.indexOf(themeName);
-    const nextTheme = themes[(currentIndex + 1) % themes.length];
-    setTheme(nextTheme);
+  const toggleTheme = (theme) => {
+    setTheme(theme);
+    setShowThemeMenu(false);
   };
+
+  const themes = [
+    { name: "light", icon: <FaSun />, label: "Light" },
+    { name: "dark", icon: <FaMoon />, label: "Dark" },
+    { name: "midnight", icon: <FaMoon />, label: "Midnight" },
+    { name: "cyberpunk", icon: <FaPalette />, label: "Cyberpunk" },
+  ];
+
+  const navLinks = [
+    { href: "/drift", label: "Home", icon: <FaHome /> },
+    { href: "/drift/explore", label: "Explore", icon: <FaCompass /> },
+    { href: "/drift/books", label: "Books", icon: <FaBook /> },
+    { href: "/drift/community", label: "Community", icon: <FaUsers /> },
+  ];
 
   return (
     <>
-      {/* Desktop Navbar */}
       <nav className={`drift-navbar ${themeName}`} style={{ fontFamily: currentFont?.family }}>
         <div className="navbar-container">
           {/* Logo */}
@@ -86,7 +102,7 @@ export default function Navbar({ onMenuClick, isMobileMenuOpen }) {
             </Link>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar - Only ONE */}
           <form onSubmit={handleSearch} className="navbar-search">
             <FaSearch className="search-icon" />
             <input
@@ -115,68 +131,53 @@ export default function Navbar({ onMenuClick, isMobileMenuOpen }) {
           {/* Right Actions */}
           <div className="navbar-actions">
             {/* Create Post Button */}
-            <button className="action-btn create-btn">
+            <button className="action-btn create-btn" onClick={() => router.push('/drift/create')}>
               <FaPlusCircle />
               <span>Create</span>
             </button>
 
             {/* Notifications */}
-            <div className="action-dropdown">
+            <div className="action-dropdown" ref={notificationRef}>
               <button
-                className={`action-btn notification-btn ${unreadNotifications > 0 ? "has-badge" : ""}`}
+                className="action-btn notification-btn"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <FaBell />
-                {unreadNotifications > 0 && (
-                  <span className="badge">{unreadNotifications}</span>
-                )}
               </button>
-              
-              {showNotifications && (
-                <div className="dropdown-menu notifications-menu">
-                  <div className="dropdown-header">
-                    <h3>Notifications</h3>
-                    <button className="mark-all-read">Mark all read</button>
-                  </div>
-                  <div className="dropdown-list">
-                    {notifications.map((notif) => (
-                      <div key={notif.id} className={`notification-item ${!notif.read ? "unread" : ""}`}>
-                        <FaUserCircle className="notification-avatar" />
-                        <div className="notification-content">
-                          <p>
-                            <strong>{notif.user}</strong> {notif.message}
-                          </p>
-                          <span className="notification-time">{notif.time}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="dropdown-footer">
-                    <Link href="/drift/notifications">View all notifications</Link>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Messages */}
             <Link href="/drift/messages" className="action-btn messages-btn">
               <FaEnvelope />
-              {unreadMessages > 0 && (
-                <span className="badge">{unreadMessages}</span>
-              )}
             </Link>
 
             {/* Theme Toggle */}
-            <button className="action-btn theme-btn" onClick={toggleTheme}>
-              {isDarkMode ? <FaSun /> : <FaMoon />}
-            </button>
+            <div className="action-dropdown" ref={themeMenuRef}>
+              <button className="action-btn theme-btn" onClick={() => setShowThemeMenu(!showThemeMenu)}>
+                <FaPalette />
+              </button>
+              {showThemeMenu && (
+                <div className="dropdown-menu theme-menu">
+                  <div className="dropdown-header">
+                    <h3>Select Theme</h3>
+                  </div>
+                  {themes.map((theme) => (
+                    <button
+                      key={theme.name}
+                      onClick={() => toggleTheme(theme.name)}
+                      className={`theme-option ${themeName === theme.name ? "active" : ""}`}
+                    >
+                      {theme.icon}
+                      <span>{theme.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* User Menu */}
-            <div className="action-dropdown">
-              <button
-                className="user-menu-btn"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
+            <div className="action-dropdown" ref={userMenuRef}>
+              <button className="user-menu-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
                 <FaUserCircle className="user-avatar" />
                 <span className="user-name">Alex</span>
               </button>
@@ -206,6 +207,11 @@ export default function Navbar({ onMenuClick, isMobileMenuOpen }) {
       {/* Mobile Menu Button */}
       <button className="mobile-menu-btn" onClick={onMenuClick}>
         {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+      </button>
+
+      {/* Mobile Right Sidebar Toggle */}
+      <button className="mobile-right-btn" onClick={onRightSidebarToggle}>
+        <FaUsers />
       </button>
     </>
   );

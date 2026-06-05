@@ -1,24 +1,16 @@
 "use client";
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import './MiddleContent.css';
+import { useTheme } from "@/themes/useTheme";
+import { useFont } from "@/contexts/FontContext";
+import "./MiddleContent.css";
 
 export default function MiddleContent({ children }) {
-  const pathname = usePathname();
-  const [isFullWidth, setIsFullWidth] = useState(false);
-  
-  useEffect(() => {
-    // Define which routes should be full width
-    // Remove '/drift' from fullWidthRoutes to keep Feed centered
-    const fullWidthRoutes = ['/explore', '/search', '/discover', '/books'];
-    const shouldBeFullWidth = fullWidthRoutes.some(route => pathname?.includes(route));
-    setIsFullWidth(shouldBeFullWidth);
-  }, [pathname]);
+  const { theme, themeName } = useTheme();
+  const { currentFont } = useFont();
 
   return (
-    <main className={`middle-content ${isFullWidth ? 'full-width-mode' : ''}`}>
-      <div className={`middle-container ${isFullWidth ? 'full-width-container' : 'normal-container'}`}>
+    <main className={`drift-middle-content ${themeName}`} style={{ fontFamily: currentFont?.family }}>
+      <div className="middle-content-container">
         {children}
       </div>
     </main>

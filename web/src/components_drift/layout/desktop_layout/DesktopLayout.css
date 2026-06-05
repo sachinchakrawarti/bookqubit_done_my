@@ -1,22 +1,32 @@
-/* Desktop Layout Styles */
-.desktop-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f7f9fc;
-  position: relative;
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .desktop-layout {
-    background: #15202b;
-  }
-}
-
 /* Drift Desktop Layout */
 .drift-desktop-layout {
   min-height: 100vh;
-  background: var(--layout-bg, #f9fafb);
+  position: relative;
+}
+
+/* Theme Variables */
+.drift-desktop-layout.light {
+  --layout-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --text-primary: #1a1a2e;
+  --text-secondary: #666666;
+}
+
+.drift-desktop-layout.dark {
+  --layout-bg: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+}
+
+.drift-desktop-layout.midnight {
+  --layout-bg: linear-gradient(135deg, #0a0f1a 0%, #0f192d 100%);
+  --text-primary: #e0e0ff;
+  --text-secondary: #8888aa;
+}
+
+.drift-desktop-layout.cyberpunk {
+  --layout-bg: linear-gradient(135deg, #0a0514 0%, #1a0a2e 100%);
+  --text-primary: #00ffff;
+  --text-secondary: #ff00ff;
 }
 
 .layout-container {
@@ -25,33 +35,67 @@
   margin: 0 auto;
   padding-top: 72px;
   min-height: 100vh;
-}
-
-/* Theme Backgrounds */
-.drift-desktop-layout.light {
-  --layout-bg: #f9fafb;
-}
-
-.drift-desktop-layout.dark {
-  --layout-bg: #0f0f1a;
-}
-
-.drift-desktop-layout.midnight {
-  --layout-bg: #0a0f1a;
-}
-
-.drift-desktop-layout.cyberpunk {
-  --layout-bg: #05010a;
+  position: relative;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .layout-container {
-    padding-top: 0;
+    padding-top: 64px;
   }
 }
 
-/* Smooth Transitions */
-.layout-container > * {
-  transition: all 0.3s ease;
+@media (max-width: 768px) {
+  .layout-container {
+    padding-top: 56px;
+    padding-bottom: 70px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
