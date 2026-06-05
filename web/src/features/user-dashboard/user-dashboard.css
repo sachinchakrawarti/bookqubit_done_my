@@ -1,31 +1,452 @@
+/* User Dashboard - Multi-Theme Support */
+
 .dashboard-page {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
+/* Light Theme */
+.dashboard-page.light {
+  background: #f9fafb;
+}
+
+/* Dark Theme */
+.dashboard-page.dark {
+  background: #1a1a2e;
+}
+
+/* Midnight Theme */
+.dashboard-page.midnight {
+  background: #0f192d;
+}
+
+/* Cyberpunk Theme */
+.dashboard-page.cyberpunk {
+  background: #0a0514;
+}
+
+/* Dashboard Layout */
 .dashboard-layout {
   display: flex;
-  gap: 24px;
-  margin-top: 24px;
+  min-height: 100vh;
 }
 
+/* Dashboard Content */
 .dashboard-content {
   flex: 1;
-  min-height: 600px;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
-.dashboard-content h2 {
-  margin: 0;
+/* RTL Support */
+[dir="rtl"] .dashboard-layout {
+  flex-direction: row-reverse;
 }
 
-@media (max-width: 992px) {
-  .dashboard-layout {
-    flex-direction: column;
+/* ===== MOBILE MENU TRIGGER ===== */
+.mobile-menu-trigger {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-trigger:hover {
+  transform: scale(1.05);
+}
+
+.dashboard-page.cyberpunk .mobile-menu-trigger {
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* ===== MOBILE OVERLAY ===== */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ===== SCROLLBAR STYLES ===== */
+.dashboard-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dashboard-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark theme scrollbar */
+.dashboard-page.dark .dashboard-content::-webkit-scrollbar-track,
+.dashboard-page.midnight .dashboard-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-page.dark .dashboard-content::-webkit-scrollbar-thumb,
+.dashboard-page.midnight .dashboard-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-page.dark .dashboard-content::-webkit-scrollbar-thumb:hover,
+.dashboard-page.midnight .dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Cyberpunk theme scrollbar */
+.dashboard-page.cyberpunk .dashboard-content::-webkit-scrollbar-track {
+  background: rgba(255, 0, 255, 0.1);
+}
+
+.dashboard-page.cyberpunk .dashboard-content::-webkit-scrollbar-thumb {
+  background: #ff00ff;
+}
+
+.dashboard-page.cyberpunk .dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: #ff44ff;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-content > * {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Cyberpunk glow effect for content */
+.dashboard-page.cyberpunk .dashboard-content {
+  position: relative;
+}
+
+.dashboard-page.cyberpunk .dashboard-content::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 255, 0.02) 0px,
+      rgba(0, 255, 255, 0.02) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  z-index: -1;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-layout {
+    position: relative;
+  }
+  
+  .dashboard-content {
+    padding: 1rem;
+    margin-top: 2rem;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Adjust all tabs for mobile */
+  .dashboard-content .stats-grid,
+  .dashboard-content .cr-stats-grid,
+  .dashboard-content .mr-stats-grid,
+  .dashboard-content .wtr-stats-grid,
+  .dashboard-content .liked-stats-grid,
+  .dashboard-content .comments-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+  
+  .dashboard-content .stat-card,
+  .dashboard-content .cr-stat-card,
+  .dashboard-content .mr-stat-card,
+  .dashboard-content .wtr-stat-card,
+  .dashboard-content .liked-stat-card,
+  .dashboard-content .comments-stat-card {
+    padding: 0.75rem !important;
+  }
+  
+  .dashboard-content .stat-value,
+  .dashboard-content .cr-stat-value,
+  .dashboard-content .mr-stat-value,
+  .dashboard-content .wtr-stat-value,
+  .dashboard-content .liked-stat-value,
+  .dashboard-content .comments-stat-value {
+    font-size: 1.25rem !important;
+  }
+  
+  /* Grid to single column on mobile */
+  .dashboard-content .cr-books-grid,
+  .dashboard-content .mr-books-grid,
+  .dashboard-content .wtr-books-grid,
+  .dashboard-content .liked-books-grid,
+  .dashboard-content .comments-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* List view adjustments */
+  .dashboard-content .cr-book-list,
+  .dashboard-content .mr-book-list,
+  .dashboard-content .wtr-book-list,
+  .dashboard-content .liked-book-list {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 1rem !important;
+  }
+  
+  .dashboard-content .cr-book-meta,
+  .dashboard-content .mr-book-meta,
+  .dashboard-content .wtr-book-meta,
+  .dashboard-content .liked-book-meta,
+  .dashboard-content .comment-book-meta {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .dashboard-content .cr-book-tags,
+  .dashboard-content .mr-book-tags,
+  .dashboard-content .wtr-book-tags,
+  .dashboard-content .liked-book-tags {
+    justify-content: center !important;
+  }
+  
+  .dashboard-content .cr-book-actions,
+  .dashboard-content .mr-book-actions,
+  .dashboard-content .wtr-book-actions,
+  .dashboard-content .liked-book-actions {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+  
+  /* Filters row mobile */
+  .dashboard-content .cr-filters-row,
+  .dashboard-content .mr-filters-row,
+  .dashboard-content .wtr-filters-row,
+  .dashboard-content .liked-filters-row,
+  .dashboard-content .comments-filters-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .dashboard-content .cr-view-toggle,
+  .dashboard-content .mr-view-toggle,
+  .dashboard-content .wtr-view-toggle,
+  .dashboard-content .liked-view-toggle,
+  .dashboard-content .comments-view-toggle {
+    margin-left: 0 !important;
+    justify-content: center !important;
+  }
+  
+  /* Comment card mobile */
+  .dashboard-content .comment-book-info {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  
+  .dashboard-content .comment-user {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+  
+  .dashboard-content .comment-date {
+    margin-left: 0 !important;
+  }
+  
+  /* Two column layout mobile */
+  .dashboard-content .overview-two-column {
+    flex-direction: column !important;
+  }
+  
+  /* Header mobile */
+  .dashboard-content .cr-title,
+  .dashboard-content .mr-title,
+  .dashboard-content .wtr-title,
+  .dashboard-content .liked-title,
+  .dashboard-content .comments-title {
+    font-size: 1.25rem !important;
+  }
+  
+  /* Progress circle mobile */
+  .dashboard-content .cr-book-cover-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Empty state mobile */
+  .dashboard-content .cr-empty-state,
+  .dashboard-content .mr-empty-state,
+  .dashboard-content .wtr-empty-state,
+  .dashboard-content .liked-empty-state,
+  .dashboard-content .comments-empty-state {
+    padding: 2rem 1rem !important;
+  }
+  
+  /* Modal mobile */
+  .cr-modal,
+  .mr-modal,
+  .wtr-modal,
+  .liked-modal,
+  .comments-modal {
+    width: 95% !important;
+    margin: 1rem !important;
+    padding: 1rem !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 0.75rem;
+  }
+  
+  .dashboard-content .stats-grid,
+  .dashboard-content .cr-stats-grid,
+  .dashboard-content .mr-stats-grid,
+  .dashboard-content .wtr-stats-grid,
+  .dashboard-content .liked-stats-grid,
+  .dashboard-content .comments-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .dashboard-content .cr-book-title,
+  .dashboard-content .mr-book-title,
+  .dashboard-content .wtr-book-title,
+  .dashboard-content .liked-book-title {
+    font-size: 1rem !important;
+  }
+  
+  .dashboard-content .cr-book-description,
+  .dashboard-content .mr-book-description,
+  .dashboard-content .wtr-book-description,
+  .dashboard-content .liked-book-description {
+    font-size: 0.8rem !important;
+  }
+  
+  .dashboard-content .cr-action-btn span,
+  .dashboard-content .mr-action-btn span,
+  .dashboard-content .wtr-action-btn span,
+  .dashboard-content .liked-action-btn span {
+    display: none !important;
+  }
+  
+  .dashboard-content .cr-action-btn,
+  .dashboard-content .mr-action-btn,
+  .dashboard-content .wtr-action-btn,
+  .dashboard-content .liked-action-btn {
+    padding: 0.5rem !important;
+  }
+}
+
+/* Tablet view */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+  
+  .dashboard-content .cr-books-grid,
+  .dashboard-content .mr-books-grid,
+  .dashboard-content .wtr-books-grid,
+  .dashboard-content .liked-books-grid,
+  .dashboard-content .comments-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .dashboard-content .stats-grid,
+  .dashboard-content .cr-stats-grid,
+  .dashboard-content .mr-stats-grid,
+  .dashboard-content .wtr-stats-grid,
+  .dashboard-content .liked-stats-grid,
+  .dashboard-content .comments-stats-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* Hide mobile menu trigger on desktop */
+@media (min-width: 769px) {
+  .mobile-menu-trigger,
+  .mobile-overlay {
+    display: none !important;
+  }
+}
+
+/* Update in user-dashboard.css - Change the click outside selector */
+
+/* Close mobile menu when clicking outside - Updated selector */
+.dashboard-page .mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Make sure the mobile sidebar has the correct class */
+.dashboard-sidebar-mobile {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  bottom: 0;
+  width: 280px;
+  z-index: 1002;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-sidebar-mobile.open {
+  left: 0;
 }

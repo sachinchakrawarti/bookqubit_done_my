@@ -1,0 +1,462 @@
+/* Currently Reading Tab - Multi-Theme Support */
+
+.currently-reading-tab {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* RTL Support */
+.currently-reading-tab[dir="rtl"] {
+  direction: rtl;
+}
+
+/* Header */
+.cr-header {
+  margin-bottom: 2rem;
+}
+
+.cr-title-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cr-header-icon {
+  font-size: 1.75rem;
+}
+
+.cr-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.cr-subtitle {
+  font-size: 0.875rem;
+}
+
+/* Stats Grid */
+.cr-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cr-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.cr-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cr-stat-icon {
+  font-size: 2rem;
+}
+
+.cr-stat-info {
+  flex: 1;
+}
+
+.cr-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.cr-stat-label {
+  font-size: 0.75rem;
+}
+
+/* Books Grid */
+.cr-books-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cr-book-card {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.cr-book-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Book Cover */
+.cr-book-cover-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cr-book-cover {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cr-book-progress-circle {
+  position: absolute;
+  bottom: -12px;
+  right: -12px;
+  width: 48px;
+  height: 48px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark .cr-book-progress-circle,
+.midnight .cr-book-progress-circle {
+  background: #1e1e2e;
+}
+
+.cyberpunk .cr-book-progress-circle {
+  background: #0d0d1a;
+  border: 1px solid #ff00ff;
+}
+
+.cr-progress-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.cr-progress-bg {
+  stroke: #e5e7eb;
+}
+
+.dark .cr-progress-bg,
+.midnight .cr-progress-bg {
+  stroke: #2d2d44;
+}
+
+.cyberpunk .cr-progress-bg {
+  stroke: #ff00ff;
+}
+
+.cr-progress-text {
+  font-size: 8px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: currentColor;
+}
+
+/* Book Info */
+.cr-book-info {
+  flex: 1;
+}
+
+.cr-book-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.cr-book-author {
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Progress Section */
+.cr-progress-section {
+  margin-bottom: 1rem;
+}
+
+.cr-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.cr-progress-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cr-progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Book Meta */
+.cr-book-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.cr-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cr-meta-icon {
+  font-size: 0.875rem;
+}
+
+.cr-meta-text {
+  font-size: 0.75rem;
+}
+
+/* Tags */
+.cr-book-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cr-tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.cr-book-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cr-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.cr-action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.cr-update-btn {
+  color: white;
+}
+
+.cr-complete-btn {
+  background: transparent;
+  border: 1px solid;
+}
+
+.cr-remove-btn {
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.cr-remove-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Empty State */
+.cr-empty-state {
+  text-align: center;
+  padding: 3rem;
+  border-radius: 1rem;
+}
+
+.cr-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.cr-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.cr-empty-text {
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.cr-add-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.cr-add-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Modal */
+.cr-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cr-modal {
+  width: 90%;
+  max-width: 500px;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cr-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.cr-modal-book {
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.cr-progress-input {
+  margin-bottom: 1.5rem;
+}
+
+.cr-input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cr-range-input {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.cr-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cr-range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.cr-pages-info {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.cr-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.cr-modal-cancel,
+.cr-modal-save {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.cr-modal-cancel:hover,
+.cr-modal-save:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cr-book-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .cr-book-meta {
+    justify-content: center;
+  }
+  
+  .cr-book-tags {
+    justify-content: center;
+  }
+  
+  .cr-book-actions {
+    justify-content: center;
+  }
+  
+  .cr-title {
+    font-size: 1.5rem;
+  }
+  
+  .cr-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cyberpunk Theme */
+.cyberpunk .cr-book-card {
+  border: 1px solid #ff00ff;
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
+}
+
+.cyberpunk .cr-range-input::-webkit-slider-thumb {
+  border-color: #00ffff;
+  box-shadow: 0 0 5px #00ffff;
+}

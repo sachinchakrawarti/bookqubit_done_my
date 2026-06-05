@@ -1,9 +1,11 @@
 "use client";
 
 import "./user-dashboard.css";
-
-import { useState } from "react";
-import DashboardHeader from "./components/DashboardHeader";
+import { useState, useEffect } from "react";
+import { useTheme } from "@/themes/useTheme";
+import { useFont } from "@/contexts/FontContext";
+import { useRTL } from "@/contexts/RTLContext";
+import MobileTopNav from "./components/MobileTopNav";
 import DashboardSidebar from "./components/DashboardSidebar";
 import {
   OverviewTab,
@@ -21,7 +23,46 @@ import {
 } from "./tab";
 
 export default function UserDashboard() {
+  const { theme, themeName } = useTheme();
+  const { currentFont } = useFont();
+  const { direction } = useRTL();
   const [activeMenu, setActiveMenu] = useState("overview");
+  const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Check if current theme is dark mode
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Check screen size for mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Guard against undefined theme
+  if (!mounted) {
+    return null;
+  }
+
+  if (!theme) {
+    return null;
+  }
+
+  // Apply font family inline style
+  const fontStyle = currentFont?.family ? {
+    fontFamily: currentFont.family
+  } : {};
 
   // Render the appropriate tab component based on active menu
   const renderContent = () => {
@@ -56,14 +97,31 @@ export default function UserDashboard() {
   };
 
   return (
-    <div className="dashboard-page">
-      <DashboardHeader />
-      <div className="dashboard-layout">
-        <DashboardSidebar
-          activeMenu={activeMenu}
-          setActiveMenu={setActiveMenu}
+    <div
+      dir={direction}
+      style={fontStyle}
+      className={`dashboard-page ${themeName}`}
+    >
+      {/* Mobile Top Navigation - Only on mobile */}
+      {isMobile && (
+        <MobileTopNav 
+          activeMenu={activeMenu} 
+          setActiveMenu={setActiveMenu} 
         />
-        <div className="dashboard-content">{renderContent()}</div>
+      )}
+
+      <div className="dashboard-layout">
+        {/* Desktop Sidebar - Only on desktop */}
+        {!isMobile && (
+          <DashboardSidebar 
+            activeMenu={activeMenu} 
+            setActiveMenu={setActiveMenu} 
+          />
+        )}
+        
+        <main className={`dashboard-content ${theme.background?.page || (isDarkMode ? "bg-gray-900" : "bg-gray-50")}`}>
+          {renderContent()}
+        </main>
       </div>
     </div>
   );
