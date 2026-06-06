@@ -1,99 +1,121 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  FiGrid,
-  FiBookOpen,
-  FiCheckCircle,
-  FiStar,
-  FiHeart,
-  FiMessageCircle,
-  FiEdit2,
-  FiBarChart2,
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useTheme } from "@/themes/useTheme";
+import { useFont } from "@/contexts/FontContext";
+import { useRTL } from "@/contexts/RTLContext";
+import { 
+  FiGrid, 
+  FiBookOpen, 
+  FiCheckCircle, 
+  FiStar, 
+  FiHeart, 
+  FiMessageCircle, 
+  FiEdit2, 
+  FiBarChart2, 
   FiUser,
   FiChevronDown,
 } from "react-icons/fi";
-import { useTheme } from "@/themes/useTheme";
 import "./MobileTopNav.css";
 
-export default function MobileTopNav({ activeMenu, setActiveMenu }) {
+export default function MobileTopNav() {
+  const router = useRouter();
   const { theme, themeName } = useTheme();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { currentFont } = useFont();
+  const { direction } = useRTL();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDarkMode = themeName === "dark" || themeName === "midnight" || themeName === "cyberpunk";
+  // Check if current theme is dark mode
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
 
   const menuItems = [
-    { id: "overview", label: "Overview", icon: FiGrid },
-    { id: "currently_reading", label: "Currently Reading", icon: FiBookOpen },
-    { id: "marked_read", label: "Marked Read", icon: FiCheckCircle },
-    { id: "want_to_read", label: "Want to Read", icon: FiStar },
-    { id: "liked_books", label: "Liked Books", icon: FiHeart },
-    { id: "comments", label: "Comments", icon: FiMessageCircle },
-    { id: "reviews", label: "Reviews", icon: FiEdit2 },
-    { id: "reading_stats", label: "Reading Stats", icon: FiBarChart2 },
-    { id: "profile", label: "Profile", icon: FiUser },
+    { id: "overview", label: "Overview", icon: FiGrid, path: "/user-dashboard" },
+    { id: "currently_reading", label: "Currently Reading", icon: FiBookOpen, path: "/user-dashboard?tab=currently_reading" },
+    { id: "marked_read", label: "Marked Read", icon: FiCheckCircle, path: "/user-dashboard?tab=marked_read" },
+    { id: "want_to_read", label: "Want to Read", icon: FiStar, path: "/user-dashboard?tab=want_to_read" },
+    { id: "liked_books", label: "Liked Books", icon: FiHeart, path: "/user-dashboard?tab=liked_books" },
+    { id: "comments", label: "Comments", icon: FiMessageCircle, path: "/user-dashboard?tab=comments" },
+    { id: "reviews", label: "Reviews", icon: FiEdit2, path: "/user-dashboard?tab=reviews" },
+    { id: "reading_stats", label: "Reading Stats", icon: FiBarChart2, path: "/user-dashboard?tab=reading_stats" },
+    { id: "profile", label: "Profile", icon: FiUser, path: "/profile" },
   ];
 
-  const currentMenuItem = menuItems.find(item => item.id === activeMenu) || menuItems[0];
-  const CurrentIcon = currentMenuItem.icon;
-
-  const handleMenuClick = (menuId) => {
-    setActiveMenu(menuId);
-    setIsMenuOpen(false);
+  // Get current page label from URL
+  const getCurrentLabel = () => {
+    const path = window.location.pathname;
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    
+    if (path === '/profile') return 'Profile';
+    if (tab === 'currently_reading') return 'Currently Reading';
+    if (tab === 'marked_read') return 'Marked Read';
+    if (tab === 'want_to_read') return 'Want to Read';
+    if (tab === 'liked_books') return 'Liked Books';
+    if (tab === 'comments') return 'Comments';
+    if (tab === 'reviews') return 'Reviews';
+    if (tab === 'reading_stats') return 'Reading Stats';
+    return 'Overview';
   };
 
-  // Don't render until mounted to avoid hydration issues
-  if (!mounted) {
-    return null;
-  }
+  const currentLabel = getCurrentLabel();
+  const currentIcon = menuItems.find(item => item.label === currentLabel)?.icon || FiGrid;
+  const CurrentIcon = currentIcon;
+
+  const handleMenuClick = (path) => {
+    setIsDropdownOpen(false);
+    router.push(path);
+  };
+
+  // Apply font family inline style
+  const fontStyle = currentFont?.family ? {
+    fontFamily: currentFont.family
+  } : {};
 
   return (
-    <>
-      {/* Top Navigation Bar */}
-      <div className={`mobile-top-nav ${themeName || "light"}`}>
-        <div className="mobile-top-nav-container">
-          <button 
-            className="mobile-menu-trigger"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <CurrentIcon size={22} />
-            <span className="mobile-current-label">
-              {currentMenuItem.label}
-            </span>
-            <FiChevronDown size={16} className={`menu-arrow ${isMenuOpen ? "open" : ""}`} />
-          </button>
-        </div>
-      </div>
+    <div 
+      dir={direction}
+      style={fontStyle}
+      className={`mobile-top-nav ${themeName}`}
+    >
+      {/* Dropdown Trigger Button */}
+      <button 
+        className="mobile-nav-trigger"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      >
+        <CurrentIcon size={20} />
+        <span className={`nav-label ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
+          {currentLabel}
+        </span>
+        <FiChevronDown className={`dropdown-arrow ${isDropdownOpen ? "open" : ""}`} />
+      </button>
 
       {/* Dropdown Menu */}
-      {isMenuOpen && (
+      {isDropdownOpen && (
         <>
-          <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />
-          <div className={`mobile-dropdown-menu ${themeName || "light"}`}>
+          <div className="mobile-dropdown-overlay" onClick={() => setIsDropdownOpen(false)} />
+          <div className={`mobile-dropdown ${themeName}`}>
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeMenu === item.id;
+              const isActive = item.label === currentLabel;
               
               return (
                 <button
                   key={item.id}
-                  className={`mobile-menu-item ${isActive ? "active" : ""}`}
-                  onClick={() => handleMenuClick(item.id)}
+                  className={`mobile-dropdown-item ${isActive ? "active" : ""}`}
+                  onClick={() => handleMenuClick(item.path)}
                 >
-                  <Icon size={20} />
+                  <Icon size={18} />
                   <span>{item.label}</span>
-                  {isActive && <span className="active-indicator"></span>}
+                  {isActive && <span className="active-check">✓</span>}
                 </button>
               );
             })}
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }

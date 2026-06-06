@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@/themes/useTheme";
 import { useFont } from "@/contexts/FontContext";
 import { useRTL } from "@/contexts/RTLContext";
-import MobileTopNav from "./components/MobileTopNav";
 import DashboardSidebar from "./components/DashboardSidebar";
+import MobileTopNav from "./components/MobileTopNav";
 import {
   OverviewTab,
   CurrentlyReadingTab,
@@ -50,21 +50,12 @@ export default function UserDashboard() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Guard against undefined theme
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return null;
 
-  if (!theme) {
-    return null;
-  }
-
-  // Apply font family inline style
   const fontStyle = currentFont?.family ? {
     fontFamily: currentFont.family
   } : {};
 
-  // Render the appropriate tab component based on active menu
   const renderContent = () => {
     switch (activeMenu) {
       case "overview":
@@ -83,14 +74,6 @@ export default function UserDashboard() {
         return <ReviewsTab />;
       case "reading_stats":
         return <ReadingStatsTab />;
-      case "bookmarks":
-        return <BookmarksTab />;
-      case "followers":
-        return <FollowersTab />;
-      case "following":
-        return <FollowingTab />;
-      case "settings":
-        return <SettingsTab />;
       default:
         return <OverviewTab />;
     }
