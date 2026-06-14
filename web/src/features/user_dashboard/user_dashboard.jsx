@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ProfileDesktop from "./profile_desktop/profile_desktop";
-import ProfileMobile from "./profile_mobile/profile_mobile";
+import UserDashboardDesktop from "./user_dashboard_desktop/user_dashboard_desktop";
+import UserDashboardMobile from "./user_dashboard_mobile/user_dashboard_mobile";
+import "./user_dashboard.css";
 
-export default function Profile() {
+export default function UserDashboard() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -16,7 +17,7 @@ export default function Profile() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -24,5 +25,5 @@ export default function Profile() {
 
   if (!mounted) return null;
 
-  return isMobile ? <ProfileMobile /> : <ProfileDesktop />;
+  return isMobile ? <UserDashboardMobile /> : <UserDashboardDesktop />;
 }

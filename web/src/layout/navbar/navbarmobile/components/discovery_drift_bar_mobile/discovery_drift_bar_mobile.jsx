@@ -13,6 +13,18 @@ const DiscoveryDriftBarMobile = memo(() => {
   const { theme, themeName } = useTheme();
   const { isRTL } = useRTL();
 
+  // ✅ SHOW ONLY ON:
+  // 1) Language root: /en , /hi , /fr , ... (one segment)
+  // 2) Homepage route: /en/homepages , /hi/homepages , ... (ends with "/homepages")
+  // 3) Drift route: /en/drift , /hi/drift , ... (ends with "/drift")
+  const pathSegments = pathname?.split('/').filter(Boolean);
+  const isLanguageOnly = pathSegments?.length === 1;
+  const isHomepagesRoute = pathname?.endsWith('/homepages');
+  const isDriftRoute = pathname?.endsWith('/drift');
+  const isHomePage = isLanguageOnly || isHomepagesRoute || isDriftRoute;
+
+  if (!isHomePage) return null;
+
   const isDrift = pathname?.includes("/drift") || false;
   
   // Detect theme type for proper styling
@@ -62,8 +74,8 @@ const DiscoveryDriftBarMobile = memo(() => {
 
     const getBorderColor = () => {
       if (theme.border?.default) return theme.border.default;
-      if (isForestTheme) return 'rgba(5, 150, 105, 0.3)';  // Fixed: removed => 
-      if (isNeonTheme) return 'rgba(0, 255, 255, 0.3)';   // Fixed: removed =>
+      if (isForestTheme) return 'rgba(5, 150, 105, 0.3)';
+      if (isNeonTheme) return 'rgba(0, 255, 255, 0.3)';
       return isDarkMode ? 'rgba(75, 85, 99, 0.3)' : 'rgba(209, 213, 219, 0.4)';
     };
 
@@ -127,7 +139,7 @@ const DiscoveryDriftBarMobile = memo(() => {
     };
   }, [theme, themeName, isDarkMode, isForestTheme, isNeonTheme]);
 
-  // Touch-optimized handlers with haptic feedback
+  // Touch‑optimized handlers with haptic feedback
   const handleDiscoveryTap = useCallback((e) => {
     if (isDrift) {
       e.currentTarget.style.background = styles.hoverBackground;

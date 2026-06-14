@@ -27,9 +27,12 @@ const Navbar_Mobile = () => {
   const [loading, setLoading] = useState(true);
   const [unreadCount] = useState(3);
   const [isScrolled, setIsScrolled] = useState(false);
-  
+
   // Check if current theme is dark mode
-  const isDarkMode = themeName === "dark" || themeName === "midnight" || themeName === "cyberpunk";
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
 
   // Detect scroll for sticky navbar effects
   useEffect(() => {
@@ -51,7 +54,7 @@ const Navbar_Mobile = () => {
 
   const handleLogin = () => router.push("/auth/login");
   const handleNotificationClick = () => router.push("/notifications");
-  const handleProfileClick = () => router.push("/auth/profile");
+  const handleProfileClick = () => router.push("/profile");
 
   const getUserInitials = () => {
     if (!user) return "U";
@@ -66,36 +69,45 @@ const Navbar_Mobile = () => {
   // Enhanced theme variables mapping
   const themeVars = {
     fontFamily: currentFont?.family,
-    
+
     "--nav-primary-color": theme.textColors?.primary || "inherit",
     "--nav-secondary-color": theme.textColors?.secondary || "inherit",
     "--nav-highlight-color": theme.textColors?.highlight || "#0ea5e9",
-    
-    "--nav-bg-color": theme.background?.navbar || theme.background?.section || "transparent",
+
+    "--nav-bg-color":
+      theme.background?.navbar || theme.background?.section || "transparent",
     "--nav-hover-bg": theme.background?.hover || "rgba(156, 163, 175, 0.08)",
-    
+
     "--nav-border-color": theme.border?.default || "rgba(156, 163, 175, 0.15)",
-    
-    "--nav-btn-bg": theme.buttonColors?.login?.background || 
-                    (isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(156, 163, 175, 0.12)"),
-    "--nav-btn-text": theme.buttonColors?.login?.text || 
-                      theme.textColors?.primary || "inherit",
-    "--nav-btn-hover-bg": theme.buttonColors?.login?.hoverBackground || 
-                          (isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(156, 163, 175, 0.2)"),
-    
-    "--nav-avatar-bg": theme.buttonColors?.primaryButton?.background || 
-                       theme.iconColors?.starFilled || "#0ea5e9",
-    "--nav-avatar-text": theme.buttonColors?.primaryButton?.textColor || "#ffffff",
-    
-    "--nav-icon-color": theme.iconColors?.default || theme.textColors?.secondary || "inherit",
-    
-    "--nav-shadow": theme.shadow?.container || "0 1px 3px 0 rgba(0, 0, 0, 0.05)",
-    
-    "--nav-logo-color": theme.textColors?.logo || theme.textColors?.primary || "inherit",
-    
+
+    "--nav-btn-bg":
+      theme.buttonColors?.login?.background ||
+      (isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(156, 163, 175, 0.12)"),
+    "--nav-btn-text":
+      theme.buttonColors?.login?.text || theme.textColors?.primary || "inherit",
+    "--nav-btn-hover-bg":
+      theme.buttonColors?.login?.hoverBackground ||
+      (isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(156, 163, 175, 0.2)"),
+
+    "--nav-avatar-bg":
+      theme.buttonColors?.primaryButton?.background ||
+      theme.iconColors?.starFilled ||
+      "#0ea5e9",
+    "--nav-avatar-text":
+      theme.buttonColors?.primaryButton?.textColor || "#ffffff",
+
+    "--nav-icon-color":
+      theme.iconColors?.default || theme.textColors?.secondary || "inherit",
+
+    "--nav-shadow":
+      theme.shadow?.container || "0 1px 3px 0 rgba(0, 0, 0, 0.05)",
+
+    "--nav-logo-color":
+      theme.textColors?.logo || theme.textColors?.primary || "inherit",
+
     // Second row specific variables
-    "--nav-second-row-bg": isScrolled 
-      ? (theme.background?.navbar || "rgba(255, 255, 255, 0.95)")
+    "--nav-second-row-bg": isScrolled
+      ? theme.background?.navbar || "rgba(255, 255, 255, 0.95)"
       : "transparent",
   };
 
@@ -108,14 +120,26 @@ const Navbar_Mobile = () => {
           style={themeVars}
         >
           <div className="navbar-mobile-left flex-shrink-0">
-            <div className="skeleton-loader w-8 h-8 opacity-20 rounded" style={{ backgroundColor: themeVars["--nav-primary-color"] }}></div>
+            <div
+              className="skeleton-loader w-8 h-8 opacity-20 rounded"
+              style={{ backgroundColor: themeVars["--nav-primary-color"] }}
+            ></div>
           </div>
           <div className="navbar-mobile-center min-w-0 mx-2">
-            <div className="skeleton-logo w-20 h-6 opacity-20 rounded" style={{ backgroundColor: themeVars["--nav-primary-color"] }}></div>
+            <div
+              className="skeleton-logo w-20 h-6 opacity-20 rounded"
+              style={{ backgroundColor: themeVars["--nav-primary-color"] }}
+            ></div>
           </div>
           <div className="navbar-mobile-right flex gap-1.5 flex-shrink-0">
-            <div className="skeleton-icon w-6 h-6 opacity-20 rounded-full" style={{ backgroundColor: themeVars["--nav-primary-color"] }}></div>
-            <div className="skeleton-icon w-6 h-6 opacity-20 rounded-full" style={{ backgroundColor: themeVars["--nav-primary-color"] }}></div>
+            <div
+              className="skeleton-icon w-6 h-6 opacity-20 rounded-full"
+              style={{ backgroundColor: themeVars["--nav-primary-color"] }}
+            ></div>
+            <div
+              className="skeleton-icon w-6 h-6 opacity-20 rounded-full"
+              style={{ backgroundColor: themeVars["--nav-primary-color"] }}
+            ></div>
           </div>
         </nav>
       </div>
@@ -163,7 +187,7 @@ const Navbar_Mobile = () => {
         {/* Right Section - Action Buttons */}
         <div className="navbar-mobile-right flex items-center gap-1.5 flex-shrink-0">
           <SearchBar_Mobile />
-  
+
           <Control_Mobile_Slider />
 
           {/* Notification Icon */}
@@ -174,7 +198,8 @@ const Navbar_Mobile = () => {
               aria-label="Notifications"
               style={{ color: themeVars["--nav-icon-color"] }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = themeVars["--nav-hover-bg"];
+                e.currentTarget.style.backgroundColor =
+                  themeVars["--nav-hover-bg"];
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -227,11 +252,13 @@ const Navbar_Mobile = () => {
                 color: themeVars["--nav-btn-text"],
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = themeVars["--nav-btn-hover-bg"];
+                e.currentTarget.style.backgroundColor =
+                  themeVars["--nav-btn-hover-bg"];
                 e.currentTarget.style.transform = "scale(1.05)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = themeVars["--nav-btn-bg"];
+                e.currentTarget.style.backgroundColor =
+                  themeVars["--nav-btn-bg"];
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
@@ -243,7 +270,7 @@ const Navbar_Mobile = () => {
       </nav>
 
       {/* Second Row - Discovery/Drift Navigation Bar */}
-      <div 
+      <div
         className={`navbar-second-row ${isScrolled ? "second-row-scrolled" : ""}`}
         style={{
           backgroundColor: themeVars["--nav-second-row-bg"],
