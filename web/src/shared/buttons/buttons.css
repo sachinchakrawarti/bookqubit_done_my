@@ -1,0 +1,377 @@
+/* Shared Buttons - Multi-Theme Support */
+
+/* Base Button Styles */
+.know-more-btn,
+.share-btn,
+.like-btn,
+.want-to-read-btn,
+.currently-reading-btn,
+.marked-read-btn,
+.summary-btn,
+.my-library-btn,
+.wishlist-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* ===== Know More Button ===== */
+.know-more-btn {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.know-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* ===== Share Button ===== */
+.share-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .share-btn,
+.midnight .share-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .share-btn {
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.share-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.dark .share-btn:hover,
+.midnight .share-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .share-btn:hover {
+  background: rgba(255, 0, 255, 0.2);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+/* ===== Like Button ===== */
+.like-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #6b7280;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .like-btn,
+.midnight .like-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .like-btn {
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.like-btn.liked {
+  background: #fee2e2;
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.dark .like-btn.liked {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.cyberpunk .like-btn.liked {
+  background: rgba(255, 0, 255, 0.2);
+  color: #ff00ff;
+  border-color: #ff00ff;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+.like-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Want to Read Button ===== */
+.want-to-read-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .want-to-read-btn,
+.midnight .want-to-read-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .want-to-read-btn {
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.want-to-read-btn.added {
+  background: #dbeafe;
+  color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.dark .want-to-read-btn.added {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border-color: #3b82f6;
+}
+
+.cyberpunk .want-to-read-btn.added {
+  background: rgba(0, 255, 255, 0.2);
+  color: #00ffff;
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.want-to-read-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Currently Reading Button ===== */
+.currently-reading-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .currently-reading-btn,
+.midnight .currently-reading-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .currently-reading-btn {
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.currently-reading-btn.active {
+  background: #d1fae5;
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.dark .currently-reading-btn.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border-color: #10b981;
+}
+
+.cyberpunk .currently-reading-btn.active {
+  background: rgba(0, 255, 255, 0.2);
+  color: #00ffff;
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.currently-reading-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Marked Read Button ===== */
+.marked-read-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .marked-read-btn,
+.midnight .marked-read-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .marked-read-btn {
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.marked-read-btn.read {
+  background: #d1fae5;
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.dark .marked-read-btn.read {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border-color: #10b981;
+}
+
+.cyberpunk .marked-read-btn.read {
+  background: rgba(0, 255, 255, 0.2);
+  color: #00ffff;
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.marked-read-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Summary Button ===== */
+.summary-btn {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.summary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* ===== My Library Button ===== */
+.my-library-btn {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.my-library-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* ===== Wishlist Button ===== */
+.wishlist-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #374151;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .wishlist-btn,
+.midnight .wishlist-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk .wishlist-btn {
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-color: #ff00ff;
+}
+
+.wishlist-btn.in-wishlist {
+  background: #fce7f3;
+  color: #db2777;
+  border-color: #db2777;
+}
+
+.dark .wishlist-btn.in-wishlist {
+  background: rgba(219, 39, 119, 0.2);
+  color: #f472b6;
+  border-color: #db2777;
+}
+
+.cyberpunk .wishlist-btn.in-wishlist {
+  background: rgba(255, 0, 255, 0.2);
+  color: #ff00ff;
+  border-color: #ff00ff;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+.wishlist-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Button Sizes ===== */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-sm .btn-icon {
+  font-size: 12px;
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+.btn-lg .btn-icon {
+  font-size: 20px;
+}
+
+.btn-xl {
+  padding: 16px 32px;
+  font-size: 18px;
+}
+
+.btn-xl .btn-icon {
+  font-size: 22px;
+}
+
+/* ===== Full Width ===== */
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ===== RTL Support ===== */
+[dir="rtl"] .btn-icon {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .know-more-btn,
+  .share-btn,
+  .like-btn,
+  .want-to-read-btn,
+  .currently-reading-btn,
+  .marked-read-btn,
+  .summary-btn,
+  .my-library-btn,
+  .wishlist-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  
+  .btn-icon {
+    font-size: 14px;
+  }
+}

@@ -1,7 +1,9 @@
-/* Drift Desktop Layout */
+/* Drift Desktop Layout - NO MARGINS */
 .drift-desktop-layout {
   min-height: 100vh;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 /* Theme Variables */
@@ -31,52 +33,42 @@
 
 .layout-container {
   display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding-top: 72px;
+  max-width: 100%; /* ← Changed from 1400px */
+  margin: 0; /* ← ZERO margin */
+  padding: 0; /* ← ZERO padding */
   min-height: 100vh;
   position: relative;
+  background: var(--layout-bg);
+  width: 100%; /* ← Full width */
+}
+
+/* Middle Content takes remaining space */
+.layout-container > :nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .layout-container {
-    padding-top: 64px;
+    padding: 0;
+    margin: 0;
   }
 }
 
 @media (max-width: 768px) {
   .layout-container {
-    padding-top: 56px;
-    padding-bottom: 70px;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
   }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
+  
+  .layout-container > :nth-child(2) {
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
 }
 

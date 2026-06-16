@@ -5,18 +5,38 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useTheme } from "@/themes/useTheme";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useFont } from "@/contexts/FontContext";
+import { useRTL } from "@/contexts/RTLContext";
+import {
+  KnowMoreButton,
+  ShareButton,
+  SummaryButton,
+  WishlistButton,
+  CurrentlyReadingButton,
+  MarkedReadButton,
+} from "@/shared/buttons";
 
 const ComicSquareCard = ({
   comic,
   onTagClick,
   onWishlistToggle,
   currentLang: propLang,
+  showActions = true,
+  size = "md",
 }) => {
   const { theme, themeName } = useTheme();
   const { t, language: contextLanguage } = useLanguage();
+  const { currentFont } = useFont();
+  const { direction } = useRTL();
   const params = useParams();
   const pathname = usePathname();
   const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // Check if current theme is dark mode
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
 
   // Get language from URL
   const getCurrentLanguage = () => {
@@ -24,20 +44,8 @@ const ComicSquareCard = ({
     const segments = pathname?.split("/").filter(Boolean);
     const firstSegment = segments?.[0];
     const supportedLanguages = [
-      "en",
-      "es",
-      "fr",
-      "de",
-      "ja",
-      "zh",
-      "hi",
-      "ar",
-      "ur",
-      "bn",
-      "pt",
-      "ru",
-      "it",
-      "ko",
+      "en", "es", "fr", "de", "ja", "zh", "hi", "ar",
+      "ur", "bn", "pt", "ru", "it", "ko",
     ];
     if (firstSegment && supportedLanguages.includes(firstSegment)) {
       return firstSegment;
@@ -51,12 +59,6 @@ const ComicSquareCard = ({
   if (!theme || !comic) {
     return null;
   }
-
-  // Check if current theme is dark mode
-  const isDarkMode =
-    themeName === "dark" ||
-    themeName === "midnight" ||
-    themeName === "cyberpunk";
 
   // Function to render star rating
   const renderStars = (rating) => {
@@ -114,7 +116,7 @@ const ComicSquareCard = ({
     );
   };
 
-  const handleWishlistClick = (e) => {
+  const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
     const newWishlistState = !isWishlisted;
@@ -124,32 +126,39 @@ const ComicSquareCard = ({
     }
   };
 
-  // Get the correct slug (handle language-specific slugs)
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: comic.title,
+        text: `Check out this comic: ${comic.title}`,
+        url: `/${currentLanguage}/comics/${comicSlug}`,
+      });
+    } else {
+      navigator.clipboard.writeText(`/${currentLanguage}/comics/${comicSlug}`);
+      alert("Link copied to clipboard!");
+    }
+  };
+
+  // Get the correct slug
   const getComicSlug = () => {
-    // For Hindi, use hindiSlug if available
-    if (currentLanguage === "hi") {
-      return comic.hindiSlug || comic.slug;
-    }
-    // For Urdu, use urduSlug if available
-    if (currentLanguage === "ur") {
-      return comic.urduSlug || comic.slug;
-    }
-    // For Arabic, use arabicSlug if available
-    if (currentLanguage === "ar") {
-      return comic.arabicSlug || comic.slug;
-    }
-    // For Bengali, use bengaliSlug if available
-    if (currentLanguage === "bn") {
-      return comic.bengaliSlug || comic.slug;
-    }
-    // Default to regular slug
+    if (currentLanguage === "hi") return comic.hindiSlug || comic.slug;
+    if (currentLanguage === "ur") return comic.urduSlug || comic.slug;
+    if (currentLanguage === "ar") return comic.arabicSlug || comic.slug;
+    if (currentLanguage === "bn") return comic.bengaliSlug || comic.slug;
     return comic.slug;
   };
 
   const comicSlug = getComicSlug();
 
+  // Apply font style
+  const fontStyle = currentFont?.family ? {
+    fontFamily: currentFont.family
+  } : {};
+
   return (
     <div
+      dir={direction}
+      style={fontStyle}
       className={`
         w-full max-w-sm mx-auto 
         ${theme.border?.default || "border border-gray-200 dark:border-gray-700"} 
@@ -191,40 +200,15 @@ const ComicSquareCard = ({
           {comic.category}
         </div>
 
-        {/* Wishlist Button */}
-        <button
-          onClick={handleWishlistClick}
-          className={`
-            absolute top-3 right-3 p-2 
-            ${theme.border?.button || "border border-gray-200 dark:border-gray-600"} 
-            ${theme.shadow?.button || "shadow-md"} 
-            rounded-full transition-all duration-300 backdrop-blur-sm 
-            ${
-              isWishlisted
-                ? `${theme.buttonColors?.wishlistButton?.savedBackground || "bg-rose-50 dark:bg-rose-900/20 border-rose-400 dark:border-rose-600"} ${theme.textColors?.wishlistSaved || "text-rose-600 dark:text-rose-400"}`
-                : `${theme.buttonColors?.wishlistButton?.defaultBackground || "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"} ${theme.textColors?.wishlistDefault || "text-gray-600 dark:text-gray-400"} hover:${theme.textColors?.wishlistSaved || "text-rose-600 dark:text-rose-400"}`
-            }
-          `}
-          aria-label={
-            isWishlisted
-              ? t("book.remove_from_wishlist") || "Remove from wishlist"
-              : t("book.add_to_wishlist") || "Add to wishlist"
-          }
-        >
-          <svg
-            className="w-4 h-4"
-            fill={isWishlisted ? "currentColor" : "none"}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
+        {/* Wishlist Button - Using Shared WishlistButton */}
+        <div className="absolute top-3 right-3">
+          <WishlistButton
+            initialInWishlist={isWishlisted}
+            onClick={handleWishlistToggle}
+            size="sm"
+            className="backdrop-blur-sm"
+          />
+        </div>
 
         {/* Value Badge */}
         {comic.valueToday && (
@@ -309,12 +293,12 @@ const ComicSquareCard = ({
                         onTagClick && onTagClick(character);
                       }}
                       className={`
-                    text-xs px-2 py-1 
-                    ${theme.border?.default || "border border-gray-200 dark:border-gray-700"} 
-                    ${theme.textColors?.badge || "text-sky-800 dark:text-sky-400"} 
-                    ${isDarkMode ? "bg-sky-900/30 hover:bg-sky-800/40" : "bg-sky-50 hover:bg-sky-100"} 
-                    rounded-full transition-colors
-                  `}
+                        text-xs px-2 py-1 
+                        ${theme.border?.default || "border border-gray-200 dark:border-gray-700"} 
+                        ${theme.textColors?.badge || "text-sky-800 dark:text-sky-400"} 
+                        ${isDarkMode ? "bg-sky-900/30 hover:bg-sky-800/40" : "bg-sky-50 hover:bg-sky-100"} 
+                        rounded-full transition-colors
+                      `}
                     >
                       {character}
                     </button>
@@ -331,57 +315,31 @@ const ComicSquareCard = ({
             </div>
           )}
 
-        {/* Action Buttons with Language-aware Links */}
-        <div className="flex flex-col gap-2">
-          <Link
-            href={`/${currentLanguage}/comics/${comicSlug}`}
-            className={`
-              w-full py-2 text-center font-semibold rounded-lg 
-              ${theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-600 to-sky-500"} 
-              text-white 
-              ${theme.border?.button || ""} 
-              ${theme.shadow?.button || "shadow-md"} 
-              transition-all duration-300 
-              ${theme.buttonColors?.primaryButton?.hoverBackground || "hover:from-sky-700 hover:to-sky-600"}
-              hover:scale-105 active:scale-95
-            `}
-          >
-            {t("comic.view_details") || "View Details"}
-          </Link>
+        {/* Action Buttons - Using Shared Buttons */}
+        {showActions && (
+          <div className="flex flex-col gap-2">
+            {/* Know More Button */}
+            <KnowMoreButton
+              onClick={() => window.open(`/${currentLanguage}/comics/${comicSlug}`, "_blank")}
+              size={size}
+              fullWidth
+            />
 
-          <div className="flex gap-2">
-            <Link
-              href={`/${currentLanguage}/read/comic/${comicSlug}`}
-              className={`
-                flex-1 py-2 text-center font-semibold rounded-lg 
-                ${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
-                ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"} 
-                ${theme.border?.button || ""} 
-                ${theme.shadow?.button || "shadow-md"} 
-                transition-all duration-300 
-                ${theme.buttonColors?.secondaryButton?.hoverBackground || "hover:bg-sky-50 dark:hover:bg-sky-900/20"}
-                hover:scale-105 active:scale-95 text-xs
-              `}
-            >
-              {t("comic.read_digital") || "Read"}
-            </Link>
-            <Link
-              href={`/${currentLanguage}/comics/${comicSlug}/collectors-guide`}
-              className={`
-                flex-1 py-2 text-center font-semibold rounded-lg 
-                ${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
-                ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"} 
-                ${theme.border?.button || ""} 
-                ${theme.shadow?.button || "shadow-md"} 
-                transition-all duration-300 
-                ${theme.buttonColors?.secondaryButton?.hoverBackground || "hover:bg-sky-50 dark:hover:bg-sky-900/20"}
-                hover:scale-105 active:scale-95 text-xs
-              `}
-            >
-              {t("comic.collectors_guide") || "Collect"}
-            </Link>
+            {/* Action Row */}
+            <div className="flex gap-2">
+              <SummaryButton
+                onClick={() => window.open(`/${currentLanguage}/comics/${comicSlug}/summary`, "_blank")}
+                size={size}
+                className="flex-1"
+              />
+              <ShareButton
+                onClick={handleShare}
+                size={size}
+                className="flex-1"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

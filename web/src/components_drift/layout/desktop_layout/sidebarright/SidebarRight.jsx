@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FaUserPlus,
   FaHashtag,
@@ -17,8 +18,6 @@ import {
   FaStar,
   FaUsers,
   FaChartLine,
-  FaCrown,
-  FaRocket,
 } from "react-icons/fa";
 import { useTheme } from "@/themes/useTheme";
 import { useFont } from "@/contexts/FontContext";
@@ -26,9 +25,10 @@ import { useRTL } from "@/contexts/RTLContext";
 import "./SidebarRight.css";
 
 export default function SidebarRight({ isOpen }) {
+  const pathname = usePathname();
   const { theme, themeName } = useTheme();
   const { currentFont } = useFont();
-  const { direction, textAlign, flexDirection } = useRTL();
+  const { direction } = useRTL();
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [trendingTopics, setTrendingTopics] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
@@ -38,6 +38,28 @@ export default function SidebarRight({ isOpen }) {
     themeName === "dark" ||
     themeName === "midnight" ||
     themeName === "cyberpunk";
+
+  // ONLY show on home page - /drift, /drift/, or /:lang/drift
+  const isHomePage = 
+    pathname === "/drift" || 
+    pathname === "/drift/" || 
+    pathname?.match(/^\/[a-z]{2}\/drift$/) !== null;
+
+  // If not home page, render nothing
+  if (!isHomePage) {
+    return null;
+  }
+
+  // Get theme-aware styles
+  const primaryText = theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900");
+  const secondaryText = theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-600");
+  const highlightText = theme.textColors?.highlight || (isDarkMode ? "text-sky-400" : "text-sky-600");
+  const cardBg = theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white");
+  const sectionBg = theme.background?.section || (isDarkMode ? "bg-gray-700" : "bg-gray-100");
+  const primaryButtonBg = theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-500 to-indigo-500";
+  const secondaryButtonBg = theme.buttonColors?.secondaryButton?.background || (isDarkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-100 hover:bg-gray-200");
+  const primaryIconColor = theme.iconColors?.primary || "text-sky-500";
+  const highlightIconColor = theme.iconColors?.highlight || "text-orange-500";
 
   useEffect(() => {
     // Mock suggested users data
@@ -98,38 +120,35 @@ export default function SidebarRight({ isOpen }) {
       >
         <div className="sidebar-right-content">
           {/* Suggested Users Card */}
-          <div className={`sidebar-card
-            ${theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white")}
-            ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}
-          `}>
-            <h3 className={`card-title ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
-              <FaUserPlus className={`title-icon ${theme.iconColors?.primary || "text-sky-500"}`} />
+          <div className={`sidebar-card ${cardBg} ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}`}>
+            <h3 className={`card-title ${primaryText}`}>
+              <FaUserPlus className={`title-icon ${primaryIconColor}`} />
               Suggested for you
             </h3>
             <div className="suggested-users">
               {suggestedUsers.map((user) => (
                 <div key={user.id} className="suggested-user">
-                  <div className={`user-avatar ${theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-500 to-indigo-500"} text-white`}>
+                  <div className={`user-avatar ${primaryButtonBg} text-white`}>
                     {user.avatar}
                   </div>
                   <div className="user-info">
                     <Link 
                       href={`/drift/profile/${user.id}`} 
-                      className={`user-name ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}
+                      className={`user-name ${primaryText}`}
                     >
                       {user.name}
                     </Link>
-                    <span className={`user-username ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>
+                    <span className={`user-username ${secondaryText}`}>
                       {user.username}
                     </span>
-                    <span className={`user-followers ${theme.textColors?.secondary || (isDarkMode ? "text-gray-500" : "text-gray-400")}`}>
+                    <span className={`user-followers ${secondaryText}`}>
                       {user.followers} followers
                     </span>
                   </div>
                   <button
                     className={`follow-btn ${
                       user.isFollowing ? "following" : ""
-                    } ${user.isFollowing ? "" : theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-500 to-indigo-500"}`}
+                    } ${user.isFollowing ? "" : primaryButtonBg}`}
                     onClick={() => handleFollow(user.id)}
                   >
                     {user.isFollowing ? "Following" : "Follow"}
@@ -139,19 +158,16 @@ export default function SidebarRight({ isOpen }) {
             </div>
             <Link 
               href="/drift/suggestions" 
-              className={`card-footer ${theme.textColors?.highlight || "text-sky-600 dark:text-sky-400"}`}
+              className={`card-footer ${highlightText}`}
             >
               Show more <FaArrowRight />
             </Link>
           </div>
 
           {/* Trending Topics Card */}
-          <div className={`sidebar-card
-            ${theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white")}
-            ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}
-          `}>
-            <h3 className={`card-title ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
-              <FaFire className={`title-icon ${theme.iconColors?.highlight || "text-orange-500"}`} />
+          <div className={`sidebar-card ${cardBg} ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}`}>
+            <h3 className={`card-title ${primaryText}`}>
+              <FaFire className={`title-icon ${highlightIconColor}`} />
               Trending
             </h3>
             <div className="trending-list">
@@ -161,14 +177,14 @@ export default function SidebarRight({ isOpen }) {
                   href={`/drift/tag/${topic.tag.slice(1)}`} 
                   className="trending-item"
                 >
-                  <div className={`trending-rank ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>
+                  <div className={`trending-rank ${secondaryText}`}>
                     #{idx + 1}
                   </div>
                   <div className="trending-info">
-                    <div className={`trending-tag ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
+                    <div className={`trending-tag ${primaryText}`}>
                       {topic.tag}
                     </div>
-                    <div className={`trending-stats ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>
+                    <div className={`trending-stats ${secondaryText}`}>
                       {topic.posts}
                     </div>
                   </div>
@@ -181,29 +197,26 @@ export default function SidebarRight({ isOpen }) {
           </div>
 
           {/* Upcoming Events Card */}
-          <div className={`sidebar-card
-            ${theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white")}
-            ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}
-          `}>
-            <h3 className={`card-title ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
-              <FaCalendarAlt className={`title-icon ${theme.iconColors?.primary || "text-sky-500"}`} />
+          <div className={`sidebar-card ${cardBg} ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}`}>
+            <h3 className={`card-title ${primaryText}`}>
+              <FaCalendarAlt className={`title-icon ${primaryIconColor}`} />
               Upcoming Events
             </h3>
             <div className="events-list">
               {upcomingEvents.map((event, idx) => (
                 <div key={idx} className="event-item">
-                  <div className={`event-icon ${theme.background?.section || (isDarkMode ? "bg-gray-700" : "bg-gray-100")} ${theme.textColors?.primary || ""}`}>
+                  <div className={`event-icon ${sectionBg} ${primaryText}`}>
                     {event.icon}
                   </div>
                   <div className="event-info">
-                    <div className={`event-name ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
+                    <div className={`event-name ${primaryText}`}>
                       {event.name}
                     </div>
-                    <div className={`event-details ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>
+                    <div className={`event-details ${secondaryText}`}>
                       {event.date} • {event.attendees} attending
                     </div>
                   </div>
-                  <button className={`event-reminder-btn ${theme.buttonColors?.secondaryButton?.background || (isDarkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-100 hover:bg-gray-200")} ${theme.textColors?.secondary || ""}`}>
+                  <button className={`event-reminder-btn ${secondaryButtonBg} ${secondaryText}`}>
                     Remind
                   </button>
                 </div>
@@ -211,18 +224,15 @@ export default function SidebarRight({ isOpen }) {
             </div>
             <Link 
               href="/drift/events" 
-              className={`card-footer ${theme.textColors?.highlight || "text-sky-600 dark:text-sky-400"}`}
+              className={`card-footer ${highlightText}`}
             >
               View all events <FaArrowRight />
             </Link>
           </div>
 
           {/* Social Links Card */}
-          <div className={`sidebar-card
-            ${theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white")}
-            ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}
-          `}>
-            <h3 className={`card-title ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
+          <div className={`sidebar-card ${cardBg} ${theme.border?.default || "border border-gray-200 dark:border-gray-700"}`}>
+            <h3 className={`card-title ${primaryText}`}>
               Follow Drift
             </h3>
             <div className="social-links">
@@ -243,7 +253,7 @@ export default function SidebarRight({ isOpen }) {
           </div>
 
           {/* Footer Links */}
-          <div className={`sidebar-footer ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>
+          <div className={`sidebar-footer ${secondaryText}`}>
             <Link href="/about">About</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
@@ -262,21 +272,21 @@ export default function SidebarRight({ isOpen }) {
           ${direction === 'rtl' ? 'rtl' : ''}
         `}
       >
-        <div className={`mobile-right-header ${theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white")} ${theme.border?.default || "border-b border-gray-200 dark:border-gray-700"}`}>
-          <h3 className={theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}>Discover</h3>
-          <button className={`close-btn ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>✕</button>
+        <div className={`mobile-right-header ${cardBg} ${theme.border?.default || "border-b border-gray-200 dark:border-gray-700"}`}>
+          <h3 className={primaryText}>Discover</h3>
+          <button className={`close-btn ${secondaryText}`}>✕</button>
         </div>
         <div className="mobile-right-content">
           <div className="mobile-section">
-            <h4 className={theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}>Suggested for you</h4>
+            <h4 className={primaryText}>Suggested for you</h4>
             {suggestedUsers.slice(0, 3).map((user) => (
               <div key={user.id} className="mobile-suggested-user">
-                <div className={`user-avatar ${theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-500 to-indigo-500"} text-white`}>
+                <div className={`user-avatar ${primaryButtonBg} text-white`}>
                   {user.avatar}
                 </div>
                 <div className="user-info">
-                  <div className={`user-name ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>{user.name}</div>
-                  <div className={`user-username ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>{user.username}</div>
+                  <div className={`user-name ${primaryText}`}>{user.name}</div>
+                  <div className={`user-username ${secondaryText}`}>{user.username}</div>
                 </div>
                 <button 
                   className={`follow-btn ${user.isFollowing ? "following" : ""}`}
@@ -288,10 +298,10 @@ export default function SidebarRight({ isOpen }) {
             ))}
           </div>
           <div className="mobile-section">
-            <h4 className={theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}>Trending</h4>
+            <h4 className={primaryText}>Trending</h4>
             {trendingTopics.slice(0, 3).map((topic, idx) => (
-              <Link key={idx} href="#" className={`mobile-trending-item ${theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")}`}>
-                <span className={`trending-rank ${theme.textColors?.secondary || (isDarkMode ? "text-gray-400" : "text-gray-500")}`}>{idx + 1}</span>
+              <Link key={idx} href="#" className={`mobile-trending-item ${primaryText}`}>
+                <span className={`trending-rank ${secondaryText}`}>{idx + 1}</span>
                 <span className="trending-tag">{topic.tag}</span>
               </Link>
             ))}

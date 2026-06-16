@@ -1,10 +1,9 @@
-// src/contexts/LanguageContext.js
-
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { allTranslations, rtlLanguages } from "./all_translations";
+import { allDriftTranslations, driftRtlLanguages } from "./all_drift_translations";
 
 const LanguageContext = createContext();
 
@@ -51,6 +50,7 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
   const [language, setLanguage] = useState("en");
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [translations, setTranslations] = useState(allTranslations.en);
+  const [driftTranslations, setDriftTranslations] = useState(allDriftTranslations.en);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -72,11 +72,13 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
       // URL has valid language - use it
       setLanguage(urlLang);
       setTranslations(allTranslations[urlLang]);
+      setDriftTranslations(allDriftTranslations[urlLang] || allDriftTranslations.en);
       localStorage.setItem("bookqubit_language", urlLang);
     } else if (initialLanguage && allTranslations[initialLanguage]) {
       // Use initialLanguage from props (from server component)
       setLanguage(initialLanguage);
       setTranslations(allTranslations[initialLanguage]);
+      setDriftTranslations(allDriftTranslations[initialLanguage] || allDriftTranslations.en);
       localStorage.setItem("bookqubit_language", initialLanguage);
     } else {
       // Fallback to localStorage or browser language
@@ -84,11 +86,13 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
       if (savedLanguage && allTranslations[savedLanguage]) {
         setLanguage(savedLanguage);
         setTranslations(allTranslations[savedLanguage]);
+        setDriftTranslations(allDriftTranslations[savedLanguage] || allDriftTranslations.en);
       } else {
         const browserLang = navigator.language.split("-")[0];
         if (allTranslations[browserLang]) {
           setLanguage(browserLang);
           setTranslations(allTranslations[browserLang]);
+          setDriftTranslations(allDriftTranslations[browserLang] || allDriftTranslations.en);
           localStorage.setItem("bookqubit_language", browserLang);
         }
       }
@@ -114,7 +118,10 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
 
   // Apply RTL/LTR when language changes
   useEffect(() => {
-    if (rtlLanguages.includes(language)) {
+    // Check both main and drift RTL languages
+    const isRTL = rtlLanguages.includes(language) || driftRtlLanguages.includes(language);
+    
+    if (isRTL) {
       document.documentElement.dir = "rtl";
       document.documentElement.lang = language;
     } else {
@@ -135,6 +142,7 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
     // Update state
     setLanguage(lang);
     setTranslations(allTranslations[lang]);
+    setDriftTranslations(allDriftTranslations[lang] || allDriftTranslations.en);
     localStorage.setItem("bookqubit_language", lang);
     setIsLanguageMenuOpen(false);
 
@@ -154,6 +162,21 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
 
   const t = (key, params = {}) => {
     let text = translations[key] || allTranslations.en[key] || key;
+
+    // Replace parameters if provided
+    if (params && typeof params === "object") {
+      Object.keys(params).forEach((param) => {
+        text = text.replace(`{${param}}`, params[param]);
+        text = text.replace(`{{${param}}}`, params[param]);
+      });
+    }
+
+    return text;
+  };
+
+  // Drift-specific translation function
+  const td = (key, params = {}) => {
+    let text = driftTranslations[key] || allDriftTranslations.en[key] || key;
 
     // Replace parameters if provided
     if (params && typeof params === "object") {
@@ -337,12 +360,14 @@ export const LanguageProvider = ({ children, initialLanguage = null }) => {
     language,
     setLanguage: changeLanguage,
     t,
+    td, // Drift-specific translation function
     translations,
+    driftTranslations,
     isLanguageMenuOpen,
     setIsLanguageMenuOpen,
     toggleLanguageMenu,
     languages,
-    isRTL: rtlLanguages.includes(language),
+    isRTL: rtlLanguages.includes(language) || driftRtlLanguages.includes(language),
     getLanguageFromURL, // Expose helper
     supportedLanguages, // Expose list
   };

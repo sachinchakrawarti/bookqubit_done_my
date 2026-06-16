@@ -1,0 +1,569 @@
+============================================
+           ALL BUTTONS - MASTER LIST (UPDATED)
+============================================
+
+============================================
+           BOOKS BUTTONS
+============================================
+
+1. View Details
+   Component: BookButtons.ViewDetails
+   Variant: primary
+   Icon: FaInfoCircle
+   Purpose: View book details
+   Usage: <BookButtons.ViewDetails slug="book-slug" />
+
+2. Get Book
+   Component: BookButtons.GetBook
+   Variant: primary
+   Icon: FaShoppingCart
+   Purpose: Purchase book
+   Usage: <BookButtons.GetBook url="https://..." />
+
+3. Add to Wishlist
+   Component: BookButtons.Wishlist
+   Variant: primary
+   Icon: FaHeart
+   Purpose: Save to wishlist
+   Usage: <BookButtons.Wishlist isWishlisted={false} onToggle={() => {}} />
+
+4. Mark as Read
+   Component: BookButtons.MarkAsRead
+   Variant: primary
+   Icon: FaCheckCircle
+   Purpose: Mark book as read
+   Usage: <BookButtons.MarkAsRead isRead={false} onToggle={() => {}} />
+
+5. Currently Reading
+   Component: BookButtons.CurrentlyReading
+   Variant: primary
+   Icon: FaBook
+   Purpose: Track reading progress
+   Usage: <BookButtons.CurrentlyReading isReading={false} onToggle={() => {}} />
+
+6. Summary
+   Component: BookButtons.Summary
+   Variant: primary
+   Icon: FaFileAlt
+   Purpose: View book summary
+   Usage: <BookButtons.Summary slug="book-slug" />
+
+7. Share
+   Component: BookButtons.Share
+   Variant: primary
+   Icon: FaShare
+   Purpose: Share book
+   Usage: <BookButtons.Share slug="book-slug" />
+
+8. Rate Book
+   Component: BookButtons.Rate
+   Variant: primary
+   Icon: FaStar
+   Purpose: Rate book
+   Usage: <BookButtons.Rate rating={4.5} onRate={() => {}} />
+
+============================================
+           COMICS BUTTONS
+============================================
+
+1. View Details
+   Component: ComicButtons.ViewDetails
+   Variant: primary
+   Icon: FaInfoCircle
+   Purpose: View comic details
+   Usage: <ComicButtons.ViewDetails slug="comic-slug" />
+
+2. Read Digital
+   Component: ComicButtons.ReadDigital
+   Variant: primary
+   Icon: FaBookOpen
+   Purpose: Read digital version
+   Usage: <ComicButtons.ReadDigital slug="comic-slug" />
+
+3. Get Comic
+   Component: ComicButtons.GetComic
+   Variant: primary
+   Icon: FaShoppingCart
+   Purpose: Purchase comic
+   Usage: <ComicButtons.GetComic url="https://..." />
+
+4. Add to Wishlist
+   Component: ComicButtons.Wishlist
+   Variant: primary
+   Icon: FaHeart
+   Purpose: Save to wishlist
+   Usage: <ComicButtons.Wishlist isWishlisted={false} onToggle={() => {}} />
+
+5. Share
+   Component: ComicButtons.Share
+   Variant: primary
+   Icon: FaShare
+   Purpose: Share comic
+   Usage: <ComicButtons.Share slug="comic-slug" />
+
+6. Summary
+   Component: ComicButtons.Summary
+   Variant: primary
+   Icon: FaFileAlt
+   Purpose: View comic summary
+   Usage: <ComicButtons.Summary slug="comic-slug" />
+
+7. Collector Guide
+   Component: ComicButtons.CollectorGuide
+   Variant: primary
+   Icon: FaStar
+   Purpose: View collector info
+   Usage: <ComicButtons.CollectorGuide slug="comic-slug" />
+
+============================================
+           ACADEMIC BUTTONS
+============================================
+
+1. View Details
+   Component: AcademicButtons.ViewDetails
+   Variant: primary
+   Icon: FaInfoCircle
+   Purpose: View academic details
+   Usage: <AcademicButtons.ViewDetails slug="academic-slug" />
+
+2. Download PDF
+   Component: AcademicButtons.DownloadPDF
+   Variant: primary
+   Icon: FaDownload
+   Purpose: Download as PDF
+   Usage: <AcademicButtons.DownloadPDF url="https://..." />
+
+3. Add to Library
+   Component: AcademicButtons.AddToLibrary
+   Variant: primary
+   Icon: FaGraduationCap
+   Purpose: Add to library
+   Usage: <AcademicButtons.AddToLibrary isAdded={false} onToggle={() => {}} />
+
+4. Share
+   Component: AcademicButtons.Share
+   Variant: primary
+   Icon: FaShare
+   Purpose: Share resource
+   Usage: <AcademicButtons.Share slug="academic-slug" />
+
+5. Cite
+   Component: AcademicButtons.Cite
+   Variant: primary
+   Icon: FaStar
+   Purpose: Generate citation
+   Usage: <AcademicButtons.Cite slug="academic-slug" />
+
+============================================
+           DRIFT (SOCIAL MEDIA) BUTTONS
+============================================
+
+1. Follow
+   Component: DriftButtons.Follow
+   Variant: primary
+   Icon: FaUserPlus / FaUserCheck
+   Purpose: Follow user
+   Usage: <DriftButtons.Follow isFollowing={false} onToggle={() => {}} />
+
+2. Like
+   Component: DriftButtons.Like
+   Variant: primary
+   Icon: FaThumbsUp
+   Purpose: Like post
+   Usage: <DriftButtons.Like isLiked={false} count={42} onToggle={() => {}} />
+
+3. Comment
+   Component: DriftButtons.Comment
+   Variant: primary
+   Icon: FaComment
+   Purpose: Add comment
+   Usage: <DriftButtons.Comment count={10} onClick={() => {}} />
+
+4. Share Post
+   Component: DriftButtons.SharePost
+   Variant: primary
+   Icon: FaShare
+   Purpose: Share post
+   Usage: <DriftButtons.SharePost onShare={() => {}} />
+
+5. Save Post
+   Component: DriftButtons.SavePost
+   Variant: primary
+   Icon: FaBookmark
+   Purpose: Save post
+   Usage: <DriftButtons.SavePost isSaved={false} onToggle={() => {}} />
+
+6. Report
+   Component: DriftButtons.Report
+   Variant: primary
+   Icon: FaFlag
+   Purpose: Report content
+   Usage: <DriftButtons.Report onReport={() => {}} />
+
+7. Create Post
+   Component: DriftButtons.CreatePost
+   Variant: primary
+   Icon: FaPlusCircle
+   Purpose: Create new post
+   Usage: <DriftButtons.CreatePost onClick={() => {}} />
+
+8. Join Community
+   Component: DriftButtons.JoinCommunity
+   Variant: primary
+   Icon: FaUsers / FaUserCheck
+   Purpose: Join community
+   Usage: <DriftButtons.JoinCommunity isJoined={false} onToggle={() => {}} />
+
+============================================
+           COMMON BUTTONS
+============================================
+
+1. View Details
+   Component: ViewDetailsButton
+   Variant: primary
+   Icon: FaInfoCircle
+   Purpose: View details
+   Usage: <ViewDetailsButton onClick={() => {}} />
+
+2. Share
+   Component: ShareButton
+   Variant: primary
+   Icon: FaShare
+   Purpose: Share content
+   Usage: <ShareButton onClick={() => {}} />
+
+3. Like
+   Component: LikeButton
+   Variant: primary
+   Icon: FaHeart
+   Purpose: Like item
+   Usage: <LikeButton initialLiked={false} count={0} onClick={() => {}} />
+
+4. Wishlist
+   Component: WishlistButton
+   Variant: primary
+   Icon: FaHeart
+   Purpose: Save to wishlist
+   Usage: <WishlistButton initialInWishlist={false} onClick={() => {}} />
+
+5. Summary
+   Component: SummaryButton
+   Variant: primary
+   Icon: FaFileAlt
+   Purpose: View summary
+   Usage: <SummaryButton onClick={() => {}} />
+
+6. My Library
+   Component: MyLibraryButton
+   Variant: primary
+   Icon: FaBooks
+   Purpose: Go to library
+   Usage: <MyLibraryButton onClick={() => {}} />
+
+============================================
+           BUTTON SIZES
+============================================
+
+| Size   | Class  | Padding       | Font Size | Min Height |
+|--------|--------|---------------|-----------|------------|
+| Small  | sm     | 6px 12px      | 12px      | 32px       |
+| Medium | md     | 10px 20px     | 14px      | 44px       |
+| Large  | lg     | 14px 28px     | 16px      | 52px       |
+| XL     | xl     | 18px 36px     | 18px      | 60px       |
+
+============================================
+           BUTTON VARIANTS (ALL PRIMARY)
+============================================
+
+| Variant   | Use Case                     | Example           |
+|-----------|------------------------------|-------------------|
+| primary   | All actions                  | All buttons       |
+
+============================================
+           BUTTON ACTION TYPES
+============================================
+
+| Type      | Description              | Example Usage                        |
+|-----------|--------------------------|--------------------------------------|
+| onClick   | Client-side function     | onClick={() => handleClick()}        |
+| to        | Internal navigation      | to="/books/123"                      |
+| href      | External link            | href="https://example.com"           |
+| onToggle  | Toggle state             | onToggle={() => setLiked(!liked)}    |
+| onShare   | Share content            | onShare={() => shareContent()}       |
+| onReport  | Report content           | onReport={() => reportContent()}     |
+
+============================================
+           FILE STRUCTURE
+============================================
+
+src/shared/buttons/
+├── index.js
+├── BaseButton.jsx
+├── buttons.css
+├── hocs/
+│   ├── index.js
+│   ├── withAnalytics.jsx
+│   ├── withTooltip.jsx
+│   ├── withAuth.jsx
+│   ├── withToast.jsx
+│   ├── withConfirmation.jsx
+│   ├── withLoadingState.jsx
+│   └── withKeyboardShortcut.jsx
+├── books/
+│   ├── index.js
+│   ├── BookButtons.jsx
+│   ├── BookActionBar.jsx
+│   └── BookButtonGroup.jsx
+├── comics/
+│   ├── index.js
+│   ├── ComicButtons.jsx
+│   ├── ComicActionBar.jsx
+│   └── ComicButtonGroup.jsx
+├── academic/
+│   ├── index.js
+│   ├── AcademicButtons.jsx
+│   ├── AcademicActionBar.jsx
+│   └── AcademicButtonGroup.jsx
+└── drift/
+    ├── index.js
+    ├── DriftButtons.jsx
+    ├── DriftActionBar.jsx
+    └── DriftButtonGroup.jsx
+
+============================================
+           QUICK IMPORT REFERENCE
+============================================
+
+// Books
+import { BookButtons, BookActionBar } from '@/shared/buttons/books';
+
+// Comics
+import { ComicButtons, ComicActionBar } from '@/shared/buttons/comics';
+
+// Academic
+import { AcademicButtons, AcademicActionBar } from '@/shared/buttons/academic';
+
+// Drift
+import { DriftButtons, DriftActionBar } from '@/shared/buttons/drift';
+
+// All
+import { BookButtons, ComicButtons, AcademicButtons, DriftButtons } from '@/shared/buttons';
+
+// Common
+import { ViewDetailsButton, ShareButton, LikeButton, WishlistButton } from '@/shared/buttons';
+
+============================================
+           USAGE EXAMPLES
+============================================
+
+// Basic Usage
+<BookButtons.ViewDetails slug="book-123" size="lg" />
+<ComicButtons.ReadDigital slug="comic-456" />
+<DriftButtons.Like isLiked={true} count={42} onToggle={() => {}} />
+
+// Action Bar (Horizontal)
+<BookActionBar
+  slug="book-123"
+  getBookUrl="https://example.com"
+  isWishlisted={false}
+  isReading={true}
+  direction="horizontal"
+/>
+
+// Button Group (Vertical)
+<BookButtonGroup direction="vertical" spacing="sm">
+  <BookButtons.ViewDetails slug="book-123" />
+  <BookButtons.Summary slug="book-123" />
+  <BookButtons.Share slug="book-123" />
+</BookButtonGroup>
+
+============================================
+           TOTAL BUTTONS SUMMARY
+============================================
+
+| Category   | Count |
+|------------|-------|
+| Books      | 8     |
+| Comics     | 7     |
+| Academic   | 5     |
+| Drift      | 8     |
+| Common     | 6     |
+|------------|-------|
+| TOTAL      | 34    |
+
+============================================
+           REMOVED BUTTONS
+============================================
+
+| Removed        | Reason                              |
+|----------------|-------------------------------------|
+| Read Now       | Merged with View Details            |
+| (Books)        |                                     |
+
+============================================
+           END OF LIST
+============================================
+
+
+
+src/shared/buttons/
+│
+├── index.js                           # Main entry point
+├── package.json                       # Metadata (optional)
+├── README.md                          # Documentation
+│
+├── core/                              # Core button system
+│   ├── index.js
+│   ├── BaseButton.jsx                 # Base button component
+│   ├── ButtonGroup.jsx                # Button group component
+│   ├── ButtonIcon.jsx                 # Icon wrapper
+│   ├── ButtonLoading.jsx              # Loading state
+│   ├── ButtonSkeleton.jsx             # Skeleton loading
+│   └── ButtonConstants.js             # Constants (sizes, variants)
+│
+├── hooks/                             # Custom hooks
+│   ├── index.js
+│   ├── useUserInteractions.js         # User interactions with localStorage
+│   ├── useButtonAnalytics.js          # Analytics tracking
+│   ├── useButtonKeyboard.js           # Keyboard shortcuts
+│   ├── useButtonTooltip.js            # Tooltip management
+│   └── useButtonLoading.js            # Loading state management
+│
+├── providers/                         # Context providers
+│   ├── index.js
+│   ├── ButtonProvider.jsx             # Global button config
+│   └── ButtonContext.jsx              # Button context
+│
+├── hocs/                              # Higher-Order Components
+│   ├── index.js
+│   ├── withAnalytics.jsx
+│   ├── withTooltip.jsx
+│   ├── withAuth.jsx
+│   ├── withConfirmation.jsx
+│   ├── withLoading.jsx
+│   └── withKeyboardShortcut.jsx
+│
+├── domains/                           # Domain-specific buttons
+│   ├── index.js
+│   │
+│   ├── books/                         # Books domain
+│   │   ├── index.js
+│   │   ├── BookButtons.jsx
+│   │   ├── BookActionBar.jsx
+│   │   ├── BookButtonGroup.jsx
+│   │   ├── BookButtonConstants.js
+│   │   └── __tests__/
+│   │       └── BookButtons.test.jsx
+│   │
+│   ├── comics/                        # Comics domain
+│   │   ├── index.js
+│   │   ├── ComicButtons.jsx
+│   │   ├── ComicActionBar.jsx
+│   │   ├── ComicButtonGroup.jsx
+│   │   ├── ComicButtonConstants.js
+│   │   └── __tests__/
+│   │       └── ComicButtons.test.jsx
+│   │
+│   ├── academic/                      # Academic domain
+│   │   ├── index.js
+│   │   ├── AcademicButtons.jsx
+│   │   ├── AcademicActionBar.jsx
+│   │   ├── AcademicButtonGroup.jsx
+│   │   ├── AcademicButtonConstants.js
+│   │   └── __tests__/
+│   │       └── AcademicButtons.test.jsx
+│   │
+│   └── drift/                         # Drift/Social domain
+│       ├── index.js
+│       ├── DriftButtons.jsx
+│       ├── DriftActionBar.jsx
+│       ├── DriftButtonGroup.jsx
+│       ├── DriftButtonConstants.js
+│       └── __tests__/
+│           └── DriftButtons.test.jsx
+│
+├── styles/                            # Styles
+│   ├── index.css
+│   ├── buttons.css
+│   ├── variants.css
+│   ├── sizes.css
+│   ├── animations.css
+│   └── themes/
+│       ├── light.css
+│       ├── dark.css
+│       ├── midnight.css
+│       └── cyberpunk.css
+│
+├── utils/                             # Utilities
+│   ├── index.js
+│   ├── buttonHelpers.js               # Helper functions
+│   ├── buttonValidators.js            # Validation
+│   ├── buttonFormatters.js            # Formatting
+│   └── storage.js                     # Storage utilities
+│
+├── types/                             # TypeScript types (if using TS)
+│   ├── index.ts
+│   ├── button.types.ts
+│   └── interactions.types.ts
+│
+├── constants/                         # Constants
+│   ├── index.js
+│   ├── variants.js
+│   ├── sizes.js
+│   ├── icons.js
+│   └── interactions.js
+│
+├── __tests__/                         # Unit tests
+│   ├── BaseButton.test.jsx
+│   ├── ButtonGroup.test.jsx
+│   ├── hooks/
+│   │   └── useUserInteractions.test.js
+│   └── utils/
+│       └── buttonHelpers.test.js
+│
+└── stories/                           # Storybook stories (optional)
+    ├── BaseButton.stories.jsx
+    ├── BookButtons.stories.jsx
+    ├── ComicButtons.stories.jsx
+    └── DriftButtons.stories.jsx
+
+
+
+
+
+
+    src/shared/buttons/
+├── hooks/
+│   └── useUserInteractions.js          ← All interactions + localStorage
+│
+├── utils/
+│   ├── storage.js                      ← Storage utilities
+│   └── analytics.js                    ← Analytics tracking (API ready)
+│
+├── domains/
+│   ├── books/
+│   │   ├── BookButtons.jsx
+│   │   ├── BookActionBar.jsx
+│   │   └── BookButtonGroup.jsx
+│   ├── comics/
+│   │   ├── ComicButtons.jsx
+│   │   ├── ComicActionBar.jsx
+│   │   └── ComicButtonGroup.jsx
+│   ├── academic/
+│   │   ├── AcademicButtons.jsx
+│   │   ├── AcademicActionBar.jsx
+│   │   └── AcademicButtonGroup.jsx
+│   └── drift/
+│       ├── DriftButtons.jsx
+│       ├── DriftActionBar.jsx
+│       └── DriftButtonGroup.jsx
+│
+├── core/
+│   ├── BaseButton.jsx
+│   ├── ButtonGroup.jsx
+│   └── ButtonConstants.js
+│
+├── styles/
+│   └── buttons.css
+│
+└── index.js

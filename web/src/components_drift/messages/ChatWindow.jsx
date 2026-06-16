@@ -1,104 +1,164 @@
 "use client";
 
-import { useState } from "react";
-import { FaPaperPlane, FaImage, FaSmile, FaMicrophone, FaArrowLeft, FaUserCircle, FaCircle, FaEllipsisH, FaCheck, FaCheckDouble } from "react-icons/fa";
-import { useTheme } from "@/themes/useTheme";
+import { useState, useEffect, useRef } from "react";
+import { FaArrowLeft, FaPaperclip, FaSmile, FaEllipsisV } from "react-icons/fa";
+import { format } from "date-fns";
 
-export default function ChatWindow({ chat, onBack, isMobile }) {
-  const { theme } = useTheme();
-  const [messageInput, setMessageInput] = useState("");
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Hey! How are you?", sender: "other", timestamp: "10:30 AM", read: true },
-    { id: 2, text: "I'm good, thanks! How about you?", sender: "me", timestamp: "10:32 AM", read: true },
-  ]);
+export default function ChatWindow({ conversation, isDarkMode, onBack }) {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const messagesEndRef = useRef(null);
 
-  const handleSendMessage = () => {
-    if (!messageInput.trim()) return;
-    
-    const newMessage = {
-      id: messages.length + 1,
-      text: messageInput,
-      sender: "me",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      read: false,
-    };
-    
-    setMessages([...messages, newMessage]);
-    setMessageInput("");
+  // Mock messages - replace with actual API
+  const mockMessages = [
+    {
+      id: 1,
+      text: "Hey! Have you read the new book?",
+      senderId: 2,
+      timestamp: "2024-06-16T10:30:00Z",
+      isRead: true,
+    },
+    {
+      id: 2,
+      text: "Not yet! Is it good?",
+      senderId: 1,
+      timestamp: "2024-06-16T10:32:00Z",
+      isRead: true,
+    },
+    {
+      id: 3,
+      text: "Yes, it's amazing! You should definitely read it.",
+      senderId: 2,
+      timestamp: "2024-06-16T10:35:00Z",
+      isRead: true,
+    },
+    {
+      id: 4,
+      text: "I'll add it to my reading list right away!",
+      senderId: 1,
+      timestamp: "2024-06-16T10:38:00Z",
+      isRead: true,
+    },
+  ];
+
+  useEffect(() => {
+    if (conversation) {
+      setMessages(mockMessages);
+    }
+  }, [conversation]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    const newMessage = {
+      id: Date.now(),
+      text: message,
+      senderId: 1,
+      timestamp: new Date().toISOString(),
+      isRead: false,
+    };
+    setMessages([...messages, newMessage]);
+    setMessage("");
+  };
+
+  if (!conversation) {
+    return (
+      <div className={`chat-window ${isDarkMode ? "dark" : ""}`}>
+        <div className="no-chat-selected">
+          <div className="no-chat-icon">💬</div>
+          <h3>Select a conversation</h3>
+          <p>Choose a conversation from the list to start messaging</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className={`p-4 border-b ${theme.border?.default || "border-gray-200 dark:border-gray-700"} flex items-center justify-between`}>
-        <div className="flex items-center gap-3">
-          {isMobile && (
-            <button onClick={onBack} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-              <FaArrowLeft className="text-gray-600 dark:text-gray-400" />
-            </button>
-          )}
-          <div className="relative">
-            <FaUserCircle className="w-10 h-10 text-gray-400" />
-            {chat?.online && <FaCircle className="absolute bottom-0 right-0 text-green-500 text-xs" />}
-          </div>
-          <div>
-            <h2 className="font-semibold text-gray-900 dark:text-white text-sm">{chat?.name}</h2>
-            <p className="text-xs text-gray-500">{chat?.online ? "Online" : "Offline"} • {chat?.role}</p>
+    <div className={`chat-window ${isDarkMode ? "dark" : ""}`}>
+      {/* Chat Header */}
+      <div className="chat-header">
+        <div className="chat-header-left">
+          <button className="back-btn" onClick={onBack}>
+            <FaArrowLeft />
+          </button>
+          <div className="chat-user-info">
+            <img src={conversation.user.avatar} alt={conversation.user.name} />
+            <div>
+              <span className="chat-user-name">{conversation.user.name}</span>
+              <span className="chat-user-status">
+                {conversation.user.online ? "Online" : "Last seen recently"}
+              </span>
+            </div>
           </div>
         </div>
-        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-          <FaEllipsisH className="text-gray-500" />
+        <button className="chat-options-btn">
+          <FaEllipsisV />
         </button>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.sender === "me" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[70%] ${message.sender === "me" ? "order-2" : "order-1"}`}>
-              <div className={`rounded-lg px-4 py-2 ${message.sender === "me" ? "bg-sky-500 text-white" : "bg-white dark:bg-gray-800"} shadow-sm`}>
-                <p className="text-sm">{message.text}</p>
-              </div>
-              <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-                <span>{message.timestamp}</span>
-                {message.sender === "me" && (
-                  message.read ? <FaCheckDouble className="text-sky-500" /> : <FaCheck className="text-gray-400" />
+      <div className="chat-messages">
+        {messages.map((msg, index) => {
+          const isOwnMessage = msg.senderId === 1;
+          const showDate = index === 0 || new Date(msg.timestamp).toDateString() !== new Date(messages[index - 1]?.timestamp).toDateString();
+
+          return (
+            <div key={msg.id}>
+              {showDate && (
+                <div className="chat-date-divider">
+                  <span>{format(new Date(msg.timestamp), "MMMM d, yyyy")}</span>
+                </div>
+              )}
+              <div className={`message-wrapper ${isOwnMessage ? "own" : "other"}`}>
+                {!isOwnMessage && (
+                  <img src={conversation.user.avatar} alt="" className="message-avatar" />
                 )}
+                <div className="message-bubble">
+                  <p>{msg.text}</p>
+                  <span className="message-time">
+                    {format(new Date(msg.timestamp), "h:mm a")}
+                    {isOwnMessage && (
+                      <span className="message-status">
+                        {msg.isRead ? "✓✓" : "✓"}
+                      </span>
+                    )}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className={`p-4 border-t ${theme.border?.default || "border-gray-200 dark:border-gray-700"}`}>
-        <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-            <FaImage className="text-gray-500 text-xl" />
-          </button>
-          <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-            <FaSmile className="text-gray-500 text-xl" />
-          </button>
-          <input
-            type="text"
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-            placeholder="Type a message..."
-            className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!messageInput.trim()}
-            className="p-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 disabled:opacity-50"
-          >
-            <FaPaperPlane className="text-sm" />
-          </button>
-          <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-            <FaMicrophone className="text-gray-500 text-xl" />
-          </button>
-        </div>
-      </div>
+      {/* Message Input */}
+      <form className="message-input-wrapper" onSubmit={handleSendMessage}>
+        <button type="button" className="attach-btn">
+          <FaPaperclip />
+        </button>
+        <input
+          type="text"
+          placeholder="Type a message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="message-input"
+        />
+        <button type="button" className="emoji-btn">
+          <FaSmile />
+        </button>
+        <button type="submit" className="send-btn">
+          Send
+        </button>
+      </form>
     </div>
   );
 }

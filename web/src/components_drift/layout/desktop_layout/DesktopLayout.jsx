@@ -1,17 +1,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SidebarLeft from './SidebarLeft';
-import SidebarRight from './SidebarRight';
+import { usePathname } from "next/navigation";
+import SidebarLeft from './sidebarleft/SidebarLeft';
+import SidebarRight from './sidebarright/SidebarRight';
 import MiddleContent from './MiddleContent';
-import Navbar from './Navbar';
 import './DesktopLayout.css';
 import { useTheme } from "@/themes/useTheme";
 
 export default function DesktopLayout({ children }) {
   const { themeName } = useTheme();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+
+  // ONLY show right sidebar on the home page (/drift, /en/drift, /fr/drift, etc.)
+  const isHomePage = 
+    pathname === "/drift" || 
+    pathname === "/drift/" || 
+    pathname?.match(/^\/[a-z]{2}\/drift$/) !== null;
+
+  const showRightSidebar = isHomePage;
 
   useEffect(() => {
     const handleResize = () => {
@@ -26,18 +35,16 @@ export default function DesktopLayout({ children }) {
 
   return (
     <div className={`drift-desktop-layout ${themeName}`}>
-      {/* <Navbar 
-        onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-        onRightSidebarToggle={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-        isMobileMenuOpen={isMobileMenuOpen}
-      />
-       */}
       <div className="layout-container">
         <SidebarLeft isMobileOpen={isMobileMenuOpen} />
-        <MiddleContent>
-          {children}
-        </MiddleContent>
-        <SidebarRight isOpen={isRightSidebarOpen} />
+        <div className="middle-content-wrapper">
+          <MiddleContent>
+            {children}
+          </MiddleContent>
+        </div>
+        {showRightSidebar && (
+          <SidebarRight isOpen={isRightSidebarOpen} />
+        )}
       </div>
     </div>
   );
