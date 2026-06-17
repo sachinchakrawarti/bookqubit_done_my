@@ -1,9 +1,52 @@
-export { default as KnowMoreButton } from './KnowMoreButton';
-export { default as ShareButton } from './ShareButton';
-export { default as LikeButton } from './LikeButton';
-export { default as WantToReadButton } from './WantToReadButton';
-export { default as CurrentlyReadingButton } from './CurrentlyReadingButton';
-export { default as MarkedReadButton } from './MarkedReadButton';
-export { default as SummaryButton } from './SummaryButton';
-export { default as MyLibraryButton } from './MyLibraryButton';
-export { default as WishlistButton } from './WishlistButton';
+// src/shared/buttons/index.js
+
+// ============================================
+// IMPORTS FIRST
+// ============================================
+
+// Hooks
+import useUserInteractions from './hooks/useUserInteractions';
+
+// Utils
+import storage from './utils/storage';
+
+// Constants - re-export
+export * from './constants/routes';
+
+// Domain Buttons - import first
+import BookButtons from './domains/books/BookButtons';
+import ComicButtons from './domains/comics/ComicButtons';
+import AcademicButtons from './domains/academic/AcademicButtons';
+import DriftButtons from './domains/drift/DriftButtons';
+
+// ============================================
+// EXPORTS
+// ============================================
+
+// Hooks
+export { useUserInteractions };
+
+// Utils
+export { storage };
+
+// Domain Buttons
+export { BookButtons, ComicButtons, AcademicButtons, DriftButtons };
+
+// All Buttons in One Object
+export const Buttons = {
+  books: BookButtons,
+  comics: ComicButtons,
+  academic: AcademicButtons,
+  drift: DriftButtons,
+};
+
+// Default Export
+export default {
+  useUserInteractions,
+  storage,
+  BookButtons,
+  ComicButtons,
+  AcademicButtons,
+  DriftButtons,
+  Buttons,
+};

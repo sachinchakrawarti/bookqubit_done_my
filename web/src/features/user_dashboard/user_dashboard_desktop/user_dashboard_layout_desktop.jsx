@@ -1,3 +1,5 @@
+// src/features/user_dashboard/user_dashboard_desktop/user_dashboard_layout_desktop.jsx
+
 "use client";
 
 import { useState, useCallback } from "react";
@@ -22,7 +24,6 @@ export default function UserDashboardLayoutDesktop() {
   const { currentFont } = useFont();
   const { direction } = useRTL();
   const [activeMenu, setActiveMenu] = useState("currently_reading");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const isDarkMode =
     themeName === "dark" ||
@@ -50,28 +51,26 @@ export default function UserDashboardLayoutDesktop() {
     }
   }, [activeMenu]);
 
-  const fontStyle = currentFont?.family ? { fontFamily: currentFont.family } : {};
+  const fontStyle = currentFont?.family
+    ? { fontFamily: currentFont.family }
+    : {};
 
   return (
     <div
       dir={direction}
       style={fontStyle}
-      className={`dashboard-page ${themeName} ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}
+      className={`dashboard-page ${themeName}`}
     >
-      <UserDashboardHeaderDesktop
-        activeMenu={activeMenu}
-        onMenuToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
+      <UserDashboardHeaderDesktop />
       <div className="dashboard-main-layout">
         <UserDashboardSliderDesktop
           activeMenu={activeMenu}
           setActiveMenu={setActiveMenu}
-          collapsed={sidebarCollapsed}
-          setCollapsed={setSidebarCollapsed}
         />
         <main
           className={`dashboard-content ${
-            theme.background?.page || (isDarkMode ? "bg-gray-900" : "bg-gray-50")
+            theme.background?.page ||
+            (isDarkMode ? "bg-gray-900" : "bg-gray-50")
           }`}
         >
           {renderContent()}

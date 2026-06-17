@@ -1,83 +1,169 @@
-/* Make the page a full-height container */
+
+/* ===== MAIN CONTAINER ===== */
 .dashboard-page {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;          /* full viewport height */
-  overflow: hidden;       /* prevent global scroll */
-  width: 100%;
+  transition: all 0.3s ease;
 }
 
-/* Header: sticky at top (no change) */
-.dashboard-page > :first-child {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  flex-shrink: 0;
+/* ===== THEME BACKGROUNDS ===== */
+.dashboard-page.light {
+  background: #f9fafb;
 }
 
-/* Main row: takes remaining height */
+.dashboard-page.dark {
+  background: #1a1a2e;
+}
+
+.dashboard-page.midnight {
+  background: #0f192d;
+}
+
+.dashboard-page.cyberpunk {
+  background: #0a0514;
+}
+
+/* ===== LAYOUT ===== */
 .dashboard-main-layout {
   display: flex;
   flex: 1;
-  min-height: 0;          /* allow children to shrink */
-  position: relative;
-  overflow: hidden;
+  min-height: calc(100vh - 80px);
 }
 
-/* Slider: fixed position relative to the main layout? 
-   Actually we want it to stay in place while scrolling content.
-   So we make it position: sticky (or fixed relative to viewport) 
-   but within the main-layout bounds. Use position: sticky with top offset. */
-.dashboard-slider {
-  width: 260px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
-  flex-shrink: 0;
-  overflow-y: auto;       /* slider itself can scroll if needed */
-  align-self: stretch;    /* fill height */
-  /* Sticky within the flex container: no need for fixed, 
-     but to keep it static while content scrolls, we rely on the parent overflow hidden and content scroll. */
-  /* Actually simpler: make content scroll, slider stays by not scrolling. */
-}
-
-.dashboard-slider.collapsed {
-  width: 80px;
-}
-
-/* Content area: scrollable */
+/* ===== CONTENT ===== */
 .dashboard-content {
   flex: 1;
-  padding: 1.5rem;
-  overflow-y: auto;       /* only content scrolls */
-  height: 100%;
+  overflow-x: auto;
+  padding: 24px;
+  transition: all 0.3s ease;
+  min-height: calc(100vh - 80px);
 }
 
-/* Utility classes */
-.bg-gray-50 { background-color: #f9fafb; }
-.bg-gray-900 { background-color: #111827; }
+/* ===== SCROLLBAR ===== */
+.dashboard-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
 
-/* Responsive: on mobile, slider becomes drawer (position fixed) */
+.dashboard-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   DARK THEME SCROLLBAR
+   ============================================ */
+
+.dashboard-page.dark .dashboard-content::-webkit-scrollbar-track,
+.dashboard-page.midnight .dashboard-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-page.dark .dashboard-content::-webkit-scrollbar-thumb,
+.dashboard-page.midnight .dashboard-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-page.dark .dashboard-content::-webkit-scrollbar-thumb:hover,
+.dashboard-page.midnight .dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   CYBERPUNK THEME SCROLLBAR
+   ============================================ */
+
+.dashboard-page.cyberpunk .dashboard-content::-webkit-scrollbar-track {
+  background: rgba(255, 0, 255, 0.1);
+}
+
+.dashboard-page.cyberpunk .dashboard-content::-webkit-scrollbar-thumb {
+  background: #ff00ff;
+}
+
+.dashboard-page.cyberpunk .dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: #ff44ff;
+}
+
+/* ============================================
+   CYBERPUNK GLOW EFFECT
+   ============================================ */
+
+.dashboard-page.cyberpunk .dashboard-content {
+  position: relative;
+}
+
+.dashboard-page.cyberpunk .dashboard-content::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 255, 0.02) 0px,
+      rgba(0, 255, 255, 0.02) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  z-index: -1;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-content > * {
+  animation: fadeIn 0.3s ease;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .dashboard-content {
+    padding: 16px;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-main-layout {
-    position: relative;
+    flex-direction: column;
   }
-  .dashboard-slider {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    bottom: 0;
-    transform: translateX(-100%);
-    z-index: 100;
-    transition: transform 0.3s;
-  }
-  .dashboard-slider.open {
-    transform: translateX(0);
-  }
+
   .dashboard-content {
-    padding: 1rem;
+    padding: 12px;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 8px;
   }
 }

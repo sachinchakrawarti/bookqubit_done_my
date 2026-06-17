@@ -1,6 +1,8 @@
+// src/shared/user_dashboard/MarkedReadTab/MarkedReadTab.jsx
+
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTheme } from "@/themes/useTheme";
 import { useFont } from "@/contexts/FontContext";
 import { useRTL } from "@/contexts/RTLContext";
@@ -8,31 +10,40 @@ import {
   FiCheckCircle,
   FiFilter,
   FiSearch,
-  FiGrid,
-  FiList,
   FiBookOpen,
-  FiStar,           // ✅ added
+  FiStar,
 } from "react-icons/fi";
 import BookCard from "./components/BookCard";
 import StatsCard from "./components/StatsCard";
 import { getBooksByLanguage } from "@/data/books";
+import { useUserInteractions } from "@/shared/buttons";
 import "./MarkedReadTab.css";
 
-const MarkedReadTab = ({ 
-  variant = "full", // full, compact, mobile
+const MarkedReadTab = ({
+  variant = "full",
   showHeader = true,
   showStats = true,
   maxItems = null,
   onBookClick = null,
+  cardSize = "passport",
 }) => {
   const { theme, themeName } = useTheme();
   const { currentFont } = useFont();
   const { direction } = useRTL();
+  const {
+    isMarkedRead,
+    getCounts,
+    isLiked,
+    isWishlisted,
+    markAsRead,
+    interactions,
+    isLoaded,
+  } = useUserInteractions();
+
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [viewMode, setViewMode] = useState("grid");
   const [selectedRating, setSelectedRating] = useState(0);
   const [sortBy, setSortBy] = useState("date");
   const [loading, setLoading] = useState(true);
@@ -42,14 +53,86 @@ const MarkedReadTab = ({
     themeName === "midnight" ||
     themeName === "cyberpunk";
 
-  // Load books data
-  useEffect(() => {
+  // Theme helper functions
+  const getHeaderIconColor = () => {
+    return theme.iconColors?.primary || "text-sky-500";
+  };
+
+  const getTextPrimary = () => {
+    return (
+      theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")
+    );
+  };
+
+  const getTextSecondary = () => {
+    return (
+      theme.textColors?.secondary ||
+      (isDarkMode ? "text-gray-400" : "text-gray-600")
+    );
+  };
+
+  const getCardBackground = () => {
+    return theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white");
+  };
+
+  const getCardBorder = () => {
+    return (
+      theme.border?.default || "border border-gray-200 dark:border-gray-700"
+    );
+  };
+
+  const getInputBackground = () => {
+    return (
+      theme.background?.input || (isDarkMode ? "bg-gray-700" : "bg-gray-100")
+    );
+  };
+
+  const getPrimaryButtonBg = () => {
+    return (
+      theme.buttonColors?.primaryButton?.background ||
+      "bg-gradient-to-r from-sky-600 to-sky-500"
+    );
+  };
+
+  const getPrimaryButtonHover = () => {
+    return (
+      theme.buttonColors?.primaryButton?.hoverBackground ||
+      "hover:from-sky-700 hover:to-sky-600"
+    );
+  };
+
+  const getPrimaryButtonText = () => {
+    return theme.buttonColors?.primaryButton?.textColor || "text-white";
+  };
+
+  const getIconColor = () => {
+    return theme.iconColors?.primary || "text-sky-500";
+  };
+
+  // Load books data - ONLY books marked as read
+  const loadMarkedBooks = useCallback(() => {
+    if (!isLoaded) return;
+
     setLoading(true);
     try {
       const booksData = getBooksByLanguage("en");
-      // Filter books that are marked as read (rating >= 4.0)
-      const readBooks = booksData.filter(book => book.rating >= 4.0);
-      const limitedBooks = maxItems ? readBooks.slice(0, maxItems) : readBooks;
+
+      const markedBooks = booksData.filter((book) => {
+        const marked = isMarkedRead(book.id);
+        if (marked) {
+          console.log(`✅ Marked: ${book.title} (${book.id})`);
+        }
+        return marked;
+      });
+
+      console.log(
+        `📚 Found ${markedBooks.length} marked books:`,
+        markedBooks.map((b) => b.title),
+      );
+
+      const limitedBooks = maxItems
+        ? markedBooks.slice(0, maxItems)
+        : markedBooks;
       setBooks(limitedBooks);
       setFilteredBooks(limitedBooks);
     } catch (error) {
@@ -57,34 +140,53 @@ const MarkedReadTab = ({
     } finally {
       setLoading(false);
     }
-  }, [maxItems]);
+  }, [isLoaded, interactions.markedRead, isMarkedRead, maxItems]);
+
+  // Load books on mount and when markedRead changes
+  useEffect(() => {
+    loadMarkedBooks();
+  }, [loadMarkedBooks]);
+
+  // Listen for storage changes (when other tabs update)
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "userInteractions") {
+        console.log("🔄 Storage changed, reloading books...");
+        loadMarkedBooks();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [loadMarkedBooks]);
 
   // Filter and search books
   useEffect(() => {
     let result = [...books];
 
-    // Search filter
     if (searchTerm) {
-      result = result.filter(book =>
-        book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      result = result.filter(
+        (book) =>
+          book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.category?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    // Category filter
     if (selectedCategory !== "all") {
-      result = result.filter(book => book.category === selectedCategory);
+      result = result.filter((book) => book.category === selectedCategory);
     }
 
-    // Rating filter
     if (selectedRating > 0) {
-      result = result.filter(book => Math.floor(book.rating) >= selectedRating);
+      result = result.filter(
+        (book) => Math.floor(book.rating) >= selectedRating,
+      );
     }
 
-    // Sort
     if (sortBy === "date") {
-      result = [...result].sort((a, b) => new Date(b.published) - new Date(a.published));
+      result = [...result].sort(
+        (a, b) => new Date(b.published) - new Date(a.published),
+      );
     } else if (sortBy === "rating") {
       result = [...result].sort((a, b) => b.rating - a.rating);
     } else if (sortBy === "title") {
@@ -95,14 +197,29 @@ const MarkedReadTab = ({
   }, [searchTerm, selectedCategory, selectedRating, sortBy, books]);
 
   // Get unique categories
-  const categories = ["all", ...new Set(books.map(book => book.category).filter(Boolean))];
+  const categories = [
+    "all",
+    ...new Set(books.map((book) => book.category).filter(Boolean)),
+  ];
 
   // Calculate stats
   const stats = {
     totalBooks: filteredBooks.length,
-    totalPages: filteredBooks.reduce((sum, book) => sum + (book.pageCount || 0), 0),
-    avgRating: (filteredBooks.reduce((sum, book) => sum + (book.rating || 0), 0) / filteredBooks.length || 0).toFixed(1),
+    totalPages: filteredBooks.reduce(
+      (sum, book) => sum + (book.pageCount || 0),
+      0,
+    ),
+    avgRating:
+      filteredBooks.length > 0
+        ? (
+            filteredBooks.reduce((sum, book) => sum + (book.rating || 0), 0) /
+            filteredBooks.length
+          ).toFixed(1)
+        : "0",
   };
+
+  // Get user interaction counts
+  const counts = getCounts();
 
   const handleBookClick = (book) => {
     if (onBookClick) {
@@ -112,7 +229,15 @@ const MarkedReadTab = ({
     }
   };
 
-  if (loading) {
+  // Function to mark a book as read and refresh
+  const handleMarkAsRead = (bookId) => {
+    markAsRead(bookId);
+    setTimeout(() => {
+      loadMarkedBooks();
+    }, 200);
+  };
+
+  if (loading || !isLoaded) {
     return (
       <div className={`marked-read-loading ${isDarkMode ? "dark" : ""}`}>
         <div className="loading-spinner"></div>
@@ -124,14 +249,21 @@ const MarkedReadTab = ({
   // Compact variant
   if (variant === "compact") {
     return (
-      <div className={`marked-read-compact ${isDarkMode ? "dark" : ""}`} dir={direction}>
+      <div
+        className={`marked-read-compact ${isDarkMode ? "dark" : ""}`}
+        dir={direction}
+      >
         <div className="compact-header">
           <h4>Recently Read</h4>
           <button className="view-all-btn">View All →</button>
         </div>
         <div className="compact-books-list">
           {filteredBooks.slice(0, 5).map((book) => (
-            <div key={book.id} className="compact-book-item" onClick={() => handleBookClick(book)}>
+            <div
+              key={book.id}
+              className="compact-book-item"
+              onClick={() => handleBookClick(book)}
+            >
               <img src={book.imageUrl} alt={book.title} />
               <div className="compact-book-info">
                 <h5>{book.title}</h5>
@@ -143,6 +275,17 @@ const MarkedReadTab = ({
           {filteredBooks.length === 0 && (
             <div className="compact-empty">
               <p>No books marked as read yet</p>
+              <button
+                className="compact-add-btn"
+                onClick={() => {
+                  const booksData = getBooksByLanguage("en");
+                  if (booksData.length > 0) {
+                    handleMarkAsRead(booksData[0].id);
+                  }
+                }}
+              >
+                + Add Test Book
+              </button>
             </div>
           )}
         </div>
@@ -153,12 +296,15 @@ const MarkedReadTab = ({
   // Mobile variant
   if (variant === "mobile") {
     return (
-      <div className={`marked-read-mobile ${isDarkMode ? "dark" : ""}`} dir={direction}>
+      <div
+        className={`marked-read-mobile ${isDarkMode ? "dark" : ""}`}
+        dir={direction}
+      >
         <div className="mobile-header">
           <h2>Marked Read</h2>
           <p>Books you've completed reading</p>
         </div>
-        
+
         <div className="mobile-search">
           <FiSearch className="search-icon" />
           <input
@@ -168,10 +314,14 @@ const MarkedReadTab = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="mobile-books-list">
           {filteredBooks.map((book) => (
-            <div key={book.id} className="mobile-book-card" onClick={() => handleBookClick(book)}>
+            <div
+              key={book.id}
+              className="mobile-book-card"
+              onClick={() => handleBookClick(book)}
+            >
               <img src={book.imageUrl} alt={book.title} />
               <div className="mobile-book-details">
                 <h3>{book.title}</h3>
@@ -188,7 +338,17 @@ const MarkedReadTab = ({
             <div className="mobile-empty">
               <FiBookOpen />
               <p>No books marked as read yet</p>
-              <button className="start-reading-btn">Start Reading</button>
+              <button
+                className="start-reading-btn"
+                onClick={() => {
+                  const booksData = getBooksByLanguage("en");
+                  if (booksData.length > 0) {
+                    handleMarkAsRead(booksData[0].id);
+                  }
+                }}
+              >
+                Add Test Book
+              </button>
             </div>
           )}
         </div>
@@ -196,35 +356,56 @@ const MarkedReadTab = ({
     );
   }
 
-  // Full variant (default)
+  // Full variant (default) - with passport cards
   return (
     <div
       dir={direction}
       style={{ fontFamily: currentFont?.family }}
-      className={`marked-read-full ${themeName} ${isDarkMode ? "dark" : ""}`}
+      className={`marked-read-full ${themeName}`}
     >
-      {/* Header */}
       {showHeader && (
         <div className="mr-header">
           <div className="mr-title-section">
-            <FiCheckCircle className="mr-header-icon" />
-            <h1 className="mr-title">Marked Read</h1>
+            <FiCheckCircle
+              className={`mr-header-icon ${getHeaderIconColor()}`}
+            />
+            <h1 className={`mr-title ${getTextPrimary()}`}>Marked Read</h1>
           </div>
-          <p className="mr-subtitle">Books you've completed reading</p>
+          <p className={`mr-subtitle ${getTextSecondary()}`}>
+            Books you've completed reading
+          </p>
         </div>
       )}
 
-      {/* Stats Cards */}
       {showStats && (
         <div className="mr-stats-grid">
-          <StatsCard icon={<FiBookOpen />} value={stats.totalBooks} label="Books Read" />
-          <StatsCard icon={<FiBookOpen />} value={stats.totalPages.toLocaleString()} label="Total Pages" />
-          <StatsCard icon={<FiStar />} value={stats.avgRating} label="Avg Rating" />
+          <StatsCard
+            icon={<FiBookOpen />}
+            value={stats.totalBooks}
+            label="Books Read"
+          />
+          <StatsCard
+            icon={<FiBookOpen />}
+            value={stats.totalPages.toLocaleString()}
+            label="Total Pages"
+          />
+          <StatsCard
+            icon={<FiStar />}
+            value={stats.avgRating}
+            label="Avg Rating"
+          />
+          <StatsCard
+            icon={<FiCheckCircle />}
+            value={counts.markedRead || 0}
+            label="Marked Read"
+          />
         </div>
       )}
 
-      {/* Filters Section */}
-      <div className="mr-filters-section">
+      {/* Search & Filters */}
+      <div
+        className={`mr-filters-section ${getCardBackground()} ${getCardBorder()}`}
+      >
         <div className="mr-search-bar">
           <FiSearch className="mr-search-icon" />
           <input
@@ -232,7 +413,7 @@ const MarkedReadTab = ({
             placeholder="Search by title, author, or category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mr-search-input"
+            className={`mr-search-input ${getInputBackground()} ${getTextPrimary()} border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-sky-500 focus:border-transparent`}
           />
         </div>
 
@@ -242,9 +423,9 @@ const MarkedReadTab = ({
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="mr-filter-select"
+              className={`mr-filter-select ${getInputBackground()} ${getTextPrimary()} border border-gray-200 dark:border-gray-600`}
             >
-              {categories.map(cat => (
+              {categories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat === "all" ? "All Categories" : cat}
                 </option>
@@ -256,7 +437,7 @@ const MarkedReadTab = ({
             <select
               value={selectedRating}
               onChange={(e) => setSelectedRating(Number(e.target.value))}
-              className="mr-filter-select"
+              className={`mr-filter-select ${getInputBackground()} ${getTextPrimary()} border border-gray-200 dark:border-gray-600`}
             >
               <option value={0}>All Ratings</option>
               <option value={4}>4★ & above</option>
@@ -268,48 +449,54 @@ const MarkedReadTab = ({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="mr-filter-select"
+              className={`mr-filter-select ${getInputBackground()} ${getTextPrimary()} border border-gray-200 dark:border-gray-600`}
             >
               <option value="date">Sort by Date</option>
               <option value="rating">Sort by Rating</option>
               <option value="title">Sort by Title</option>
             </select>
           </div>
-
-          <div className="mr-view-toggle">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`mr-view-btn ${viewMode === "grid" ? "active" : ""}`}
-            >
-              <FiGrid />
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`mr-view-btn ${viewMode === "list" ? "active" : ""}`}
-            >
-              <FiList />
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Books Grid/List */}
+      {/* Books List - Passport Style */}
       {filteredBooks.length > 0 ? (
-        <div className={`mr-books-${viewMode}`}>
+        <div className="mr-books-passport">
           {filteredBooks.map((book) => (
-            <BookCard 
-              key={book.id} 
-              book={book} 
-              viewMode={viewMode}
+            <BookCard
+              key={book.id}
+              book={book}
               onBookClick={handleBookClick}
+              isMarkedReadProp={isMarkedRead(book.id)}
+              isLiked={isLiked(book.id)}
+              isWishlisted={isWishlisted(book.id)}
+              size={cardSize}
             />
           ))}
         </div>
       ) : (
-        <div className="mr-empty-state">
+        <div
+          className={`mr-empty-state ${getCardBackground()} ${getCardBorder()}`}
+        >
           <div className="mr-empty-icon">📚</div>
-          <h3 className="mr-empty-title">No books marked as read</h3>
-          <p className="mr-empty-text">Start reading and mark books as complete to see them here</p>
+          <h3 className={`mr-empty-title ${getTextPrimary()}`}>
+            No books marked as read
+          </h3>
+          <p className={`mr-empty-text ${getTextSecondary()}`}>
+            Mark a book as read from the book details page.
+          </p>
+          <button
+            className={`mr-add-test-btn ${getPrimaryButtonBg()} ${getPrimaryButtonHover()} ${getPrimaryButtonText()}`}
+            onClick={() => {
+              const booksData = getBooksByLanguage("en");
+              if (booksData.length > 0) {
+                handleMarkAsRead(booksData[0].id);
+                alert(`✅ Marked "${booksData[0].title}" as read!`);
+              }
+            }}
+          >
+            + Add Test Book
+          </button>
         </div>
       )}
     </div>

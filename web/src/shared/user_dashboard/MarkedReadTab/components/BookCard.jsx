@@ -1,3 +1,5 @@
+// src/shared/user_dashboard/MarkedReadTab/components/BookCard.jsx
+
 "use client";
 
 import React from "react";
@@ -6,42 +8,239 @@ import {
   FiHeart,
   FiShare2,
   FiTrash2,
-  FiCalendar,
-  FiClock,
+  FiCheckCircle,
 } from "react-icons/fi";
+import { useTheme } from "@/themes/useTheme";
+import { useUserInteractions } from "@/shared/buttons";
+import "./BookCard.css";
 
-const BookCard = ({ book, viewMode, onBookClick }) => {
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
+const BookCard = ({
+  book,
+  viewMode,
+  onBookClick,
+  isMarkedReadProp,
+  isLiked: isLikedProp,
+  isWishlisted: isWishlistedProp,
+  size = "passport",
+}) => {
+  const { theme, themeName } = useTheme();
+  const {
+    isMarkedRead,
+    isLiked,
+    isWishlisted,
+    toggleLike,
+    toggleWishlist,
+    markAsRead,
+  } = useUserInteractions();
+
+  // Check if current theme is dark mode
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
+
+  const isRead =
+    isMarkedReadProp !== undefined ? isMarkedReadProp : isMarkedRead(book.id);
+  const liked = isLikedProp !== undefined ? isLikedProp : isLiked(book.id);
+  const wishlisted =
+    isWishlistedProp !== undefined ? isWishlistedProp : isWishlisted(book.id);
+
+  // Theme helper functions (following Navbar_Desktop_First_Row pattern)
+  const getCardBackground = () => {
+    return theme.background?.card || (isDarkMode ? "bg-gray-800" : "bg-white");
+  };
+
+  const getCardBorder = () => {
     return (
-      <div className="stars-container">
-        {[...Array(5)].map((_, i) => (
-          <FiStar
-            key={i}
-            className={`star ${i < fullStars ? "filled" : "empty"}`}
-            fill={i < fullStars ? "currentColor" : "none"}
-          />
-        ))}
-        <span className="rating-value">({rating})</span>
-      </div>
+      theme.border?.default || "border border-gray-200 dark:border-gray-700"
     );
   };
 
-  const handleRemoveFromRead = (e, bookId) => {
-    e.stopPropagation();
-    if (confirm("Remove this book from your read list?")) {
-      // Add remove logic here
-      console.log("Remove book:", bookId);
+  const getTextPrimary = () => {
+    return (
+      theme.textColors?.primary || (isDarkMode ? "text-white" : "text-gray-900")
+    );
+  };
+
+  const getTextSecondary = () => {
+    return (
+      theme.textColors?.secondary ||
+      (isDarkMode ? "text-gray-400" : "text-gray-600")
+    );
+  };
+
+  const getTextMuted = () => {
+    return (
+      theme.textColors?.secondary ||
+      (isDarkMode ? "text-gray-500" : "text-gray-400")
+    );
+  };
+
+  const getIconPrimary = () => {
+    return theme.iconColors?.primary || "text-sky-500";
+  };
+
+  const getStarFilled = () => {
+    return theme.iconColors?.starFilled || "text-amber-400";
+  };
+
+  const getStarEmpty = () => {
+    return theme.iconColors?.starEmpty || "text-gray-300";
+  };
+
+  const getPrimaryButtonBg = () => {
+    return (
+      theme.buttonColors?.primaryButton?.background ||
+      "bg-gradient-to-r from-sky-600 to-sky-500"
+    );
+  };
+
+  const getPrimaryButtonHoverBg = () => {
+    return (
+      theme.buttonColors?.primaryButton?.hoverBackground ||
+      "hover:from-sky-700 hover:to-sky-600"
+    );
+  };
+
+  const getPrimaryButtonText = () => {
+    return theme.buttonColors?.primaryButton?.textColor || "text-white";
+  };
+
+  const getPhotoBackground = () => {
+    return (
+      theme.background?.bookCoverSide ||
+      (isDarkMode ? "bg-gray-700" : "bg-gray-50")
+    );
+  };
+
+  // If not marked as read, show mini mark option
+  if (!isRead) {
+    return (
+      <div
+        className={`book-card not-read ${getCardBackground()} ${getCardBorder()}`}
+        onClick={() => onBookClick(book)}
+      >
+        <div className="book-cover">
+          <img src={book.imageUrl} alt={book.title} />
+        </div>
+        <div className="book-info">
+          <div className={`book-title ${getTextPrimary()}`}>{book.title}</div>
+          <div className={`book-author ${getTextSecondary()}`}>
+            {book.author}
+          </div>
+          <button
+            className={`mark-read-btn ${getPrimaryButtonBg()} ${getPrimaryButtonHoverBg()} ${getPrimaryButtonText()}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              markAsRead(book.id);
+              window.dispatchEvent(new Event("storage"));
+              setTimeout(() => window.location.reload(), 300);
+            }}
+          >
+            <FiCheckCircle /> Mark Read
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ============================================
+  // PASSPORT PHOTO STYLE - MAIN VIEW
+  // ============================================
+  return (
+    <div
+      className={`book-card passport ${getCardBackground()} ${getCardBorder()}`}
+      onClick={() => onBookClick(book)}
+      title={`${book.title} by ${book.author}`}
+    >
+      {/* Passport Photo */}
+      <div className={`book-cover passport-photo ${getPhotoBackground()}`}>
+        <img src={book.imageUrl} alt={book.title} />
+        <span className={`photo-rating ${getStarFilled()}`}>
+          ⭐{book.rating}
+        </span>
+        <span className={`photo-read-badge ${getPrimaryButtonBg()}`}>
+          <FiCheckCircle size={10} />
+        </span>
+      </div>
+
+      {/* Passport Info */}
+      <div className="book-info passport-info">
+        <div className={`book-title passport-title ${getTextPrimary()}`}>
+          {book.title}
+        </div>
+        <div className={`book-author passport-author ${getTextSecondary()}`}>
+          {book.author}
+        </div>
+        <div className={`passport-meta ${getTextMuted()}`}>
+          <span>{book.pageCount} pgs</span>
+          <span>•</span>
+          <span>{book.published?.split("-")[0]}</span>
+        </div>
+        <div className="passport-actions">
+          <button
+            className={`action-btn like ${liked ? "active" : ""}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleLike(e);
+            }}
+            title="Like"
+          >
+            <FiHeart className={liked ? "active" : ""} size={12} />
+          </button>
+          <button
+            className={`action-btn wishlist ${wishlisted ? "active" : ""}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToWishlist(e);
+            }}
+            title="Wishlist"
+          >
+            <FiStar className={wishlisted ? "active" : ""} size={12} />
+          </button>
+          <button
+            className="action-btn share"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleShare(e);
+            }}
+            title="Share"
+          >
+            <FiShare2 size={12} />
+          </button>
+          <button
+            className="action-btn remove"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveFromRead(e);
+            }}
+            title="Remove"
+          >
+            <FiTrash2 size={12} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Helper functions
+  function handleRemoveFromRead(e) {
+    if (confirm(`Remove "${book.title}" from your read list?`)) {
+      markAsRead(book.id);
+      window.dispatchEvent(new Event("storage"));
+      setTimeout(() => window.location.reload(), 300);
     }
-  };
+  }
 
-  const handleAddToWishlist = (e, book) => {
-    e.stopPropagation();
-    alert(`Added "${book.title}" to wishlist!`);
-  };
+  function handleAddToWishlist(e) {
+    toggleWishlist(book.id);
+  }
 
-  const handleShare = (e, book) => {
-    e.stopPropagation();
+  function handleLike(e) {
+    toggleLike(book.id);
+  }
+
+  function handleShare(e) {
     if (navigator.share) {
       navigator.share({
         title: book.title,
@@ -51,68 +250,7 @@ const BookCard = ({ book, viewMode, onBookClick }) => {
       navigator.clipboard.writeText(`${book.title} by ${book.author}`);
       alert("Copied to clipboard!");
     }
-  };
-
-  if (viewMode === "list") {
-    return (
-      <div className="mr-book-list-item" onClick={() => onBookClick(book)}>
-        <img src={book.imageUrl} alt={book.title} className="mr-book-cover" />
-        <div className="mr-book-info">
-          <h3 className="mr-book-title">{book.title}</h3>
-          <p className="mr-book-author">by {book.author}</p>
-          <div className="mr-book-rating">{renderStars(book.rating)}</div>
-          <p className="mr-book-description">{book.description?.substring(0, 200)}...</p>
-          <div className="mr-book-meta">
-            <div className="mr-meta-item">
-              <FiCalendar />
-              <span>{book.published}</span>
-            </div>
-            <div className="mr-meta-item">
-              <FiClock />
-              <span>{book.pageCount} pages</span>
-            </div>
-          </div>
-          <div className="mr-book-actions">
-            <button className="mr-action-btn mr-view-btn">View Details</button>
-            <button className="mr-action-btn mr-wishlist-btn" onClick={(e) => handleAddToWishlist(e, book)}>
-              <FiHeart />
-            </button>
-            <button className="mr-action-btn mr-share-btn" onClick={(e) => handleShare(e, book)}>
-              <FiShare2 />
-            </button>
-            <button className="mr-action-btn mr-remove-btn" onClick={(e) => handleRemoveFromRead(e, book.id)}>
-              <FiTrash2 />
-            </button>
-          </div>
-        </div>
-      </div>
-    );
   }
-
-  // Grid view
-  return (
-    <div className="mr-book-grid-item" onClick={() => onBookClick(book)}>
-      <div className="mr-book-cover-wrapper">
-        <img src={book.imageUrl} alt={book.title} className="mr-book-cover" />
-        <div className="mr-book-rating-badge">{book.rating}★</div>
-      </div>
-      <div className="mr-book-info">
-        <h3 className="mr-book-title">{book.title}</h3>
-        <p className="mr-book-author">by {book.author}</p>
-        <div className="mr-book-rating">{renderStars(book.rating)}</div>
-        <p className="mr-book-description">{book.description?.substring(0, 100)}...</p>
-        <div className="mr-book-meta">
-          <span>{book.pageCount} pages</span>
-        </div>
-        <div className="mr-book-actions">
-          <button className="mr-action-btn mr-view-btn">Details</button>
-          <button className="mr-action-btn mr-wishlist-btn" onClick={(e) => handleAddToWishlist(e, book)}>
-            <FiHeart />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 };
 
 export default BookCard;

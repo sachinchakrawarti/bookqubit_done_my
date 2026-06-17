@@ -1,6 +1,8 @@
+// src/shared/user_dashboard/LikesTab/LikesTab.jsx
+
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTheme } from "@/themes/useTheme";
 import { useFont } from "@/contexts/FontContext";
 import { useRTL } from "@/contexts/RTLContext";
@@ -8,31 +10,34 @@ import {
   FiHeart,
   FiFilter,
   FiSearch,
-  FiGrid,
-  FiList,
   FiBookOpen,
   FiThumbsUp,
   FiTrendingUp,
-  FiClock,
 } from "react-icons/fi";
 import LikedBookCard from "./components/LikedBookCard";
+import LikedStatsCard from "./components/LikedStatsCard";
+import { getBooksByLanguage } from "@/data/books";
+import { useUserInteractions } from "@/shared/buttons";
 import "./LikesTab.css";
 
-const LikesTab = ({ 
-  variant = "full", // full, compact, mobile
+const LikesTab = ({
+  variant = "full",
   showHeader = true,
   showStats = true,
   maxItems = null,
   onBookClick = null,
+  cardSize = "passport",
 }) => {
   const { theme, themeName } = useTheme();
   const { currentFont } = useFont();
   const { direction } = useRTL();
-  const [likedBooks, setLikedBooks] = useState([]);
+  const { isLiked, getCounts, toggleLike } = useUserInteractions();
+
+  const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [viewMode, setViewMode] = useState("grid");
+  const [selectedRating, setSelectedRating] = useState(0);
   const [sortBy, setSortBy] = useState("date");
   const [loading, setLoading] = useState(true);
 
@@ -41,132 +46,130 @@ const LikesTab = ({
     themeName === "midnight" ||
     themeName === "cyberpunk";
 
-  // Mock liked books data
-  useEffect(() => {
+  // Load books data - ONLY books that are liked
+  const loadLikedBooks = useCallback(() => {
     setLoading(true);
     try {
-      const mockLikedBooks = [
-        {
-          id: 1,
-          title: "The Great Gatsby",
-          author: "F. Scott Fitzgerald",
-          cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150",
-          rating: 4.5,
-          category: "Classic",
-          likedDate: "2024-01-15",
-          description: "A story of decadence and excess, Gatsby explores the darker aspects of the American Dream.",
-          pageCount: 180,
-          likedBy: 234,
-        },
-        {
-          id: 2,
-          title: "1984",
-          author: "George Orwell",
-          cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150",
-          rating: 4.8,
-          category: "Dystopian",
-          likedDate: "2024-01-10",
-          description: "A chilling vision of a totalitarian future that remains eerily relevant today.",
-          pageCount: 328,
-          likedBy: 189,
-        },
-        {
-          id: 3,
-          title: "Dune",
-          author: "Frank Herbert",
-          cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150",
-          rating: 4.7,
-          category: "Science Fiction",
-          likedDate: "2024-01-05",
-          description: "An epic masterpiece of science fiction that continues to inspire generations.",
-          pageCount: 412,
-          likedBy: 156,
-        },
-        {
-          id: 4,
-          title: "To Kill a Mockingbird",
-          author: "Harper Lee",
-          cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150",
-          rating: 4.9,
-          category: "Classic",
-          likedDate: "2023-12-28",
-          description: "A powerful story of racial injustice and loss of innocence in the American South.",
-          pageCount: 281,
-          likedBy: 312,
-        },
-        {
-          id: 5,
-          title: "The Hobbit",
-          author: "J.R.R. Tolkien",
-          cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=150",
-          rating: 4.6,
-          category: "Fantasy",
-          likedDate: "2023-12-20",
-          description: "A timeless fantasy adventure that began it all.",
-          pageCount: 310,
-          likedBy: 278,
-        },
-      ];
-      
-      const limitedBooks = maxItems ? mockLikedBooks.slice(0, maxItems) : mockLikedBooks;
-      setLikedBooks(limitedBooks);
+      const booksData = getBooksByLanguage("en");
+
+      const likedBooks = booksData.filter((book) => {
+        const liked = isLiked(book.id);
+        if (liked) {
+          console.log(`❤️ Liked: ${book.title} (${book.id})`);
+        }
+        return liked;
+      });
+
+      console.log(
+        `❤️ Found ${likedBooks.length} liked books:`,
+        likedBooks.map((b) => b.title),
+      );
+
+      const limitedBooks = maxItems
+        ? likedBooks.slice(0, maxItems)
+        : likedBooks;
+      setBooks(limitedBooks);
       setFilteredBooks(limitedBooks);
     } catch (error) {
       console.error("Error loading liked books:", error);
     } finally {
       setLoading(false);
     }
-  }, [maxItems]);
+  }, [isLiked, maxItems]);
+
+  // Load books on mount
+  useEffect(() => {
+    loadLikedBooks();
+  }, [loadLikedBooks]);
+
+  // Listen for storage changes
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "userInteractions") {
+        console.log("🔄 Storage changed, reloading liked books...");
+        loadLikedBooks();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [loadLikedBooks]);
 
   // Filter and search books
   useEffect(() => {
-    let result = [...likedBooks];
+    let result = [...books];
 
     if (searchTerm) {
-      result = result.filter(book =>
-        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.category.toLowerCase().includes(searchTerm.toLowerCase())
+      result = result.filter(
+        (book) =>
+          book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.category?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (selectedCategory !== "all") {
-      result = result.filter(book => book.category === selectedCategory);
+      result = result.filter((book) => book.category === selectedCategory);
+    }
+
+    if (selectedRating > 0) {
+      result = result.filter(
+        (book) => Math.floor(book.rating) >= selectedRating,
+      );
     }
 
     if (sortBy === "date") {
-      result = [...result].sort((a, b) => new Date(b.likedDate) - new Date(a.likedDate));
+      result = [...result].sort(
+        (a, b) => new Date(b.published) - new Date(a.published),
+      );
     } else if (sortBy === "rating") {
       result = [...result].sort((a, b) => b.rating - a.rating);
     } else if (sortBy === "title") {
-      result = [...result].sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sortBy === "popular") {
-      result = [...result].sort((a, b) => b.likedBy - a.likedBy);
+      result = [...result].sort((a, b) => a.title?.localeCompare(b.title));
     }
 
     setFilteredBooks(result);
-  }, [searchTerm, selectedCategory, sortBy, likedBooks]);
+  }, [searchTerm, selectedCategory, selectedRating, sortBy, books]);
 
-  const categories = ["all", ...new Set(likedBooks.map(book => book.category))];
+  // Get unique categories
+  const categories = [
+    "all",
+    ...new Set(books.map((book) => book.category).filter(Boolean)),
+  ];
 
+  // Calculate stats
   const stats = {
-    totalLikes: filteredBooks.length,
-    totalPages: filteredBooks.reduce((sum, book) => sum + book.pageCount, 0),
-    avgRating: (filteredBooks.reduce((sum, book) => sum + book.rating, 0) / filteredBooks.length || 0).toFixed(1),
-    totalLikedBy: filteredBooks.reduce((sum, book) => sum + book.likedBy, 0),
+    totalBooks: filteredBooks.length,
+    totalPages: filteredBooks.reduce(
+      (sum, book) => sum + (book.pageCount || 0),
+      0,
+    ),
+    avgRating:
+      filteredBooks.length > 0
+        ? (
+            filteredBooks.reduce((sum, book) => sum + (book.rating || 0), 0) /
+            filteredBooks.length
+          ).toFixed(1)
+        : "0",
   };
 
-  const handleUnlike = (bookId) => {
-    if (confirm("Remove this book from your liked list?")) {
-      setLikedBooks(likedBooks.filter(book => book.id !== bookId));
-    }
-  };
+  // Get user interaction counts
+  const counts = getCounts();
 
   const handleBookClick = (book) => {
     if (onBookClick) {
       onBookClick(book);
     } else {
-      window.open(`/books/${book.id}`, "_blank");
+      window.open(`/books/${book.slug}`, "_blank");
+    }
+  };
+
+  const handleUnlike = (bookId) => {
+    if (confirm("Remove this book from your liked list?")) {
+      toggleLike(bookId);
+      setTimeout(() => {
+        loadLikedBooks();
+      }, 200);
     }
   };
 
@@ -182,15 +185,22 @@ const LikesTab = ({
   // Compact variant
   if (variant === "compact") {
     return (
-      <div className={`likes-compact ${isDarkMode ? "dark" : ""}`} dir={direction}>
+      <div
+        className={`likes-compact ${isDarkMode ? "dark" : ""}`}
+        dir={direction}
+      >
         <div className="compact-header">
           <h4>Liked Books</h4>
           <button className="view-all-btn">View All →</button>
         </div>
         <div className="compact-books-list">
-          {filteredBooks.slice(0, 3).map((book) => (
-            <div key={book.id} className="compact-book-item" onClick={() => handleBookClick(book)}>
-              <img src={book.cover} alt={book.title} />
+          {filteredBooks.slice(0, 5).map((book) => (
+            <div
+              key={book.id}
+              className="compact-book-item"
+              onClick={() => handleBookClick(book)}
+            >
+              <img src={book.imageUrl} alt={book.title} />
               <div className="compact-book-info">
                 <h5>{book.title}</h5>
                 <p>{book.author}</p>
@@ -211,27 +221,13 @@ const LikesTab = ({
   // Mobile variant
   if (variant === "mobile") {
     return (
-      <div className={`likes-mobile ${isDarkMode ? "dark" : ""}`} dir={direction}>
+      <div
+        className={`likes-mobile ${isDarkMode ? "dark" : ""}`}
+        dir={direction}
+      >
         <div className="mobile-header">
           <h2>Liked Books</h2>
           <p>Books you've loved</p>
-        </div>
-
-        <div className="mobile-stats">
-          <div className="mobile-stat">
-            <FiHeart />
-            <div>
-              <strong>{stats.totalLikes}</strong>
-              <span>Likes</span>
-            </div>
-          </div>
-          <div className="mobile-stat">
-            <FiTrendingUp />
-            <div>
-              <strong>{stats.avgRating}</strong>
-              <span>Avg Rating</span>
-            </div>
-          </div>
         </div>
 
         <div className="mobile-search">
@@ -244,38 +240,24 @@ const LikesTab = ({
           />
         </div>
 
-        <div className="mobile-filters">
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="mobile-filter-select"
-          >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>
-                {cat === "all" ? "All Categories" : cat}
-              </option>
-            ))}
-          </select>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="mobile-filter-select"
-          >
-            <option value="date">Recent</option>
-            <option value="rating">Top Rated</option>
-            <option value="popular">Most Liked</option>
-          </select>
-        </div>
-
         <div className="mobile-books-list">
           {filteredBooks.map((book) => (
-            <LikedBookCard
+            <div
               key={book.id}
-              book={book}
-              variant="mobile"
-              onBookClick={handleBookClick}
-              onUnlike={handleUnlike}
-            />
+              className="mobile-book-card"
+              onClick={() => handleBookClick(book)}
+            >
+              <img src={book.imageUrl} alt={book.title} />
+              <div className="mobile-book-details">
+                <h3>{book.title}</h3>
+                <p>{book.author}</p>
+                <div className="book-rating">⭐ {book.rating}</div>
+                <div className="book-meta">
+                  <span>{book.pageCount} pages</span>
+                  <span>{book.published}</span>
+                </div>
+              </div>
+            </div>
           ))}
           {filteredBooks.length === 0 && (
             <div className="mobile-empty">
@@ -289,14 +271,13 @@ const LikesTab = ({
     );
   }
 
-  // Full variant (default)
+  // Full variant (default) - with passport cards
   return (
     <div
       dir={direction}
       style={{ fontFamily: currentFont?.family }}
       className={`likes-full ${themeName} ${isDarkMode ? "dark" : ""}`}
     >
-      {/* Header */}
       {showHeader && (
         <div className="likes-header">
           <div className="likes-title-section">
@@ -307,41 +288,35 @@ const LikesTab = ({
         </div>
       )}
 
-      {/* Stats Cards */}
       {showStats && (
         <div className="likes-stats-grid">
-          <div className="likes-stat-card">
-            <FiHeart className="stat-icon" />
-            <div className="stat-info">
-              <span className="stat-value">{stats.totalLikes}</span>
-              <span className="stat-label">Books Liked</span>
-            </div>
-          </div>
-          <div className="likes-stat-card">
-            <FiThumbsUp className="stat-icon" />
-            <div className="stat-info">
-              <span className="stat-value">{stats.totalLikedBy.toLocaleString()}</span>
-              <span className="stat-label">Total Likes Given</span>
-            </div>
-          </div>
-          <div className="likes-stat-card">
-            <FiBookOpen className="stat-icon" />
-            <div className="stat-info">
-              <span className="stat-value">{stats.totalPages.toLocaleString()}</span>
-              <span className="stat-label">Pages Liked</span>
-            </div>
-          </div>
-          <div className="likes-stat-card">
-            <FiTrendingUp className="stat-icon" />
-            <div className="stat-info">
-              <span className="stat-value">{stats.avgRating}</span>
-              <span className="stat-label">Average Rating</span>
-            </div>
-          </div>
+          <LikedStatsCard
+            icon={<FiHeart />}
+            value={stats.totalBooks}
+            label="Books Liked"
+            color="#ef4444"
+          />
+          <LikedStatsCard
+            icon={<FiBookOpen />}
+            value={stats.totalPages.toLocaleString()}
+            label="Total Pages"
+            color="#3b82f6"
+          />
+          <LikedStatsCard
+            icon={<FiTrendingUp />}
+            value={stats.avgRating}
+            label="Avg Rating"
+            color="#f59e0b"
+          />
+          <LikedStatsCard
+            icon={<FiThumbsUp />}
+            value={counts.likes || 0}
+            label="Total Likes"
+            color="#8b5cf6"
+          />
         </div>
       )}
 
-      {/* Filters Section */}
       <div className="likes-filters-section">
         <div className="likes-search-bar">
           <FiSearch className="search-icon" />
@@ -362,11 +337,23 @@ const LikesTab = ({
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="filter-select"
             >
-              {categories.map(cat => (
+              {categories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat === "all" ? "All Categories" : cat}
                 </option>
               ))}
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <select
+              value={selectedRating}
+              onChange={(e) => setSelectedRating(Number(e.target.value))}
+              className="filter-select"
+            >
+              <option value={0}>All Ratings</option>
+              <option value={4}>4★ & above</option>
+              <option value={4.5}>4.5★ & above</option>
             </select>
           </div>
 
@@ -379,38 +366,21 @@ const LikesTab = ({
               <option value="date">Sort by Date</option>
               <option value="rating">Sort by Rating</option>
               <option value="title">Sort by Title</option>
-              <option value="popular">Sort by Popularity</option>
             </select>
-          </div>
-
-          <div className="likes-view-toggle">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`view-btn ${viewMode === "grid" ? "active" : ""}`}
-            >
-              <FiGrid />
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`view-btn ${viewMode === "list" ? "active" : ""}`}
-            >
-              <FiList />
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Books Grid/List */}
       {filteredBooks.length > 0 ? (
-        <div className={`likes-books-${viewMode}`}>
+        <div className="likes-books-passport">
           {filteredBooks.map((book) => (
             <LikedBookCard
               key={book.id}
               book={book}
-              viewMode={viewMode}
-              variant="full"
               onBookClick={handleBookClick}
               onUnlike={handleUnlike}
+              isLikedProp={isLiked(book.id)}
+              size={cardSize}
             />
           ))}
         </div>

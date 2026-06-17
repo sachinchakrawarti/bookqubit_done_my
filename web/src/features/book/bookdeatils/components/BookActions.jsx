@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { useTheme } from "@/themes/useTheme";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserInteractions } from "@/shared/buttons";
 
 const BookActions = ({
   book,
@@ -33,28 +34,45 @@ const BookActions = ({
   const { theme, themeName } = useTheme();
   const { t } = useLanguage();
 
+  // Get user interactions
+  const {
+    markAsRead,
+    isMarkedRead,
+    addToCurrentlyReading,
+    isCurrentlyReading,
+    addToWantToRead,
+    isWantToRead,
+    toggleLike,
+    isLiked: isBookLiked,
+    toggleWishlist,
+    isWishlisted: isBookWishlisted,
+    toggleLibrary,
+    isInLibrary,
+    getCounts,
+  } = useUserInteractions();
+
   // Guard against undefined theme
   if (!theme) {
     return null;
   }
 
-  // Helper to get button styles based on state
-  const getButtonStyles = (isActive = false, activeBgClass = "") => {
-    if (isActive) {
-      return activeBgClass || "bg-gradient-to-r from-sky-600 to-sky-500 text-white";
-    }
-    const secondaryBg = theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent";
-    const secondaryText = theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400";
-    return `${secondaryBg} ${secondaryText}`;
+  // Get real-time status from localStorage
+  const isRead = isMarkedRead(book?.id);
+  const isReading = isCurrentlyReading(book?.id);
+  const isWanted = isWantToRead(book?.id);
+  const liked = isBookLiked(book?.id);
+  const wishlisted = isBookWishlisted(book?.id);
+  const inLibrary = isInLibrary(book?.id);
+
+  // Determine book status from localStorage
+  const getBookStatus = () => {
+    if (isRead) return "read";
+    if (isReading) return "currently_reading";
+    if (isWanted) return "want_to_read";
+    return "unread";
   };
 
-  const buttonClass = `
-    flex-1 min-w-[140px] px-4 py-3 
-    flex items-center justify-center gap-2 
-    rounded-lg text-sm font-medium 
-    transition-all duration-200 hover:shadow-lg 
-    hover:scale-105 active:scale-95
-  `;
+  const currentStatus = getBookStatus();
 
   const handleSummaryClick = () => {
     if (onScrollToSummary) {
@@ -64,44 +82,99 @@ const BookActions = ({
     }
   };
 
-  const handleLike = () => {
-    if (onLike) onLike();
+  // Handle Mark as Read toggle
+  const handleMarkAsReadToggle = () => {
+    if (isRead) {
+      // If already read, unmark it
+      markAsRead(book.id);
+    } else {
+      // Mark as read
+      markAsRead(book.id);
+      // Remove from other statuses if needed
+      if (isReading) {
+        // If it was in currently reading, you might want to keep it or remove
+        // For now, we'll just mark as read
+      }
+    }
+    // Force refresh
+    window.dispatchEvent(new Event("storage"));
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   };
 
-  const handleWishlist = () => {
-    if (onWishlist) onWishlist();
+  // Handle Currently Reading toggle
+  const handleCurrentlyReadingToggle = () => {
+    if (isReading) {
+      // If already reading, unmark
+      addToCurrentlyReading(book.id);
+    } else {
+      // Mark as currently reading
+      addToCurrentlyReading(book.id);
+      // Remove from read if it was marked read
+      if (isRead) {
+        markAsRead(book.id);
+      }
+    }
+    window.dispatchEvent(new Event("storage"));
   };
 
+  // Handle Want to Read toggle
+  const handleWantToReadToggle = () => {
+    addToWantToRead(book.id);
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  // Handle Like toggle
+  const handleLikeToggle = () => {
+    toggleLike(book.id);
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  // Handle Wishlist toggle
+  const handleWishlistToggle = () => {
+    toggleWishlist(book.id);
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  // Handle Library toggle
+  const handleLibraryToggle = () => {
+    toggleLibrary(book.id);
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  // Handle Share
   const handleShare = () => {
-    if (onShare) onShare();
+    if (onShare) {
+      onShare();
+    } else {
+      const url = `https://bookqubit.com/books/${book.slug}`;
+      if (navigator.share) {
+        navigator.share({
+          title: book.title,
+          text: `Check out "${book.title}" by ${book.author}`,
+          url: url,
+        });
+      } else {
+        navigator.clipboard.writeText(url);
+        alert("Link copied to clipboard!");
+      }
+    }
   };
-
-  const handleAddToLibrary = () => {
-    if (onAddToLibrary) onAddToLibrary();
-  };
-
-  const handleReadStatus = () => {
-    const newStatus = bookStatus === "read" ? "unread" : "read";
-    if (onReadStatus) onReadStatus(newStatus);
-  };
-
-  const handleGetBook = () => {
-    if (onGetBook) onGetBook();
-  };
-
-  // Primary button styles
-  const primaryButtonBg = theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-600 to-sky-500";
-  const primaryButtonHover = theme.buttonColors?.primaryButton?.hoverBackground || "hover:from-sky-700 hover:to-sky-600";
 
   return (
     <div className="flex flex-wrap gap-3 pt-4">
       {/* Get Book Button */}
       {book?.buttons?.getBook && (
         <button
-          onClick={handleGetBook}
-          className={`${buttonClass} ${primaryButtonBg} ${primaryButtonHover} text-white`}
+          onClick={() => window.open(book.buttons.getBook, "_blank")}
+          className={`flex-1 min-w-[140px] px-4 py-3 
+            ${theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-600 to-sky-500"}
+            ${theme.buttonColors?.primaryButton?.hoverBackground || "hover:from-sky-700 hover:to-sky-600"}
+            text-white rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          `}
         >
-          <FaBook className="w-4 h-4" />
+          <FaBook className="inline mr-2" />
           {t("book.get_book") || "Get Book"}
         </button>
       )}
@@ -110,56 +183,123 @@ const BookActions = ({
       {(book?.summary || book?.buttons?.readSummary) && (
         <button
           onClick={handleSummaryClick}
-          className={`${buttonClass} ${getButtonStyles(false)}`}
+          className={`flex-1 min-w-[140px] px-4 py-3 
+            ${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"}
+            ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}
+            rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          `}
         >
-          <FaBookOpen className="w-4 h-4" />
+          <FaBookOpen className="inline mr-2" />
           {t("book.summary") || "Summary"}
         </button>
       )}
 
+      {/* Mark as Read Button */}
+      <button
+        onClick={handleMarkAsReadToggle}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${
+            isRead
+              ? "bg-green-500 text-white hover:bg-green-600"
+              : `${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
+               ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}`
+          }
+        `}
+      >
+        <FaCheck className="inline mr-2" />
+        {isRead ? "Read ✓" : "Mark as Read"}
+      </button>
+
+      {/* Currently Reading Button */}
+      <button
+        onClick={handleCurrentlyReadingToggle}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${
+            isReading
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : `${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
+               ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}`
+          }
+        `}
+      >
+        <FaBookOpen className="inline mr-2" />
+        {isReading ? "Reading Now" : "Currently Reading"}
+      </button>
+
+      {/* Want to Read Button */}
+      <button
+        onClick={handleWantToReadToggle}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${
+            isWanted
+              ? "bg-yellow-500 text-white hover:bg-yellow-600"
+              : `${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
+               ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}`
+          }
+        `}
+      >
+        <FaHeart className="inline mr-2" />
+        {isWanted ? "Wanted ✓" : "Want to Read"}
+      </button>
+
       {/* Like Button */}
       <button
-        onClick={handleLike}
-        className={`${buttonClass} ${getButtonStyles(isLiked, "bg-gradient-to-r from-blue-600 to-blue-500 text-white")}`}
+        onClick={handleLikeToggle}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${
+            liked
+              ? "bg-rose-500 text-white hover:bg-rose-600"
+              : `${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
+               ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}`
+          }
+        `}
       >
-        {isLiked ? <FaThumbsUp className="w-4 h-4" /> : <FaRegThumbsUp className="w-4 h-4" />}
-        {isLiked ? (t("book.liked") || "Liked") : (t("book.like") || "Like")}
+        <FaThumbsUp className="inline mr-2" />
+        {liked ? "Liked" : "Like"}
       </button>
 
       {/* Wishlist Button */}
       <button
-        onClick={handleWishlist}
-        className={`${buttonClass} ${getButtonStyles(isInWishlist, "bg-gradient-to-r from-pink-600 to-pink-500 text-white")}`}
+        onClick={handleWishlistToggle}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${
+            wishlisted
+              ? "bg-pink-500 text-white hover:bg-pink-600"
+              : `${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
+               ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}`
+          }
+        `}
       >
-        {isInWishlist ? <FaHeart className="w-4 h-4" /> : <FaRegHeart className="w-4 h-4" />}
-        {isInWishlist ? (t("book.wishlisted") || "Wishlisted") : (t("book.wishlist") || "Wishlist")}
+        <FaHeart className="inline mr-2" />
+        {wishlisted ? "Wishlisted" : "Wishlist"}
+      </button>
+
+      {/* Add to Library Button */}
+      <button
+        onClick={handleLibraryToggle}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${
+            inLibrary
+              ? "bg-purple-500 text-white hover:bg-purple-600"
+              : `${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"} 
+               ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}`
+          }
+        `}
+      >
+        <FaBookmark className="inline mr-2" />
+        {inLibrary ? "In Library" : "Add to Library"}
       </button>
 
       {/* Share Button */}
       <button
         onClick={handleShare}
-        className={`${buttonClass} ${getButtonStyles(false)}`}
+        className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg font-medium transition-all hover:scale-105 active:scale-95
+          ${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500 bg-transparent"}
+          ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}
+        `}
       >
-        <FaShare className="w-4 h-4" />
+        <FaShare className="inline mr-2" />
         {t("book.share") || "Share"}
-      </button>
-
-      {/* Library Button */}
-      <button
-        onClick={handleAddToLibrary}
-        className={`${buttonClass} ${getButtonStyles(isInCollection, "bg-gradient-to-r from-green-600 to-green-500 text-white")}`}
-      >
-        {isInCollection ? <FaBookmark className="w-4 h-4" /> : <FaPlus className="w-4 h-4" />}
-        {isInCollection ? (t("book.in_library") || "In Library") : (t("book.my_library") || "My Library")}
-      </button>
-
-      {/* Read Status Button */}
-      <button
-        onClick={handleReadStatus}
-        className={`${buttonClass} ${getButtonStyles(bookStatus === "read", "bg-gradient-to-r from-green-600 to-green-500 text-white")}`}
-      >
-        {bookStatus === "read" ? <FaCheck className="w-4 h-4" /> : <FaBookOpen className="w-4 h-4" />}
-        {bookStatus === "read" ? (t("book.read") || "Read") : (t("book.mark_read") || "Mark Read")}
       </button>
     </div>
   );

@@ -1,0 +1,665 @@
+/* src/shared/user_dashboard/LikesTab/components/LikedBookCard.css */
+
+/* ============================================
+   LIKED BOOK CARD - PASSPORT STYLE
+   ============================================ */
+
+.liked-book-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 6px 6px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px;
+  max-width: 100%;
+}
+
+.liked-book-card:hover {
+  transform: translateX(3px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #ef4444;
+}
+
+/* ===== DARK THEME ===== */
+.dark .liked-book-card {
+  background: #1a1a2e;
+  border-color: #2d2d44;
+}
+
+.dark .liked-book-card:hover {
+  border-color: #ef4444;
+}
+
+/* ===== MIDNIGHT THEME ===== */
+.midnight .liked-book-card {
+  background: #0f192d;
+  border-color: #1a2542;
+}
+
+.midnight .liked-book-card:hover {
+  border-color: #6366f1;
+}
+
+/* ===== CYBERPUNK THEME ===== */
+.cyberpunk .liked-book-card {
+  background: #0a0514;
+  border-color: #ff00ff;
+}
+
+.cyberpunk .liked-book-card:hover {
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+}
+
+/* ============================================
+   PASSPORT PHOTO
+   ============================================ */
+
+.passport-photo {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 58px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f3f4f6;
+}
+
+.dark .passport-photo {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: #1f2937;
+}
+
+.midnight .passport-photo {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.cyberpunk .passport-photo {
+  border-color: #ff00ff;
+}
+
+.passport-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Photo Rating Badge */
+.photo-rating {
+  position: absolute;
+  bottom: 1px;
+  left: 2px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fbbf24;
+  font-size: 7px;
+  padding: 0px 4px;
+  border-radius: 2px;
+  line-height: 13px;
+  font-weight: 600;
+}
+
+/* Photo Like Badge */
+.photo-like-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #ef4444;
+  color: white;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dark .photo-like-badge {
+  border-color: #1a1a2e;
+}
+
+.midnight .photo-like-badge {
+  border-color: #0f192d;
+}
+
+.cyberpunk .photo-like-badge {
+  border-color: #0a0514;
+  background: #ff00ff;
+}
+
+.cyberpunk .photo-like-badge svg {
+  color: #00ffff;
+}
+
+/* ============================================
+   PASSPORT INFO
+   ============================================ */
+
+.passport-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.passport-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #1f2937;
+}
+
+.dark .passport-title {
+  color: #ffffff;
+}
+
+.midnight .passport-title {
+  color: #c0c0e0;
+}
+
+.cyberpunk .passport-title {
+  color: #00ffff;
+}
+
+.passport-author {
+  font-size: 11px;
+  color: #6b7280;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark .passport-author {
+  color: #9ca3af;
+}
+
+.midnight .passport-author {
+  color: #8888aa;
+}
+
+.cyberpunk .passport-author {
+  color: #ff00ff;
+}
+
+.passport-meta {
+  display: flex;
+  gap: 4px;
+  font-size: 9px;
+  color: #9ca3af;
+}
+
+.dark .passport-meta {
+  color: #6b7280;
+}
+
+.midnight .passport-meta {
+  color: #6a7a9a;
+}
+
+.cyberpunk .passport-meta {
+  color: #aa00aa;
+}
+
+/* ============================================
+   PASSPORT ACTIONS
+   ============================================ */
+
+.passport-actions {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.passport-action {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.dark .passport-action {
+  color: #9ca3af;
+}
+
+.midnight .passport-action {
+  color: #8888aa;
+}
+
+.cyberpunk .passport-action {
+  color: #ff00ff;
+}
+
+.passport-action:hover {
+  background: rgba(0, 0, 0, 0.06);
+  transform: scale(1.1);
+}
+
+.dark .passport-action:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.midnight .passport-action:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.cyberpunk .passport-action:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.passport-action .active {
+  color: #ef4444;
+}
+
+.passport-action.unlike:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.passport-action.share:hover {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.cyberpunk .passport-action .active {
+  color: #ff00ff;
+}
+
+.cyberpunk .passport-action.unlike:hover {
+  color: #ff00ff;
+  background: rgba(255, 0, 255, 0.1);
+}
+
+.cyberpunk .passport-action.share:hover {
+  color: #00ffff;
+  background: rgba(0, 255, 255, 0.1);
+}
+
+/* ============================================
+   SMALL VARIANT
+   ============================================ */
+
+.liked-book-card.small {
+  padding: 4px 8px 4px 4px;
+  min-height: 48px;
+  gap: 8px;
+}
+
+.small-photo {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 48px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f3f4f6;
+}
+
+.small-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.small-rating {
+  position: absolute;
+  bottom: 1px;
+  left: 2px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fbbf24;
+  font-size: 6px;
+  padding: 0px 3px;
+  border-radius: 2px;
+  line-height: 11px;
+}
+
+.small-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.small-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #1f2937;
+}
+
+.dark .small-title {
+  color: #ffffff;
+}
+
+.midnight .small-title {
+  color: #c0c0e0;
+}
+
+.cyberpunk .small-title {
+  color: #00ffff;
+}
+
+.small-author {
+  font-size: 10px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark .small-author {
+  color: #9ca3af;
+}
+
+.midnight .small-author {
+  color: #8888aa;
+}
+
+.cyberpunk .small-author {
+  color: #ff00ff;
+}
+
+.small-actions {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.small-action {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.dark .small-action {
+  color: #9ca3af;
+}
+
+.midnight .small-action {
+  color: #8888aa;
+}
+
+.cyberpunk .small-action {
+  color: #ff00ff;
+}
+
+.small-action .active {
+  color: #ef4444;
+}
+
+.small-action:hover {
+  background: rgba(0, 0, 0, 0.06);
+  transform: scale(1.1);
+}
+
+.dark .small-action:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.midnight .small-action:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.cyberpunk .small-action:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.small-action.unlike:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.small-action.share:hover {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.cyberpunk .small-action.unlike:hover {
+  color: #ff00ff;
+  background: rgba(255, 0, 255, 0.1);
+}
+
+.cyberpunk .small-action.share:hover {
+  color: #00ffff;
+  background: rgba(0, 255, 255, 0.1);
+}
+
+/* ============================================
+   GRID VARIANT
+   ============================================ */
+
+.liked-book-card.grid {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  min-height: auto;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.liked-book-card.grid .book-cover-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.liked-book-card.grid .book-cover-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.liked-book-card.grid .rating-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fbbf24;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.liked-book-card.grid .like-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ef4444;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.liked-book-card.grid .book-info {
+  padding: 12px;
+  flex: 1;
+}
+
+.liked-book-card.grid .book-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1f2937;
+}
+
+.dark .liked-book-card.grid .book-title {
+  color: #ffffff;
+}
+
+.liked-book-card.grid .book-author {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.dark .liked-book-card.grid .book-author {
+  color: #9ca3af;
+}
+
+.liked-book-card.grid .book-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.liked-book-card.grid .book-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.liked-book-card.grid .action-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.liked-book-card.grid .details-btn {
+  flex: 1;
+  background: #3b82f6;
+  color: white;
+}
+
+.liked-book-card.grid .details-btn:hover {
+  background: #2563eb;
+}
+
+.liked-book-card.grid .unlike-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.liked-book-card.grid .unlike-btn .active {
+  color: #ef4444;
+}
+
+.liked-book-card.grid .unlike-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+  .liked-book-card {
+    padding: 4px 8px 4px 4px;
+    min-height: 48px;
+    gap: 8px;
+  }
+
+  .passport-photo {
+    width: 36px;
+    height: 48px;
+  }
+
+  .passport-title {
+    font-size: 11px;
+  }
+
+  .passport-author {
+    font-size: 10px;
+  }
+
+  .passport-meta {
+    font-size: 8px;
+  }
+
+  .passport-action {
+    width: 20px;
+    height: 20px;
+  }
+
+  .passport-action svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .photo-rating {
+    font-size: 6px;
+    line-height: 11px;
+    padding: 0px 3px;
+  }
+
+  .photo-like-badge {
+    width: 13px;
+    height: 13px;
+  }
+
+  .photo-like-badge svg {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes likeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.liked-book-card {
+  animation: likeSlideIn 0.25s ease;
+}
+
+.liked-book-card:nth-child(1) { animation-delay: 0.02s; }
+.liked-book-card:nth-child(2) { animation-delay: 0.04s; }
+.liked-book-card:nth-child(3) { animation-delay: 0.06s; }
+.liked-book-card:nth-child(4) { animation-delay: 0.08s; }
+.liked-book-card:nth-child(5) { animation-delay: 0.10s; }
+.liked-book-card:nth-child(6) { animation-delay: 0.12s; }
+.liked-book-card:nth-child(7) { animation-delay: 0.14s; }
+.liked-book-card:nth-child(8) { animation-delay: 0.16s; }
+.liked-book-card:nth-child(9) { animation-delay: 0.18s; }
+.liked-book-card:nth-child(10) { animation-delay: 0.20s; }

@@ -1,0 +1,208 @@
+
+/* ============================================
+   WANT TO READ BOOK CARD - PASSPORT STYLE
+   ============================================ */
+
+.want-to-read-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 6px 6px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px;
+}
+
+.want-to-read-card:hover {
+  transform: translateX(3px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #f59e0b;
+}
+
+/* ===== DARK THEME ===== */
+.dark .want-to-read-card {
+  background: #1a1a2e;
+  border-color: #2d2d44;
+}
+
+.dark .want-to-read-card:hover {
+  border-color: #f59e0b;
+}
+
+/* ===== MIDNIGHT THEME ===== */
+.midnight .want-to-read-card {
+  background: #0f192d;
+  border-color: #1a2542;
+}
+
+.midnight .want-to-read-card:hover {
+  border-color: #6366f1;
+}
+
+/* ===== CYBERPUNK THEME ===== */
+.cyberpunk .want-to-read-card {
+  background: #0a0514;
+  border-color: #ff00ff;
+}
+
+.cyberpunk .want-to-read-card:hover {
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+}
+
+/* ===== PASSPORT PHOTO ===== */
+.passport-photo {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 58px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f3f4f6;
+}
+
+.passport-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-rating {
+  position: absolute;
+  bottom: 1px;
+  left: 2px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fbbf24;
+  font-size: 7px;
+  padding: 0px 4px;
+  border-radius: 2px;
+  line-height: 13px;
+  font-weight: 600;
+}
+
+.photo-wanted-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #f59e0b;
+  color: white;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== PASSPORT INFO ===== */
+.passport-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.passport-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #1f2937;
+}
+
+.dark .passport-title {
+  color: #ffffff;
+}
+
+.midnight .passport-title {
+  color: #c0c0e0;
+}
+
+.cyberpunk .passport-title {
+  color: #00ffff;
+}
+
+.passport-author {
+  font-size: 11px;
+  color: #6b7280;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark .passport-author {
+  color: #9ca3af;
+}
+
+.midnight .passport-author {
+  color: #8888aa;
+}
+
+.cyberpunk .passport-author {
+  color: #ff00ff;
+}
+
+.passport-meta {
+  display: flex;
+  gap: 4px;
+  font-size: 9px;
+  color: #9ca3af;
+}
+
+.dark .passport-meta {
+  color: #6b7280;
+}
+
+.midnight .passport-meta {
+  color: #6a7a9a;
+}
+
+.cyberpunk .passport-meta {
+  color: #aa00aa;
+}
+
+/* ===== PASSPORT ACTIONS ===== */
+.passport-actions {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.passport-action {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.passport-action:hover {
+  background: rgba(0, 0, 0, 0.06);
+  transform: scale(1.1);
+}
+
+.passport-action.remove:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.passport-action.share:hover {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}

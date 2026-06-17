@@ -1,3 +1,5 @@
+// src/shared/user_dashboard/LikesTab/components/LikedBookCard.jsx
+
 "use client";
 
 import React from "react";
@@ -6,36 +8,29 @@ import {
   FiStar,
   FiShare2,
   FiTrash2,
-  FiCalendar,
-  FiClock,
-  FiThumbsUp,
+  FiCheckCircle,
 } from "react-icons/fi";
+import { useUserInteractions } from "@/shared/buttons";
+import "./LikedBookCard.css";
 
-const LikedBookCard = ({ book, viewMode, variant, onBookClick, onUnlike }) => {
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    return (
-      <div className="stars-container">
-        {[...Array(5)].map((_, i) => (
-          <FiStar
-            key={i}
-            className={`star ${i < fullStars ? "filled" : "empty"}`}
-            fill={i < fullStars ? "currentColor" : "none"}
-          />
-        ))}
-        <span className="rating-value">({rating})</span>
-      </div>
-    );
-  };
+const LikedBookCard = ({
+  book,
+  onBookClick,
+  onUnlike,
+  isLikedProp,
+  size = "passport",
+}) => {
+  const { isLiked, toggleLike } = useUserInteractions();
+  const liked = isLikedProp !== undefined ? isLikedProp : isLiked(book.id);
 
-  const formatDate = (date) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(date).toLocaleDateString(undefined, options);
-  };
-
-  const handleUnlikeClick = (e) => {
+  const handleUnlike = (e) => {
     e.stopPropagation();
-    onUnlike(book.id);
+    if (confirm(`Remove "${book.title}" from your liked list?`)) {
+      toggleLike(book.id);
+      window.dispatchEvent(new Event("storage"));
+      setTimeout(() => window.location.reload(), 300);
+      if (onUnlike) onUnlike(book.id);
+    }
   };
 
   const handleShare = (e) => {
@@ -43,7 +38,7 @@ const LikedBookCard = ({ book, viewMode, variant, onBookClick, onUnlike }) => {
     if (navigator.share) {
       navigator.share({
         title: book.title,
-        text: `I really liked "${book.title}" by ${book.author}`,
+        text: `I loved "${book.title}" by ${book.author}`,
       });
     } else {
       navigator.clipboard.writeText(`${book.title} by ${book.author}`);
@@ -51,29 +46,42 @@ const LikedBookCard = ({ book, viewMode, variant, onBookClick, onUnlike }) => {
     }
   };
 
-  if (variant === "mobile") {
+  // Passport style (default)
+  if (size === "passport") {
     return (
-      <div className="liked-book-card-mobile" onClick={() => onBookClick(book)}>
-        <img src={book.cover} alt={book.title} />
-        <div className="book-details">
-          <h3>{book.title}</h3>
-          <p>{book.author}</p>
-          <div className="book-meta">
-            <span className="category">{book.category}</span>
-            <span className="liked-date">
-              <FiClock /> {formatDate(book.likedDate)}
-            </span>
+      <div
+        className="liked-book-card passport"
+        onClick={() => onBookClick(book)}
+      >
+        <div className="passport-photo">
+          <img src={book.imageUrl} alt={book.title} />
+          <span className="photo-rating">⭐{book.rating}</span>
+          <span className="photo-like-badge">
+            <FiHeart size={10} />
+          </span>
+        </div>
+        <div className="passport-info">
+          <div className="passport-title">{book.title}</div>
+          <div className="passport-author">{book.author}</div>
+          <div className="passport-meta">
+            <span>{book.pageCount} pgs</span>
+            <span>•</span>
+            <span>{book.published?.split("-")[0]}</span>
           </div>
-          {renderStars(book.rating)}
-          <div className="book-stats">
-            <span><FiThumbsUp /> {book.likedBy}</span>
-          </div>
-          <div className="book-actions">
-            <button className="unlike-btn" onClick={handleUnlikeClick}>
-              <FiHeart /> Unlike
+          <div className="passport-actions">
+            <button
+              className="passport-action unlike"
+              onClick={handleUnlike}
+              title="Unlike"
+            >
+              <FiHeart className="active" size={12} />
             </button>
-            <button className="share-btn" onClick={handleShare}>
-              <FiShare2 /> Share
+            <button
+              className="passport-action share"
+              onClick={handleShare}
+              title="Share"
+            >
+              <FiShare2 size={12} />
             </button>
           </div>
         </div>
@@ -81,35 +89,23 @@ const LikedBookCard = ({ book, viewMode, variant, onBookClick, onUnlike }) => {
     );
   }
 
-  if (viewMode === "list") {
+  // Small style
+  if (size === "small") {
     return (
-      <div className="liked-book-list-item" onClick={() => onBookClick(book)}>
-        <img src={book.cover} alt={book.title} className="book-cover" />
-        <div className="book-info">
-          <h3 className="book-title">{book.title}</h3>
-          <p className="book-author">by {book.author}</p>
-          {renderStars(book.rating)}
-          <p className="book-description">{book.description.substring(0, 200)}...</p>
-          <div className="book-meta">
-            <div className="meta-item">
-              <FiCalendar />
-              <span>Liked on {formatDate(book.likedDate)}</span>
-            </div>
-            <div className="meta-item">
-              <FiBookIcon />
-              <span>{book.pageCount} pages</span>
-            </div>
-            <div className="meta-item">
-              <FiThumbsUp />
-              <span>{book.likedBy} likes</span>
-            </div>
-          </div>
-          <div className="book-actions">
-            <button className="unlike-btn" onClick={handleUnlikeClick}>
-              <FiHeart /> Unlike
+      <div className="liked-book-card small" onClick={() => onBookClick(book)}>
+        <div className="small-photo">
+          <img src={book.imageUrl} alt={book.title} />
+          <span className="small-rating">⭐{book.rating}</span>
+        </div>
+        <div className="small-info">
+          <div className="small-title">{book.title}</div>
+          <div className="small-author">{book.author}</div>
+          <div className="small-actions">
+            <button className="small-action unlike" onClick={handleUnlike}>
+              <FiHeart className="active" size={14} />
             </button>
-            <button className="share-btn" onClick={handleShare}>
-              <FiShare2 /> Share
+            <button className="small-action share" onClick={handleShare}>
+              <FiShare2 size={14} />
             </button>
           </div>
         </div>
@@ -119,39 +115,37 @@ const LikedBookCard = ({ book, viewMode, variant, onBookClick, onUnlike }) => {
 
   // Grid view
   return (
-    <div className="liked-book-grid-item" onClick={() => onBookClick(book)}>
+    <div className="liked-book-card grid" onClick={() => onBookClick(book)}>
       <div className="book-cover-wrapper">
-        <img src={book.cover} alt={book.title} className="book-cover" />
-        <button className="unlike-badge" onClick={handleUnlikeClick}>
+        <img src={book.imageUrl} alt={book.title} className="book-cover" />
+        <div className="rating-badge">⭐ {book.rating}</div>
+        <div className="like-badge">
           <FiHeart />
-        </button>
+        </div>
       </div>
       <div className="book-info">
         <h3 className="book-title">{book.title}</h3>
-        <p className="book-author">by {book.author}</p>
-        {renderStars(book.rating)}
+        <p className="book-author">{book.author}</p>
         <div className="book-meta">
-          <span className="category">{book.category}</span>
-          <span className="likes-count">
-            <FiThumbsUp /> {book.likedBy}
-          </span>
+          <span>{book.pageCount} pages</span>
         </div>
         <div className="book-actions">
-          <button className="share-btn-small" onClick={handleShare}>
-            <FiShare2 />
+          <button
+            className="action-btn details-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onBookClick(book);
+            }}
+          >
+            Details
+          </button>
+          <button className="action-btn unlike-btn" onClick={handleUnlike}>
+            <FiHeart className="active" />
           </button>
         </div>
       </div>
     </div>
   );
 };
-
-// Helper icon component
-const FiBookIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-  </svg>
-);
 
 export default LikedBookCard;

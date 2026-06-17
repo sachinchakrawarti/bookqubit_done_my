@@ -1,9 +1,23 @@
+// src/shared/Button.jsx
+
 "use client";
 
 import React from "react";
 import Link from "next/link";
 import { useTheme } from "@/themes/useTheme";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { BookButtons } from "@/shared/buttons";
+import {
+  FaHeart,
+  FaBookOpen,
+  FaShoppingCart,
+  FaShare,
+  FaInfoCircle,
+} from "react-icons/fa";
+
+// ============================================
+// BASE BUTTON
+// ============================================
 
 const Button = ({
   text,
@@ -17,48 +31,45 @@ const Button = ({
   const { theme, themeName } = useTheme();
   const { t } = useLanguage();
 
-  // Guard against undefined theme
-  if (!theme) {
-    return null;
-  }
+  if (!theme) return null;
 
-  // Check if current theme is dark mode
-  const isDarkMode = themeName === 'dark' || themeName === 'midnight' || themeName === 'cyberpunk';
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
 
-  // Base classes with theme support
   const baseClasses = `
     px-5 py-2.5 
     rounded-lg 
     text-sm font-medium 
     transition-all duration-200 
     focus:outline-none focus:ring-2 focus:ring-offset-2
-    ${theme.border?.button || ''}
-    ${theme.shadow?.button || 'shadow-md'}
+    ${theme.border?.button || ""}
+    ${theme.shadow?.button || "shadow-md"}
     hover:shadow-lg
     disabled:opacity-50 disabled:cursor-not-allowed hover:disabled:opacity-50
   `;
 
-  // Preset classes from theme
   const getPresetClasses = () => {
     switch (preset) {
       case "primaryButton":
         return `
-          ${theme.buttonColors?.primaryButton?.background || 'bg-gradient-to-r from-sky-600 to-sky-500'}
-          ${theme.buttonColors?.primaryButton?.hoverBackground || 'hover:from-sky-700 hover:to-sky-600'}
-          ${theme.buttonColors?.primaryButton?.textColor || 'text-white'}
+          ${theme.buttonColors?.primaryButton?.background || "bg-gradient-to-r from-sky-600 to-sky-500"}
+          ${theme.buttonColors?.primaryButton?.hoverBackground || "hover:from-sky-700 hover:to-sky-600"}
+          ${theme.buttonColors?.primaryButton?.textColor || "text-white"}
           focus:ring-sky-500
         `;
       case "secondaryButton":
         return `
-          ${theme.buttonColors?.secondaryButton?.background || 'border-2 border-sky-500'}
-          ${theme.buttonColors?.secondaryButton?.hoverBackground || 'hover:bg-sky-50 dark:hover:bg-sky-900/20'}
-          ${theme.buttonColors?.secondaryButton?.textColor || 'text-sky-600 dark:text-sky-400'}
+          ${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500"}
+          ${theme.buttonColors?.secondaryButton?.hoverBackground || "hover:bg-sky-50 dark:hover:bg-sky-900/20"}
+          ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}
           focus:ring-sky-500
         `;
       case "wishlistButton":
         return `
-          ${theme.buttonColors?.wishlistButton?.defaultBackground || 'border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'}
-          hover:${theme.buttonColors?.wishlistButton?.savedBackground || 'bg-rose-50 dark:bg-rose-900/20 border-rose-400 dark:border-rose-600'}
+          ${theme.buttonColors?.wishlistButton?.defaultBackground || "border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"}
+          hover:${theme.buttonColors?.wishlistButton?.savedBackground || "bg-rose-50 dark:bg-rose-900/20 border-rose-400 dark:border-rose-600"}
           focus:ring-rose-500
           text-gray-700 dark:text-gray-300
         `;
@@ -74,15 +85,18 @@ const Button = ({
     }
   };
 
-  // Focus ring offset based on theme
   const focusRingOffset = isDarkMode
     ? "focus:ring-offset-gray-900"
     : "focus:ring-offset-white";
 
-  // Translate text if it's a translation key
-  const displayText = text && (text.startsWith('button.') || text.startsWith('book.') || text.startsWith('filter.') || text.startsWith('search.')) 
-    ? t(text) || text 
-    : text;
+  const displayText =
+    text &&
+    (text.startsWith("button.") ||
+      text.startsWith("book.") ||
+      text.startsWith("filter.") ||
+      text.startsWith("search."))
+      ? t(text) || text
+      : text;
 
   const buttonClass = `
     ${baseClasses} 
@@ -94,7 +108,6 @@ const Button = ({
     .replace(/\s+/g, " ")
     .trim();
 
-  // Handle disabled state for links
   const handleLinkClick = (e) => {
     if (disabled) {
       e.preventDefault();
@@ -102,9 +115,9 @@ const Button = ({
     }
   };
 
-  // Use Next.js Link for internal navigation, regular a tag for external
-  const isInternalLink = href && href.startsWith('/');
-  const isExternalLink = href && (href.startsWith('http') || href.startsWith('https'));
+  const isInternalLink = href && href.startsWith("/");
+  const isExternalLink =
+    href && (href.startsWith("http") || href.startsWith("https"));
 
   if (href) {
     if (isInternalLink) {
@@ -120,8 +133,7 @@ const Button = ({
         </Link>
       );
     }
-    
-    // External link (opens in new tab)
+
     return (
       <a
         href={disabled ? undefined : href}
@@ -149,12 +161,14 @@ const Button = ({
   );
 };
 
-// Loading button variant
+// ============================================
+// LOADING BUTTON
+// ============================================
+
 export const LoadingButton = ({ isLoading, text, disabled, ...props }) => {
   const { theme } = useTheme();
   const { t } = useLanguage();
 
-  // Translate loading text
   const loadingText = t("button.loading") || "Loading...";
   const displayText = isLoading ? loadingText : text;
 
@@ -168,7 +182,7 @@ export const LoadingButton = ({ isLoading, text, disabled, ...props }) => {
       {isLoading && (
         <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <svg
-            className={`animate-spin h-5 w-5 ${theme.buttonColors?.primaryButton?.textColor || 'text-white'}`}
+            className={`animate-spin h-5 w-5 ${theme.buttonColors?.primaryButton?.textColor || "text-white"}`}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -193,27 +207,152 @@ export const LoadingButton = ({ isLoading, text, disabled, ...props }) => {
   );
 };
 
-// Icon button variant
+// ============================================
+// ICON BUTTON
+// ============================================
+
 export const IconButton = ({ icon, text, ...props }) => {
   const { theme } = useTheme();
   const { t } = useLanguage();
 
-  // Translate text if it's a translation key
-  const displayText = text && (text.startsWith('button.') || text.startsWith('book.') || text.startsWith('filter.')) 
-    ? t(text) || text 
-    : text;
+  const displayText =
+    text &&
+    (text.startsWith("button.") ||
+      text.startsWith("book.") ||
+      text.startsWith("filter."))
+      ? t(text) || text
+      : text;
 
   return (
     <Button
       {...props}
       className={`flex items-center justify-center gap-2 ${props.className || ""}`}
     >
-      <span className={theme.textColors?.highlight || 'text-sky-600 dark:text-sky-400'}>
+      <span
+        className={
+          theme.textColors?.highlight || "text-sky-600 dark:text-sky-400"
+        }
+      >
         {icon}
       </span>
       <span>{displayText}</span>
     </Button>
   );
 };
+
+// ============================================
+// BOOK ACTION BUTTONS (Using BookButtons)
+// ============================================
+
+export const BookActionButton = {
+  // View Details
+  ViewDetails: ({ slug, size = "md", label = "View Details", ...props }) => (
+    <BookButtons.ViewDetails slug={slug} size={size} label={label} {...props} />
+  ),
+
+  // Get Book
+  GetBook: ({ url, size = "md", label = "Get Book", ...props }) => (
+    <BookButtons.GetBook url={url} size={size} label={label} {...props} />
+  ),
+
+  // Wishlist
+  Wishlist: ({
+    isWishlisted = false,
+    onToggle,
+    size = "md",
+    label = "Add to Wishlist",
+    ...props
+  }) => (
+    <BookButtons.Wishlist
+      isWishlisted={isWishlisted}
+      onToggle={onToggle}
+      size={size}
+      label={label}
+      {...props}
+    />
+  ),
+
+  // Mark as Read
+  MarkAsRead: ({
+    isRead = false,
+    onToggle,
+    size = "md",
+    label = "Mark as Read",
+    ...props
+  }) => (
+    <BookButtons.MarkAsRead
+      isRead={isRead}
+      onToggle={onToggle}
+      size={size}
+      label={label}
+      {...props}
+    />
+  ),
+
+  // Currently Reading
+  CurrentlyReading: ({
+    isReading = false,
+    onToggle,
+    size = "md",
+    label = "Currently Reading",
+    ...props
+  }) => (
+    <BookButtons.CurrentlyReading
+      isReading={isReading}
+      onToggle={onToggle}
+      size={size}
+      label={label}
+      {...props}
+    />
+  ),
+
+  // Want to Read
+  WantToRead: ({
+    isWanted = false,
+    onToggle,
+    size = "md",
+    label = "Want to Read",
+    ...props
+  }) => (
+    <BookButtons.WantToRead
+      isWanted={isWanted}
+      onToggle={onToggle}
+      size={size}
+      label={label}
+      {...props}
+    />
+  ),
+
+  // Summary
+  Summary: ({ slug, size = "md", label = "Summary", ...props }) => (
+    <BookButtons.Summary slug={slug} size={size} label={label} {...props} />
+  ),
+
+  // Share
+  Share: ({ slug, onShare, size = "md", label = "Share", ...props }) => (
+    <BookButtons.Share
+      slug={slug}
+      onShare={onShare}
+      size={size}
+      label={label}
+      {...props}
+    />
+  ),
+
+  // Rate
+  Rate: ({ rating = 0, onRate, size = "md", label = "Rate", ...props }) => (
+    <BookButtons.Rate
+      rating={rating}
+      onRate={onRate}
+      size={size}
+      label={label}
+      {...props}
+    />
+  ),
+};
+
+// ============================================
+// DEFAULT EXPORT
+// ============================================
 
 export default Button;

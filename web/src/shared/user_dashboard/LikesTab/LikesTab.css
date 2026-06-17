@@ -1,11 +1,16 @@
-/* Main Container */
+
+/* ============================================
+   LIKES TAB - MAIN STYLES
+   ============================================ */
+
+/* ===== Main Container ===== */
 .likes-full {
   padding: 1rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Header */
+/* ===== Header ===== */
 .likes-header {
   margin-bottom: 2rem;
 }
@@ -35,7 +40,7 @@
   margin: 0;
 }
 
-/* Stats Grid */
+/* ===== Stats Grid ===== */
 .likes-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -43,45 +48,7 @@
   margin-bottom: 1.5rem;
 }
 
-.likes-stat-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 1rem;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
-}
-
-.likes-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.stat-icon {
-  font-size: 2rem;
-  color: #ef4444;
-}
-
-.stat-info {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  display: block;
-  margin-bottom: 0.25rem;
-  color: #111827;
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-/* Filters Section */
+/* ===== Filters Section ===== */
 .likes-filters-section {
   background: rgba(255, 255, 255, 0.95);
   padding: 1rem;
@@ -95,7 +62,7 @@
   margin-bottom: 1rem;
 }
 
-.search-icon {
+.likes-search-bar .search-icon {
   position: absolute;
   left: 1rem;
   top: 50%;
@@ -103,7 +70,7 @@
   color: #9ca3af;
 }
 
-[dir="rtl"] .search-icon {
+[dir="rtl"] .likes-search-bar .search-icon {
   left: auto;
   right: 1rem;
 }
@@ -115,6 +82,10 @@
   border-radius: 0.5rem;
   background: transparent;
   transition: all 0.2s;
+}
+
+[dir="rtl"] .likes-search-input {
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
 }
 
 .likes-search-input:focus {
@@ -152,260 +123,41 @@
   background-size: 1.25rem;
 }
 
-.likes-view-toggle {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: auto;
+[dir="rtl"] .filter-select {
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  background-position: left 0.5rem center;
 }
 
-.view-btn {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  background: transparent;
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.view-btn.active {
-  background: #ef4444;
-  color: white;
-  border-color: #ef4444;
-}
-
-/* Books Grid */
-.likes-books-grid {
+/* ===== Passport Books Grid ===== */
+.likes-books-passport {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-top: 12px;
 }
 
-/* Books List */
-.likes-books-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+@media (min-width: 640px) {
+  .likes-books-passport {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
 }
 
-/* Grid Item */
-.liked-book-grid-item {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 1rem;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
+@media (min-width: 1024px) {
+  .likes-books-passport {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
 }
 
-.liked-book-grid-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+@media (min-width: 1280px) {
+  .likes-books-passport {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
 }
 
-.book-cover-wrapper {
-  position: relative;
-}
-
-.book-cover {
-  width: 100%;
-  height: 280px;
-  object-fit: cover;
-}
-
-.unlike-badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: rgba(0, 0, 0, 0.7);
-  color: #ef4444;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 1rem;
-}
-
-.unlike-badge:hover {
-  transform: scale(1.1);
-  background: #ef4444;
-  color: white;
-}
-
-.book-info {
-  padding: 1rem;
-}
-
-.book-title {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 0.25rem;
-  color: #111827;
-}
-
-.book-author {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-}
-
-/* Stars */
-.stars-container {
-  display: flex;
-  align-items: center;
-  gap: 0.125rem;
-  margin-bottom: 0.5rem;
-}
-
-.star {
-  width: 14px;
-  height: 14px;
-}
-
-.star.filled {
-  color: #fbbf24;
-  fill: #fbbf24;
-}
-
-.star.empty {
-  color: #d1d5db;
-}
-
-.rating-value {
-  font-size: 0.7rem;
-  margin-left: 0.25rem;
-  color: #6b7280;
-}
-
-.book-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0.5rem 0;
-  font-size: 0.7rem;
-}
-
-.category {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  padding: 0.125rem 0.5rem;
-  border-radius: 1rem;
-}
-
-.likes-count {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: #6b7280;
-}
-
-/* List Item */
-.liked-book-list-item {
-  display: flex;
-  gap: 1.5rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.liked-book-list-item:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.liked-book-list-item .book-cover {
-  width: 120px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
-
-.liked-book-list-item .book-info {
-  flex: 1;
-  padding: 0;
-}
-
-.book-description {
-  font-size: 0.875rem;
-  line-height: 1.4;
-  color: #6b7280;
-  margin: 0.5rem 0;
-}
-
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.book-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.unlike-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.unlike-btn:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
-}
-
-.share-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.share-btn:hover {
-  background: #2563eb;
-  transform: translateY(-2px);
-}
-
-.share-btn-small {
-  background: none;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 0.375rem;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.share-btn-small:hover {
-  background: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
-}
-
-/* Empty State */
+/* ===== Empty State ===== */
 .likes-empty-state {
   text-align: center;
   padding: 3rem;
@@ -422,26 +174,33 @@
 .empty-title {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
   color: #111827;
 }
 
 .empty-text {
   font-size: 0.875rem;
   color: #6b7280;
-  margin-bottom: 1rem;
+  margin: 0 0 1.5rem 0;
 }
 
 .empty-browse-btn {
-  padding: 0.5rem 1rem;
-  background: #ef4444;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Loading State */
+.empty-browse-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* ===== Loading State ===== */
 .likes-loading {
   display: flex;
   flex-direction: column;
@@ -466,11 +225,129 @@
   }
 }
 
-/* Compact Variant */
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+.dark .likes-filters-section,
+.dark .likes-empty-state {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.dark .likes-title {
+  color: #f9fafb;
+}
+
+.dark .likes-subtitle,
+.dark .empty-text {
+  color: #9ca3af;
+}
+
+.dark .likes-search-input,
+.dark .filter-select {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+.dark .empty-title {
+  color: #f9fafb;
+}
+
+/* ============================================
+   MIDNIGHT THEME
+   ============================================ */
+
+.midnight .likes-filters-section,
+.midnight .likes-empty-state {
+  background: rgba(15, 25, 45, 0.9);
+  border-color: #1a2542;
+}
+
+.midnight .likes-title {
+  color: #e0e0ff;
+}
+
+.midnight .likes-subtitle,
+.midnight .empty-text {
+  color: #8888aa;
+}
+
+.midnight .likes-search-input,
+.midnight .filter-select {
+  background: #1a2542;
+  border-color: #1a2542;
+  color: #c0c0e0;
+}
+
+.midnight .empty-title {
+  color: #c0c0e0;
+}
+
+.midnight .likes-header-icon {
+  color: #6366f1;
+}
+
+/* ============================================
+   CYBERPUNK THEME
+   ============================================ */
+
+.cyberpunk .likes-filters-section,
+.cyberpunk .likes-empty-state {
+  background: rgba(10, 5, 20, 0.8);
+  border-color: #ff00ff;
+}
+
+.cyberpunk .likes-title {
+  color: #00ffff;
+}
+
+.cyberpunk .likes-subtitle,
+.cyberpunk .empty-text {
+  color: #ff00ff;
+}
+
+.cyberpunk .likes-search-input,
+.cyberpunk .filter-select {
+  background: #1a0a2e;
+  border-color: #ff00ff;
+  color: #00ffff;
+}
+
+.cyberpunk .empty-title {
+  color: #00ffff;
+}
+
+.cyberpunk .likes-header-icon {
+  color: #ff00ff;
+}
+
+.cyberpunk .empty-browse-btn {
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  color: #0a0514;
+}
+
+.cyberpunk .empty-browse-btn:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.cyberpunk .likes-stats-grid .stat-card {
+  border-color: #ff00ff;
+}
+
+.cyberpunk .likes-stats-grid .stat-card:hover {
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+}
+
+/* ============================================
+   COMPACT VARIANT
+   ============================================ */
+
 .likes-compact {
+  padding: 1rem;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 1rem;
-  padding: 1rem;
 }
 
 .compact-header {
@@ -520,14 +397,10 @@
   border-radius: 0.25rem;
 }
 
-.compact-book-info {
-  flex: 1;
-}
-
 .compact-book-info h5 {
   font-size: 0.875rem;
   font-weight: 600;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.25rem 0;
 }
 
 .compact-book-info p {
@@ -542,57 +415,36 @@
   margin-top: 0.25rem;
 }
 
-/* Mobile Variant */
+.compact-empty {
+  text-align: center;
+  padding: 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* ============================================
+   MOBILE VARIANT
+   ============================================ */
+
 .likes-mobile {
   padding: 1rem;
 }
 
 .mobile-header {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .mobile-header h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
 }
 
 .mobile-header p {
   font-size: 0.875rem;
   color: #6b7280;
   margin: 0;
-}
-
-.mobile-stats {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.mobile-stat {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: white;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-}
-
-.mobile-stat svg {
-  font-size: 1.5rem;
-  color: #ef4444;
-}
-
-.mobile-stat strong {
-  display: block;
-  font-size: 1rem;
-}
-
-.mobile-stat span {
-  font-size: 0.7rem;
-  color: #6b7280;
 }
 
 .mobile-search {
@@ -616,21 +468,6 @@
   background: white;
 }
 
-.mobile-filters {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.mobile-filter-select {
-  flex: 1;
-  padding: 0.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  background: white;
-  font-size: 0.75rem;
-}
-
 .mobile-books-list {
   display: flex;
   flex-direction: column;
@@ -640,11 +477,16 @@
 .mobile-book-card {
   display: flex;
   gap: 1rem;
-  background: white;
   padding: 1rem;
+  background: white;
   border-radius: 1rem;
   border: 1px solid #e5e7eb;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mobile-book-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .mobile-book-card img {
@@ -661,64 +503,37 @@
 .mobile-book-details h3 {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
 }
 
 .mobile-book-details p {
   font-size: 0.75rem;
   color: #6b7280;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
-.mobile-book-details .rating {
-  font-size: 0.7rem;
+.mobile-book-details .book-rating {
+  font-size: 0.75rem;
   color: #fbbf24;
   margin-bottom: 0.25rem;
 }
 
-.mobile-book-details .date {
-  font-size: 0.65rem;
+.mobile-book-details .book-meta {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.7rem;
   color: #6b7280;
 }
 
-.mobile-book-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.mobile-unlike-btn {
-  padding: 0.25rem 0.75rem;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-
-.mobile-share-btn {
-  padding: 0.25rem 0.75rem;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-
-/* Empty State Mobile */
 .mobile-empty {
   text-align: center;
   padding: 2rem;
-  background: white;
-  border-radius: 1rem;
-  border: 1px solid #e5e7eb;
 }
 
 .mobile-empty svg {
   font-size: 3rem;
-  color: #ef4444;
+  color: #e5e7eb;
   margin-bottom: 1rem;
 }
 
@@ -728,105 +543,53 @@
   margin-bottom: 1rem;
 }
 
-.mobile-empty button {
-  padding: 0.5rem 1rem;
+.start-browsing-btn {
+  padding: 8px 20px;
   background: #ef4444;
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-/* Dark Mode */
-.dark .likes-stat-card,
-.dark .likes-filters-section,
-.dark .liked-book-grid-item,
-.dark .liked-book-list-item,
-.dark .likes-empty-state,
-.dark .likes-compact,
-.dark .mobile-stat,
-.dark .mobile-book-card,
-.dark .mobile-empty {
-  background: #1f2937;
-  border-color: #374151;
+.start-browsing-btn:hover {
+  background: #dc2626;
 }
 
-.dark .likes-title,
-.dark .stat-value,
-.dark .book-title,
-.dark .empty-title,
-.dark .compact-header h4,
-.dark .mobile-header h2,
-.dark .mobile-book-details h3 {
-  color: #f9fafb;
-}
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 
-.dark .likes-subtitle,
-.dark .stat-label,
-.dark .book-author,
-.dark .empty-text,
-.dark .compact-book-info p,
-.dark .mobile-header p,
-.dark .mobile-book-details p,
-.dark .mobile-book-details .date,
-.dark .mobile-empty p {
-  color: #9ca3af;
-}
-
-.dark .likes-search-input,
-.dark .filter-select,
-.dark .mobile-search input,
-.dark .mobile-filter-select {
-  background: #374151;
-  border-color: #4b5563;
-  color: #f9fafb;
-}
-
-.dark .star.empty {
-  color: #4b5563;
-}
-
-.dark .book-description,
-.dark .meta-item,
-.dark .likes-count {
-  color: #9ca3af;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .likes-title {
     font-size: 1.5rem;
   }
-  
+
   .likes-filters-row {
     flex-direction: column;
     align-items: stretch;
   }
-  
-  .likes-view-toggle {
-    margin-left: 0;
-    justify-content: center;
+
+  .likes-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .likes-books-grid {
+}
+
+@media (max-width: 480px) {
+  .likes-stats-grid {
     grid-template-columns: 1fr;
   }
-  
-  .liked-book-list-item {
+
+  .mobile-book-card {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-  
-  .book-meta {
-    justify-content: center;
-  }
-  
-  .book-actions {
-    justify-content: center;
-  }
-  
-  .mobile-stats {
-    flex-direction: column;
+
+  .mobile-book-card img {
+    width: 100px;
+    height: 150px;
   }
 }

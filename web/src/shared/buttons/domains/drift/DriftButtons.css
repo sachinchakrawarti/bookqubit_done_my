@@ -1,0 +1,612 @@
+/* ============================================
+   DRIFT BUTTONS - MASTER CSS
+   ============================================ */
+
+/* ===== BASE BUTTON ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+}
+
+.btn-label {
+  font-size: inherit;
+}
+
+/* ===== SPINNER ===== */
+.btn-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== SIZES ===== */
+.btn-xs {
+  padding: 4px 10px;
+  font-size: 11px;
+  min-height: 28px;
+  gap: 6px;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
+  min-height: 32px;
+  gap: 6px;
+}
+
+.btn-md {
+  padding: 10px 20px;
+  font-size: 14px;
+  min-height: 44px;
+  gap: 8px;
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+  min-height: 52px;
+  gap: 10px;
+}
+
+.btn-xl {
+  padding: 18px 36px;
+  font-size: 18px;
+  min-height: 60px;
+  gap: 12px;
+}
+
+/* ============================================
+   VARIANTS
+   ============================================ */
+
+/* ----- Primary ----- */
+.btn-primary {
+  background: #ec4899;
+  color: white;
+}
+
+.btn-primary:hover:not(.btn-disabled) {
+  background: #db2777;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+/* ----- Secondary ----- */
+.btn-secondary {
+  border: 2px solid #ec4899;
+  background: transparent;
+  color: #ec4899;
+}
+
+.btn-secondary:hover:not(.btn-disabled) {
+  background: #ec4899;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ----- Outline ----- */
+.btn-outline {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #374151;
+}
+
+.btn-outline:hover:not(.btn-disabled) {
+  border-color: #ec4899;
+  color: #ec4899;
+  transform: translateY(-2px);
+}
+
+/* Dark mode outline */
+.dark .btn-outline,
+.midnight .btn-outline {
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+.dark .btn-outline:hover:not(.btn-disabled),
+.midnight .btn-outline:hover:not(.btn-disabled) {
+  border-color: #ec4899;
+  color: #f472b6;
+}
+
+/* ----- Ghost ----- */
+.btn-ghost {
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-ghost:hover:not(.btn-disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   DRIFT-SPECIFIC VARIANTS
+   ============================================ */
+
+/* ----- Drift ----- */
+.btn-drift {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: white;
+}
+
+.btn-drift:hover:not(.btn-disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+.btn-drift:hover:not(.btn-disabled) {
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.5);
+}
+
+/* ============================================
+   SOCIAL VARIANTS
+   ============================================ */
+
+/* ----- Follow ----- */
+.btn-follow {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-follow:hover:not(.btn-disabled) {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-follow.active {
+  background: #22c55e;
+}
+
+.btn-follow.active:hover:not(.btn-disabled) {
+  background: #16a34a;
+}
+
+/* ----- Like ----- */
+.btn-like {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-like:hover:not(.btn-disabled) {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.btn-like.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.btn-like.active:hover:not(.btn-disabled) {
+  background: #dbeafe;
+}
+
+/* ----- Comment ----- */
+.btn-comment {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-comment:hover:not(.btn-disabled) {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+/* ----- Share ----- */
+.btn-share {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-share:hover:not(.btn-disabled) {
+  border-color: #22c55e;
+  color: #22c55e;
+  transform: translateY(-2px);
+}
+
+/* ----- Save ----- */
+.btn-save {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-save:hover:not(.btn-disabled) {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.btn-save.active {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.btn-save.active:hover:not(.btn-disabled) {
+  background: #fef3c7;
+}
+
+/* ----- Report ----- */
+.btn-report {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-report:hover:not(.btn-disabled) {
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: translateY(-2px);
+}
+
+/* ----- Create ----- */
+.btn-create {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: white;
+}
+
+.btn-create:hover:not(.btn-disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+/* ----- Edit ----- */
+.btn-edit {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-edit:hover:not(.btn-disabled) {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+/* ----- Delete ----- */
+.btn-delete {
+  border: 2px solid #ef4444;
+  background: transparent;
+  color: #ef4444;
+}
+
+.btn-delete:hover:not(.btn-disabled) {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ----- Join ----- */
+.btn-join {
+  background: #8b5cf6;
+  color: white;
+}
+
+.btn-join:hover:not(.btn-disabled) {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+.btn-join.active {
+  background: #22c55e;
+}
+
+.btn-join.active:hover:not(.btn-disabled) {
+  background: #16a34a;
+}
+
+/* ----- Follow Topic ----- */
+.btn-follow-topic {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-follow-topic:hover:not(.btn-disabled) {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.btn-follow-topic.active {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  color: #d97706;
+}
+
+/* ----- Notification ----- */
+.btn-notification {
+  position: relative;
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.btn-notification:hover:not(.btn-disabled) {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+/* ----- Award ----- */
+.btn-award {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+}
+
+.btn-award:hover:not(.btn-disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+/* ============================================
+   DARK MODE OVERRIDES
+   ============================================ */
+.dark .btn-like,
+.midnight .btn-like {
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+.dark .btn-like:hover:not(.btn-disabled),
+.midnight .btn-like:hover:not(.btn-disabled) {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.dark .btn-like.active,
+.midnight .btn-like.active {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.dark .btn-save,
+.midnight .btn-save {
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+.dark .btn-save:hover:not(.btn-disabled),
+.midnight .btn-save:hover:not(.btn-disabled) {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.dark .btn-save.active,
+.midnight .btn-save.active {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.dark .btn-follow,
+.midnight .btn-follow {
+  background: #3b82f6;
+}
+
+.dark .btn-follow.active,
+.midnight .btn-follow.active {
+  background: #22c55e;
+}
+
+/* ============================================
+   CYBERPUNK THEME OVERRIDES
+   ============================================ */
+.cyberpunk .btn-primary {
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  color: #0a0514;
+}
+
+.cyberpunk .btn-primary:hover:not(.btn-disabled) {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.cyberpunk .btn-drift {
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  color: #0a0514;
+}
+
+.cyberpunk .btn-drift:hover:not(.btn-disabled) {
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+}
+
+.cyberpunk .btn-follow {
+  background: #00ffff;
+  color: #0a0514;
+}
+
+.cyberpunk .btn-follow:hover:not(.btn-disabled) {
+  background: #00e5e5;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.cyberpunk .btn-follow.active {
+  background: #ff00ff;
+}
+
+.cyberpunk .btn-like.active {
+  border-color: #00ffff;
+  background: rgba(0, 255, 255, 0.2);
+  color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.cyberpunk .btn-save.active {
+  border-color: #ff00ff;
+  background: rgba(255, 0, 255, 0.2);
+  color: #ff00ff;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+.cyberpunk .btn-create {
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  color: #0a0514;
+}
+
+.cyberpunk .btn-create:hover:not(.btn-disabled) {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.cyberpunk .btn-join {
+  background: #ff00ff;
+  color: #0a0514;
+}
+
+.cyberpunk .btn-join:hover:not(.btn-disabled) {
+  background: #e600e6;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+}
+
+.cyberpunk .btn-join.active {
+  background: #00ffff;
+  color: #0a0514;
+}
+
+.cyberpunk .btn-outline {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .btn-outline:hover:not(.btn-disabled) {
+  border-color: #00ffff;
+  color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.cyberpunk .btn-comment {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .btn-comment:hover:not(.btn-disabled) {
+  border-color: #00ffff;
+  color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.cyberpunk .btn-share {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .btn-share:hover:not(.btn-disabled) {
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.cyberpunk .btn-report {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .btn-report:hover:not(.btn-disabled) {
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.cyberpunk .btn-edit {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .btn-edit:hover:not(.btn-disabled) {
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
+.cyberpunk .btn-delete {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .btn-delete:hover:not(.btn-disabled) {
+  background: #ff00ff;
+  color: #0a0514;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.btn:active:not(.btn-disabled) {
+  animation: pulse 0.3s ease;
+}
+
+/* ============================================
+   GLOW EFFECT FOR DRIFT BUTTONS
+   ============================================ */
+.btn-drift-glow {
+  animation: driftGlowPulse 2s ease-in-out infinite;
+}
+
+@keyframes driftGlowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(236, 72, 153, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+  }
+}

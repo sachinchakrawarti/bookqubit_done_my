@@ -1,103 +1,87 @@
+// src/shared/user_dashboard/CurrentlyReadingTab/components/BookCard.jsx
+
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
-  FiStar,
-  FiHeart,
-  FiShare2,
   FiBookOpen,
-  FiCalendar,
+  FiShare2,
+  FiTrash2,
+  FiStar,
   FiClock,
 } from "react-icons/fi";
-import ProgressBar from "./ProgressBar";
+import { useUserInteractions } from "@/shared/buttons";
+import "./BookCard.css";
 
-const BookCard = ({ book, viewMode, onBookClick, onUpdateProgress }) => {
-  const [showProgressInput, setShowProgressInput] = useState(false);
-  const [newProgress, setNewProgress] = useState(book.progress);
+const BookCard = ({
+  book,
+  onBookClick,
+  onRemove,
+  isReadingProp,
+  size = "passport",
+}) => {
+  const { isCurrentlyReading, addToCurrentlyReading } = useUserInteractions();
+  const isReading =
+    isReadingProp !== undefined ? isReadingProp : isCurrentlyReading(book.id);
 
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    return (
-      <div className="stars-container">
-        {[...Array(5)].map((_, i) => (
-          <FiStar
-            key={i}
-            className={`star ${i < fullStars ? "filled" : "empty"}`}
-            fill={i < fullStars ? "currentColor" : "none"}
-          />
-        ))}
-        <span className="rating-value">({rating})</span>
-      </div>
-    );
-  };
-
-  const handleUpdateProgress = () => {
-    if (newProgress >= 0 && newProgress <= 100) {
-      onUpdateProgress(book.id, newProgress);
-      setShowProgressInput(false);
+  const handleRemove = (e) => {
+    e.stopPropagation();
+    if (confirm(`Remove "${book.title}" from your reading list?`)) {
+      addToCurrentlyReading(book.id);
+      window.dispatchEvent(new Event("storage"));
+      setTimeout(() => window.location.reload(), 300);
+      if (onRemove) onRemove(book.id);
     }
   };
 
-  const handleContinueReading = () => {
-    if (onBookClick) onBookClick(book);
+  const handleShare = (e) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      navigator.share({
+        title: book.title,
+        text: `I'm currently reading "${book.title}" by ${book.author}`,
+      });
+    } else {
+      navigator.clipboard.writeText(`${book.title} by ${book.author}`);
+      alert("Copied to clipboard!");
+    }
   };
 
-  if (viewMode === "list") {
+  // Passport style
+  if (size === "passport") {
     return (
-      <div className="cr-book-list-item">
-        <img src={book.imageUrl} alt={book.title} className="cr-book-cover" />
-        <div className="cr-book-info">
-          <h3 className="cr-book-title">{book.title}</h3>
-          <p className="cr-book-author">by {book.author}</p>
-          {renderStars(book.rating)}
-          
-          <ProgressBar progress={book.progress} showPercentage />
-          
-          <div className="cr-book-meta">
-            <div className="cr-meta-item">
-              <FiCalendar />
-              <span>Started: {book.startDate}</span>
-            </div>
-            <div className="cr-meta-item">
-              <FiClock />
-              <span>{book.pagesRead}/{book.pageCount} pages</span>
-            </div>
+      <div className="reading-card passport" onClick={() => onBookClick(book)}>
+        <div className="passport-photo">
+          <img src={book.imageUrl} alt={book.title} />
+          <span className="photo-rating">⭐{book.rating}</span>
+          <span className="photo-reading-badge">
+            <FiBookOpen size={10} />
+          </span>
+        </div>
+        <div className="passport-info">
+          <div className="passport-title">{book.title}</div>
+          <div className="passport-author">{book.author}</div>
+          <div className="passport-meta">
+            <span>{book.pageCount} pgs</span>
+            <span>•</span>
+            <span>{book.published?.split("-")[0]}</span>
           </div>
-          
-          <div className="cr-book-actions">
-            <button className="cr-action-btn cr-continue-btn" onClick={handleContinueReading}>
-              <FiBookOpen /> Continue Reading
-            </button>
-            <button 
-              className="cr-action-btn cr-update-btn"
-              onClick={() => setShowProgressInput(!showProgressInput)}
+          <div className="passport-actions">
+            <button
+              className="passport-action remove"
+              onClick={handleRemove}
+              title="Remove"
             >
-              Update Progress
+              <FiTrash2 size={12} />
             </button>
-            <button className="cr-action-btn cr-wishlist-btn">
-              <FiHeart />
-            </button>
-            <button className="cr-action-btn cr-share-btn">
-              <FiShare2 />
+            <button
+              className="passport-action share"
+              onClick={handleShare}
+              title="Share"
+            >
+              <FiShare2 size={12} />
             </button>
           </div>
-
-          {showProgressInput && (
-            <div className="cr-progress-input">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={newProgress}
-                onChange={(e) => setNewProgress(Number(e.target.value))}
-              />
-              <div className="cr-progress-controls">
-                <span>{newProgress}%</span>
-                <button onClick={handleUpdateProgress}>Save</button>
-                <button onClick={() => setShowProgressInput(false)}>Cancel</button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -105,28 +89,32 @@ const BookCard = ({ book, viewMode, onBookClick, onUpdateProgress }) => {
 
   // Grid view
   return (
-    <div className="cr-book-grid-item">
-      <div className="cr-book-cover-wrapper">
-        <img src={book.imageUrl} alt={book.title} className="cr-book-cover" />
-        <div className="cr-progress-badge">{book.progress}%</div>
-      </div>
-      <div className="cr-book-info">
-        <h3 className="cr-book-title">{book.title}</h3>
-        <p className="cr-book-author">by {book.author}</p>
-        {renderStars(book.rating)}
-        
-        <ProgressBar progress={book.progress} size="small" />
-        
-        <div className="cr-book-meta">
-          <span>{book.pagesRead}/{book.pageCount} pages</span>
+    <div className="reading-card grid" onClick={() => onBookClick(book)}>
+      <div className="book-cover-wrapper">
+        <img src={book.imageUrl} alt={book.title} className="book-cover" />
+        <div className="rating-badge">⭐ {book.rating}</div>
+        <div className="reading-badge">
+          <FiBookOpen />
         </div>
-        
-        <div className="cr-book-actions">
-          <button className="cr-action-btn cr-continue-btn" onClick={handleContinueReading}>
-            Continue
+      </div>
+      <div className="book-info">
+        <h3 className="book-title">{book.title}</h3>
+        <p className="book-author">{book.author}</p>
+        <div className="book-meta">
+          <span>{book.pageCount} pages</span>
+        </div>
+        <div className="book-actions">
+          <button
+            className="action-btn details-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onBookClick(book);
+            }}
+          >
+            Details
           </button>
-          <button className="cr-action-btn cr-wishlist-btn">
-            <FiHeart />
+          <button className="action-btn remove-btn" onClick={handleRemove}>
+            <FiTrash2 />
           </button>
         </div>
       </div>

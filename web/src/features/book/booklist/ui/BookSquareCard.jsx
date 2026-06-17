@@ -6,6 +6,7 @@ import { useTheme } from "@/themes/useTheme";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFont } from "@/contexts/FontContext";
 import { useRTL } from "@/contexts/RTLContext";
+import { BookButtons } from "@/shared/buttons";
 
 const BookSquareCard = ({ book, onTagClick }) => {
   const { theme, themeName } = useTheme();
@@ -14,7 +15,10 @@ const BookSquareCard = ({ book, onTagClick }) => {
   const { direction, textAlign, flexDirection } = useRTL();
 
   // Check if current theme is dark mode
-  const isDarkMode = themeName === 'dark' || themeName === 'midnight' || themeName === 'cyberpunk';
+  const isDarkMode =
+    themeName === "dark" ||
+    themeName === "midnight" ||
+    themeName === "cyberpunk";
 
   // Format published year
   const formatPublishedYear = (dateString) => {
@@ -37,9 +41,11 @@ const BookSquareCard = ({ book, onTagClick }) => {
   };
 
   // Apply font family inline style
-  const fontStyle = currentFont?.family ? {
-    fontFamily: currentFont.family
-  } : {};
+  const fontStyle = currentFont?.family
+    ? {
+        fontFamily: currentFont.family,
+      }
+    : {};
 
   return (
     <article
@@ -47,15 +53,15 @@ const BookSquareCard = ({ book, onTagClick }) => {
       style={fontStyle}
       className={`
       w-full 
-      ${theme.background?.section || 'bg-white dark:bg-gray-800'} 
-      ${theme.border?.default || 'border border-gray-200 dark:border-gray-700'} 
-      ${theme.shadow?.container || 'shadow-lg'}
+      ${theme.background?.section || "bg-white dark:bg-gray-800"} 
+      ${theme.border?.default || "border border-gray-200 dark:border-gray-700"} 
+      ${theme.shadow?.container || "shadow-lg"}
       rounded-xl 
       overflow-hidden 
       flex flex-col h-full 
       hover:shadow-2xl hover:-translate-y-1
       transition-all duration-300
-      ${theme.ringEffect || ''}
+      ${theme.ringEffect || ""}
       relative
     `}
     >
@@ -93,31 +99,42 @@ const BookSquareCard = ({ book, onTagClick }) => {
         <div className="flex-grow">
           {/* Title */}
           <h3
-            className={`text-base font-semibold ${theme.textColors?.primary || 'text-gray-900 dark:text-white'} line-clamp-2 mb-1 ${textAlign}`}
+            className={`text-base font-semibold ${theme.textColors?.primary || "text-gray-900 dark:text-white"} line-clamp-2 mb-1 ${textAlign}`}
             title={book.title}
           >
             {book.title}
           </h3>
 
           {/* Author and Published Year */}
-          <div className={`flex items-center gap-2 text-xs mb-2 flex-wrap ${flexDirection}`}>
-            <span className={theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'}>
+          <div
+            className={`flex items-center gap-2 text-xs mb-2 flex-wrap ${flexDirection}`}
+          >
+            <span
+              className={
+                theme.textColors?.secondary ||
+                "text-gray-600 dark:text-gray-400"
+              }
+            >
               {t("book.by")}
             </span>
             {book.authorId ? (
               <Link
                 href={`/authors/${book.authorId}`}
-                className={`font-medium ${theme.textColors?.highlight || 'text-sky-600 dark:text-sky-400'} hover:underline`}
+                className={`font-medium ${theme.textColors?.highlight || "text-sky-600 dark:text-sky-400"} hover:underline`}
               >
                 {book.author}
               </Link>
             ) : (
-              <span className={`font-medium ${theme.textColors?.highlight || 'text-sky-600 dark:text-sky-400'}`}>
+              <span
+                className={`font-medium ${theme.textColors?.highlight || "text-sky-600 dark:text-sky-400"}`}
+              >
                 {book.author}
               </span>
             )}
             {book.published && (
-              <span className={`text-[10px] ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'}`}>
+              <span
+                className={`text-[10px] ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"}`}
+              >
                 ({formatPublishedYear(book.published)})
               </span>
             )}
@@ -126,7 +143,7 @@ const BookSquareCard = ({ book, onTagClick }) => {
           {/* Description */}
           {book.description && (
             <p
-              className={`text-xs ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'} mb-3 line-clamp-2 ${textAlign}`}
+              className={`text-xs ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"} mb-3 line-clamp-2 ${textAlign}`}
               title={book.description}
             >
               {book.description}
@@ -137,7 +154,7 @@ const BookSquareCard = ({ book, onTagClick }) => {
           {book.category && getCategoryArray().length > 0 && (
             <div className="mb-2">
               <span
-                className={`text-[10px] font-semibold ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'} uppercase tracking-wider`}
+                className={`text-[10px] font-semibold ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"} uppercase tracking-wider`}
               >
                 {t("book.category") || "Category"}
               </span>
@@ -148,12 +165,12 @@ const BookSquareCard = ({ book, onTagClick }) => {
                     onClick={() => onTagClick && onTagClick(cat)}
                     className={`
                       text-[10px] px-2 py-0.5 
-                      ${theme.background?.navigationDots || 'bg-gray-100 dark:bg-gray-700'} 
-                      ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'}
-                      hover:${theme.background?.bookCoverSide || 'bg-gray-200 dark:bg-gray-600'}
-                      hover:${theme.textColors?.primary || 'text-gray-900 dark:text-white'}
+                      ${theme.background?.navigationDots || "bg-gray-100 dark:bg-gray-700"} 
+                      ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"}
+                      hover:${theme.background?.bookCoverSide || "bg-gray-200 dark:bg-gray-600"}
+                      hover:${theme.textColors?.primary || "text-gray-900 dark:text-white"}
                       rounded-full transition-all duration-200
-                      ${theme.border?.button || 'border border-gray-200 dark:border-gray-600'}
+                      ${theme.border?.button || "border border-gray-200 dark:border-gray-600"}
                       font-normal
                     `}
                   >
@@ -168,7 +185,7 @@ const BookSquareCard = ({ book, onTagClick }) => {
           {book.subjects && book.subjects.length > 0 && (
             <div className="mb-2">
               <span
-                className={`text-[10px] font-semibold ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'} uppercase tracking-wider`}
+                className={`text-[10px] font-semibold ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"} uppercase tracking-wider`}
               >
                 {t("book.subjects") || "Subjects"}
               </span>
@@ -179,12 +196,12 @@ const BookSquareCard = ({ book, onTagClick }) => {
                     onClick={() => onTagClick && onTagClick(subject)}
                     className={`
                       text-[10px] px-2 py-0.5 
-                      ${theme.background?.navigationDots || 'bg-gray-100 dark:bg-gray-700'} 
-                      ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'}
-                      hover:${theme.background?.bookCoverSide || 'bg-gray-200 dark:bg-gray-600'}
-                      hover:${theme.textColors?.primary || 'text-gray-900 dark:text-white'}
+                      ${theme.background?.navigationDots || "bg-gray-100 dark:bg-gray-700"} 
+                      ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"}
+                      hover:${theme.background?.bookCoverSide || "bg-gray-200 dark:bg-gray-600"}
+                      hover:${theme.textColors?.primary || "text-gray-900 dark:text-white"}
                       rounded-full transition-all duration-200
-                      ${theme.border?.button || 'border border-gray-200 dark:border-gray-600'}
+                      ${theme.border?.button || "border border-gray-200 dark:border-gray-600"}
                       font-normal
                     `}
                   >
@@ -199,7 +216,7 @@ const BookSquareCard = ({ book, onTagClick }) => {
           {book.tags && book.tags.length > 0 && (
             <div className="mb-2">
               <span
-                className={`text-[10px] font-semibold ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'} uppercase tracking-wider`}
+                className={`text-[10px] font-semibold ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"} uppercase tracking-wider`}
               >
                 {t("book.tags") || "Tags"}
               </span>
@@ -210,12 +227,12 @@ const BookSquareCard = ({ book, onTagClick }) => {
                     onClick={() => onTagClick && onTagClick(tag)}
                     className={`
                       text-[10px] px-2 py-0.5 
-                      ${theme.background?.navigationDots || 'bg-gray-100 dark:bg-gray-700'} 
-                      ${theme.textColors?.secondary || 'text-gray-600 dark:text-gray-400'}
-                      hover:${theme.background?.bookCoverSide || 'bg-gray-200 dark:bg-gray-600'}
-                      hover:${theme.textColors?.primary || 'text-gray-900 dark:text-white'}
+                      ${theme.background?.navigationDots || "bg-gray-100 dark:bg-gray-700"} 
+                      ${theme.textColors?.secondary || "text-gray-600 dark:text-gray-400"}
+                      hover:${theme.background?.bookCoverSide || "bg-gray-200 dark:bg-gray-600"}
+                      hover:${theme.textColors?.primary || "text-gray-900 dark:text-white"}
                       rounded-full transition-all duration-200
-                      ${theme.border?.button || 'border border-gray-200 dark:border-gray-600'}
+                      ${theme.border?.button || "border border-gray-200 dark:border-gray-600"}
                       font-normal
                     `}
                   >
@@ -227,81 +244,40 @@ const BookSquareCard = ({ book, onTagClick }) => {
           )}
         </div>
 
-        {/* Buttons */}
+        {/* Buttons using BookButtons */}
         <div className="mt-4 space-y-2">
           {/* First row - 50/50 buttons */}
           <div className={`grid grid-cols-2 gap-2 ${flexDirection}`}>
-            {/* Know More Button - FIXED */}
-            <Link href={`/books/${book.slug || book.id}`} className="block">
-              <button
-                className={`
-                w-full py-2 px-1 sm:px-2 
-                ${theme.buttonColors?.primaryButton?.background || 'bg-gradient-to-r from-sky-600 to-sky-500'}
-                ${theme.buttonColors?.primaryButton?.hoverBackground || 'hover:from-sky-700 hover:to-sky-600'}
-                ${theme.buttonColors?.primaryButton?.textColor || 'text-white'}
-                rounded-lg 
-                shadow-md
-                hover:shadow-lg 
-                transition-all duration-200 
-                font-medium text-xs sm:text-sm
-              `}
-              >
-                {t("book.know_more") || "Know More"}
-              </button>
-            </Link>
+            {/* View Details - Using BookButtons */}
+            <BookButtons.ViewDetails
+              slug={book.slug || book.id}
+              size="sm"
+              label={t("book.know_more") || "Know More"}
+              className="w-full text-center"
+            />
 
+            {/* Summary - Using BookButtons */}
             {book.buttons?.readSummary && (
-              <a
-                href={book.buttons.readSummary}
-                className="block"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <button
-                  className={`
-                  w-full py-2 px-1 sm:px-2 
-                  ${theme.buttonColors?.secondaryButton?.background || 'border-2 border-sky-500'}
-                  ${theme.buttonColors?.secondaryButton?.hoverBackground || 'hover:bg-sky-50 dark:hover:bg-sky-900/20'}
-                  ${theme.buttonColors?.secondaryButton?.textColor || 'text-sky-600 dark:text-sky-400'}
-                  rounded-lg 
-                  shadow-md
-                  hover:shadow-lg 
-                  transition-all duration-200 
-                  font-medium text-xs sm:text-sm
-                `}
-                >
-                  {t("book.summary") || "Summary"}
-                </button>
-              </a>
+              <BookButtons.Summary
+                slug={book.slug || book.id}
+                size="sm"
+                label={t("book.summary") || "Summary"}
+                className="w-full text-center"
+              />
             )}
           </div>
 
           {/* Second row - full width buttons */}
           {book.buttons?.getBook && (
-            <a
-              href={book.buttons.getBook}
-              className="block"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button
-                className={`
-                w-full py-2 px-2 sm:px-4 
-                ${theme.buttonColors?.secondaryButton?.background || 'border-2 border-sky-500'}
-                ${theme.buttonColors?.secondaryButton?.hoverBackground || 'hover:bg-sky-50 dark:hover:bg-sky-900/20'}
-                ${theme.buttonColors?.secondaryButton?.textColor || 'text-sky-600 dark:text-sky-400'}
-                rounded-lg 
-                shadow-md
-                hover:shadow-lg 
-                transition-all duration-200 
-                font-medium text-xs sm:text-sm
-              `}
-              >
-                {t("book.get_book") || "Get Book"}
-              </button>
-            </a>
+            <BookButtons.GetBook
+              url={book.buttons.getBook}
+              size="sm"
+              label={t("book.get_book") || "Get Book"}
+              className="w-full text-center"
+            />
           )}
 
+          {/* Audiobook - Custom button (not in BookButtons) */}
           {book.buttons?.listenAudiobook && (
             <a
               href={book.buttons.listenAudiobook}
@@ -312,9 +288,9 @@ const BookSquareCard = ({ book, onTagClick }) => {
               <button
                 className={`
                 w-full py-2 px-2 sm:px-4 
-                ${theme.buttonColors?.secondaryButton?.background || 'border-2 border-sky-500'}
-                ${theme.buttonColors?.secondaryButton?.hoverBackground || 'hover:bg-sky-50 dark:hover:bg-sky-900/20'}
-                ${theme.buttonColors?.secondaryButton?.textColor || 'text-sky-600 dark:text-sky-400'}
+                ${theme.buttonColors?.secondaryButton?.background || "border-2 border-sky-500"}
+                ${theme.buttonColors?.secondaryButton?.hoverBackground || "hover:bg-sky-50 dark:hover:bg-sky-900/20"}
+                ${theme.buttonColors?.secondaryButton?.textColor || "text-sky-600 dark:text-sky-400"}
                 rounded-lg 
                 shadow-md
                 hover:shadow-lg 

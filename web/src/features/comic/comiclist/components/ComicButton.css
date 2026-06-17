@@ -1,0 +1,109 @@
+/* src/features/comic/comiclist/components/ComicButton.css */
+
+/* ============================================
+   COMIC BUTTON - COMPONENT STYLES
+   ============================================ */
+
+/* Base button overrides for comic domain */
+.comic-btn {
+  font-family: inherit;
+}
+
+/* Comic-specific button variants */
+.comic-btn-read {
+  background: linear-gradient(135deg, #8b5cf6, #d946ef);
+  color: white;
+}
+
+.comic-btn-read:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.comic-btn-buy {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.comic-btn-buy:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+.comic-btn-share {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.comic-btn-share:hover:not(:disabled) {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+.comic-btn-wishlist {
+  border: 2px solid #d1d5db;
+  background: transparent;
+  color: #6b7280;
+}
+
+.comic-btn-wishlist:hover:not(:disabled) {
+  border-color: #ec4899;
+  color: #ec4899;
+  transform: translateY(-2px);
+}
+
+.comic-btn-wishlist.active {
+  border-color: #ec4899;
+  background: #fdf2f8;
+  color: #db2777;
+}
+
+/* Dark mode */
+.dark .comic-btn-wishlist,
+.midnight .comic-btn-wishlist {
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+.dark .comic-btn-wishlist:hover:not(:disabled),
+.midnight .comic-btn-wishlist:hover:not(:disabled) {
+  border-color: #ec4899;
+  color: #ec4899;
+}
+
+.dark .comic-btn-wishlist.active,
+.midnight .comic-btn-wishlist.active {
+  border-color: #ec4899;
+  background: rgba(236, 72, 153, 0.2);
+  color: #f472b6;
+}
+
+/* Cyberpunk theme */
+.cyberpunk .comic-btn-read {
+  background: linear-gradient(135deg, #00ffff, #ff00ff);
+  color: #0a0514;
+}
+
+.cyberpunk .comic-btn-read:hover:not(:disabled) {
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+}
+
+.cyberpunk .comic-btn-share {
+  border-color: #ff00ff;
+  color: #ff00ff;
+}
+
+.cyberpunk .comic-btn-share:hover:not(:disabled) {
+  border-color: #00ffff;
+  color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.cyberpunk .comic-btn-wishlist.active {
+  border-color: #ff00ff;
+  background: rgba(255, 0, 255, 0.2);
+  color: #ff00ff;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
